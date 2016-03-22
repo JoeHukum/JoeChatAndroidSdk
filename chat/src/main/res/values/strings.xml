@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Chat</string>
+    <string name="chatBoxHint">Type a message..</string>
+    <string name="attach_dialog_camera">Camera</string>
+    <string name="attach_dialog_gallery">Gallery</string>
+    <string name="attach_dialog_title">Attachments</string>
+    <string name="external_storage_permission_pitch">\"Joe wants to save images he sent to you on your phone :)\"</string>
+    <string name="ok">OK</string>
+</resources>
