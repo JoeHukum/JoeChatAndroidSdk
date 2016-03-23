@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'joe-chat-android-client'
+
+    publishedGroupId = 'com.joehukum'
+    libraryName = 'chat'
+    artifact = 'chat'
+
+    libraryDescription = 'Android chat client for Joe Hukum chat'
+
+    siteUrl = 'https://github.com/JoeHukum/JoeChatAndroidSdk'
+    gitUrl = 'https://github.com/JoeHukum/JoeChatAndroidSdk.git'
+
+    libraryVersion = '0.1'
+
+    developerId = 'pulkitkumar'
+    developerName = 'Pulkit Kumar'
+    developerEmail = 'itzme.pulkit@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
