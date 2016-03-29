@@ -3,6 +3,7 @@ package com.joehukum.chat.messages.pubsub;
 import android.content.Context;
 import android.util.Log;
 
+import com.joehukum.chat.ServiceFactory;
 import com.pubnub.api.Callback;
 import com.pubnub.api.PubnubError;
 import com.pubnub.api.PubnubException;
@@ -27,7 +28,7 @@ public class PubSubService
                     Log.i(TAG, "message received");
                     if (context != null)
                     {
-                        //todo: message received logic.
+                        ServiceFactory.MessageNetworkService().saveMessage(message.toString());
                     } else
                     {
                         //do nothing

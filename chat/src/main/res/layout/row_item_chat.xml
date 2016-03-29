@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                tools:ignore="missingPrefix">
+
+    <RelativeLayout
+        android:id="@+id/received"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_marginRight="80dp"
+        android:background="@color/gray">
+
+        <RelativeLayout
+            android:id="@+id/receivedContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/receivedImage"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_width="200dp"
+                android:visibility="gone"
+                android:layout_marginBottom="4dp"
+                android:layout_height="200dp"/>
+
+            <TextView
+                android:id="@+id/messageReceived"
+                android:autoLink="all"
+                android:layout_below="@+id/receivedImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                fontPath="fonts/Gotham.otf"
+                android:text="assa aasf s sfkasassa aasf s sfkasassa aasf s sfkasassa aasf s sfkas "/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/timeReceived"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@color/material_blue_grey_800"
+            android:text="10 18 pm"
+            fontPath="fonts/Gotham.otf"
+            android:layout_below="@id/receivedContent"
+            android:layout_alignParentRight="true"/>
+
+        <Button
+            android:id="@+id/userAction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_below="@id/timeReceived"
+            android:layout_marginTop="8dp"
+            android:text="VIEW IN MAP"
+            android:textAllCaps="true"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/sent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_marginLeft="80dp"
+        android:background="@color/gray">
+
+        <FrameLayout
+            android:id="@+id/contentSent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/sentImage"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="4dp"
+                android:visibility="gone"
+                android:layout_marginBottom="4dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"/>
+
+            <TextView
+                android:id="@+id/messageSent"
+                android:autoLink="all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fontPath="fonts/Gotham.otf"
+                android:padding="4dp"
+                android:text="Hey!"/>
+
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/status"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/contentSent"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_action_done"/>
+
+        <TextView
+            android:id="@+id/timeSent"
+            android:autoLink="all"
+            android:layout_alignBottom="@+id/status"
+            android:layout_toLeftOf="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fontPath="fonts/Gotham.otf"
+            android:layout_marginBottom="1dp"
+            android:textSize="10sp"
+            android:text="10 : 20 pm"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,3 +1,4 @@
+/*
 package com.joehukum.chat.ui.activities;
 
 import android.Manifest;
@@ -33,9 +34,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+*/
 /**
  * Created by pulkitkumar on 17/03/16.
- */
+ *//*
+
 public class SendImageActivity extends AppCompatActivity implements View.OnClickListener
 {
     public static final int TYPE_CAMERA = 1;
@@ -95,7 +98,8 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
         } else if (mType == TYPE_GALLERY)
         {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
+            intent.setType("image*/
+/*");
             startActivityForResult(intent, TYPE_GALLERY);
         }
     }
@@ -312,3 +316,4 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
         return intent;
     }
 }
+*/

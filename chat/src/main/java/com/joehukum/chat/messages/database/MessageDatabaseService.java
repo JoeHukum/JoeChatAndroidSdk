@@ -160,7 +160,7 @@ public class MessageDatabaseService
         });
     }
 
-    public Observable<List<Message>> getAllMessage(final Context context)
+    public Observable<List<Message>> getMessages(final Context context)
     {
         return Observable.just(context).map(new Func1<Context, List<Message>>()
         {
@@ -171,8 +171,8 @@ public class MessageDatabaseService
                 Cursor cursor = null;
                 try
                 {
-                    cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null,
-                            null, null, TableMessage.COLUMN_TIME + " desc");
+                    cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null, null
+                            , null, TableMessage.COLUMN_TIME + " desc");
                     List<Message> messages = TableMessage.getMessage(cursor);
                     return messages;
                 } catch (SQLException e)
@@ -185,5 +185,25 @@ public class MessageDatabaseService
                 }
             }
         });
+    }
+
+    @Nullable
+    public List<Message> getUnSyncedMessages(Context context)
+    {
+        Cursor cursor = null;
+        try
+        {
+            cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null,
+                    TableMessage.whereHashIsNull(), null, TableMessage.COLUMN_TIME + " asc");
+            List<Message> messages = TableMessage.getMessage(cursor);
+            return messages;
+        } catch (SQLException e)
+        {
+            Log.wtf(TAG, e);
+            return null;
+        } finally
+        {
+            DbUtils.closeCursor(cursor);
+        }
     }
 }

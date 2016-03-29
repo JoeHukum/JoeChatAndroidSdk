@@ -31,6 +31,7 @@ public class TableMessage
     public static final String COLUMN_TIME = "date";
     public static final String COLUMN_AUTHOR = "author";
     public static final String COLUMN_IS_READ = "is_read";
+    public static final String COLUMN_METADATA = "metadata";
 
     public static void onCreate(@NonNull SQLiteDatabase db)
     {
@@ -43,6 +44,7 @@ public class TableMessage
                 .append(COLUMN_RESPONSE_TYPE).append(" text, ")// not empty
                 .append(COLUMN_TIME).append(" long, ")// not null
                 .append(COLUMN_AUTHOR).append(" text, ")
+                .append(COLUMN_METADATA).append(" text, ")
                 .append(COLUMN_IS_READ).append(" boolean default false);");
         Log.i(TAG, builder.toString());
         db.execSQL(builder.toString());
@@ -65,6 +67,7 @@ public class TableMessage
                 message.setResponseType(Message.ResponseType.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_RESPONSE_TYPE))));
                 message.setTime(new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_TIME))));
                 message.setAuthor(cursor.getString(cursor.getColumnIndex(COLUMN_AUTHOR)));
+                message.setMetadata(cursor.getString(cursor.getColumnIndex(COLUMN_METADATA)));
                 message.setIsRead(cursor.getInt(cursor.getColumnIndex(COLUMN_IS_READ)) > 0);
                 messages.add(message);
             } while (cursor.moveToNext());
@@ -117,19 +120,24 @@ public class TableMessage
 
     public static String whereId()
     {
-        StringBuilder builder = new StringBuilder().append("where ").append(COLUMN_ID).append("=?");
+        StringBuilder builder = new StringBuilder().append(COLUMN_ID).append("=?");
         return builder.toString();
     }
 
     public static String whereHash()
     {
-        StringBuilder builder = new StringBuilder().append("where ").append(COLUMN_HASH).append("=?");
+        StringBuilder builder = new StringBuilder().append(COLUMN_HASH).append("=?");
         return builder.toString();
+    }
+
+    public static String whereHashIsNull()
+    {
+        return new StringBuilder().append(COLUMN_HASH).append(" is null ").toString();
     }
 
     public static String whereRead()
     {
-        StringBuilder builder = new StringBuilder().append("where ").append(COLUMN_IS_READ).append("=?");
+        StringBuilder builder = new StringBuilder().append(COLUMN_IS_READ).append("=?");
         return builder.toString();
     }
 

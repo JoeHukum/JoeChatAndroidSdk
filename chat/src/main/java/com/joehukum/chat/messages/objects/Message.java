@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class Message
 {
+    public static final long MINIMUM_ID = -1;
     private long id;
     private Type type;
     private String messageHash;
@@ -16,6 +17,7 @@ public class Message
     private ContentType contentType;
     private ResponseType responseType;
     private boolean isRead;
+    private String metadata;
 
     public long getId()
     {
@@ -107,10 +109,20 @@ public class Message
         this.isRead = isRead;
     }
 
+    public void setMetadata(String metadata)
+    {
+        this.metadata = metadata;
+    }
+
+    public String getMetadata()
+    {
+        return metadata;
+    }
+
     public enum ResponseType
     {
         TEXT("TEXT"), OPTIONS("OPTIONS"), ADDRESS("ADDRESS"), INT("INT"), DATE("DATE"), TIME("TIME")
-        , SEARCH_OPTION("SEARCH_OPTION");
+        , SEARCH_OPTION("SEARCH_OPTION"),  PAYMENT("PAYMENT");
 
         private String name;
 
@@ -127,7 +139,7 @@ public class Message
 
     public enum ContentType
     {
-        TEXT("TEXT"), IMAGE("IMAGE"), PAYMENT("PAYMENT");
+        TEXT("TEXT"), IMAGE("IMAGE");
 
         private String name;
 

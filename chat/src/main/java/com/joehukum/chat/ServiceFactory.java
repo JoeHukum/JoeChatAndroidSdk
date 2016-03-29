@@ -1,5 +1,8 @@
 package com.joehukum.chat;
 
+import com.joehukum.chat.messages.database.MessageDatabaseService;
+import com.joehukum.chat.messages.metadata.MetadataService;
+import com.joehukum.chat.messages.network.MessageNetworkService;
 import com.joehukum.chat.messages.pubsub.PubSubService;
 import com.joehukum.chat.user.CredentialsService;
 
@@ -12,6 +15,33 @@ public class ServiceFactory
 
     private static PubSubService mPubSubService;
     private static CredentialsService mCredentialsService;
+    private static MessageDatabaseService mMessageDatabaseService;
+    private static MessageNetworkService mMessageNetworkService;
+    private static MetadataService mMetadataService;
+
+    public static MessageDatabaseService MessageDatabaseService()
+    {
+        synchronized (mLock)
+        {
+            if(mMessageDatabaseService == null)
+            {
+                mMessageDatabaseService = new MessageDatabaseService();
+            }
+        }
+        return mMessageDatabaseService;
+    }
+
+    public static MessageNetworkService MessageNetworkService()
+    {
+        synchronized (mLock)
+        {
+            if (mMessageNetworkService == null)
+            {
+                mMessageNetworkService = new MessageNetworkService();
+            }
+        }
+        return mMessageNetworkService;
+    }
 
     public static PubSubService PubSubService()
     {
@@ -35,5 +65,17 @@ public class ServiceFactory
             }
         }
         return mCredentialsService;
+    }
+
+    public static MetadataService MetaDataService()
+    {
+        synchronized (mLock)
+        {
+            if (mMetadataService == null)
+            {
+                mMetadataService = new MetadataService();
+            }
+        }
+        return mMetadataService;
     }
 }

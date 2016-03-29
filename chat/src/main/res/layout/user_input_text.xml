@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llMessage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:padding="8dp"
+    tools:showIn="@layout/activity_chat">
+
+    <ImageButton
+        android:id="@+id/attachment"
+        android:background="@drawable/ic_attach"
+        android:layout_width="48dp"
+        android:layout_height="48dp"/>
+
+    <EditText
+        android:id="@+id/message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:layout_weight="0.8"
+        android:hint="@string/chatBoxHint"
+        android:inputType="textMultiLine|textCapSentences"
+        android:paddingLeft="8dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:src="@drawable/ic_send"/>
+
+</LinearLayout>
+
+    

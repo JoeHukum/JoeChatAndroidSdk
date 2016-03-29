@@ -7,50 +7,18 @@
 
     <include layout="@layout/toolbar"/>
 
-    <LinearLayout
-        android:id="@+id/footer"
+    <FrameLayout
+        android:id="@+id/userInputContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:isScrollContainer="false"
         android:layout_alignParentBottom="true">
 
-        <LinearLayout
-            android:id="@+id/llMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="8dp">
+        <include layout="@layout/user_input_text"/>
 
-            <ImageButton
-                android:id="@+id/attachment"
-                android:background="@drawable/ic_attach"
-                android:layout_width="48dp"
-                android:layout_height="48dp"/>
+    </FrameLayout>
 
-            <EditText
-                android:id="@+id/message"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:maxLines="3"
-                android:layout_weight="0.8"
-                android:hint="@string/chatBoxHint"
-                android:inputType="textMultiLine|textCapSentences"
-                android:paddingLeft="8dp"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:src="@drawable/ic_send"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"

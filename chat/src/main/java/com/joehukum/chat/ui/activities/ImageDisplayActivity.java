@@ -1,3 +1,4 @@
+/*
 package com.joehukum.chat.ui.activities;
 
 import android.content.Context;
@@ -14,9 +15,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.joehukum.chat.R;
 import com.joehukum.chat.ui.views.TouchImageView;
 
+*/
 /**
  * Created by pulkitkumar on 18/03/16.
- */
+ *//*
+
 public class ImageDisplayActivity extends AppCompatActivity
 {
 
@@ -64,3 +67,4 @@ public class ImageDisplayActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 }
+*/

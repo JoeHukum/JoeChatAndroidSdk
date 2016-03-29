@@ -6,4 +6,6 @@
     <string name="attach_dialog_title">Attachments</string>
     <string name="external_storage_permission_pitch">\"Joe wants to save images he sent to you on your phone :)\"</string>
     <string name="ok">OK</string>
+    <string name="select_date">Select Date</string>
+    <string name="time_input">Select Time</string>
 </resources>

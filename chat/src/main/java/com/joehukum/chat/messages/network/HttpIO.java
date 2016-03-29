@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * Created by pulkitkumar on 17/03/16.
  */
-public class HttpIOHandler
+public class HttpIO
 {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -157,9 +157,7 @@ public class HttpIOHandler
 
     private static Request.Builder addDefaultHeaders(Request.Builder builder)
     {
-        builder.addHeader("X-AndroidAppVersion", String.valueOf(BuildConfig.VERSION_CODE));
-        builder.addHeader("X-ApiVersion", "V1.0");
-        builder.addHeader("X-AppSource", "JoeAndroid");
+        //builder.addHeader("X-AndroidAppVersion", String.valueOf(BuildConfig.VERSION_CODE));
         return builder;
     }
 }
