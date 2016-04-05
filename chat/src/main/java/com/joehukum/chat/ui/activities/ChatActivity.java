@@ -24,6 +24,7 @@ import com.joehukum.chat.ui.adapters.ChatAdapter;
 import com.joehukum.chat.ui.fragments.DatePickerFragment;
 import com.joehukum.chat.ui.fragments.TimePickerFragment;
 import com.joehukum.chat.ui.views.DateInputView;
+import com.joehukum.chat.ui.views.OptionsInputView;
 import com.joehukum.chat.ui.views.SearchAddItemsView;
 import com.joehukum.chat.ui.views.TextUserInputView;
 import com.joehukum.chat.ui.views.TimeInputView;
@@ -37,7 +38,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class ChatActivity extends AppCompatActivity implements TextUserInputView.TextInputCallbacks,
-        SearchAddItemsView.SearchAddItemsCallback, DateInputView.DateInputCallbacks, TimeInputView.TimeInputCallback
+        SearchAddItemsView.SearchAddItemsCallback, DateInputView.DateInputCallbacks,
+        TimeInputView.TimeInputCallback, OptionsInputView.OptionClickCallback
 {
     private static final String TAG = ChatActivity.class.getName();
     private static final String CHANNEL_NAME = "channelName";
@@ -61,7 +63,6 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     private DateInputView mDateInputView;
     private TimeInputView mTimeInputView;
     private SearchAddItemsView mSearchAddInputView;
-
 
     private ChatAdapter mAdapter;
     private List<Message> mMessages;
@@ -102,7 +103,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     protected void onPause()
     {
         super.onPause();
-        ServiceFactory.PubSubService().unSubscribe(mChannelName);
+        ServiceFactory.PubSubService().unSubscribe(this, mChannelName);
         getContentResolver().unregisterContentObserver(mObserver);
     }
 
@@ -302,9 +303,16 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     }
 
     @Override
-    public void OnClickAdd(List<Option> selectedOptions)
+    public void onClickAdd(List<Option> selectedOptions)
     {
+        String data = TextUtils.join(", ", selectedOptions);
+        sendMessage(data);
+    }
 
+    @Override
+    public void onOptionClick(Option option)
+    {
+        sendMessage(option.toString());
     }
 
     @Override

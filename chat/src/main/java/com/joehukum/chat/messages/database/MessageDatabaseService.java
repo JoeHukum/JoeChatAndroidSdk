@@ -206,4 +206,29 @@ public class MessageDatabaseService
             DbUtils.closeCursor(cursor);
         }
     }
+
+    public Message getLatestMessage(Context context)
+    {
+        Cursor cursor = null;
+        try
+        {
+            cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null, TableMessage.whereHashNotNull(),
+                    null, TableMessage.COLUMN_TIME + " desc");
+            List<Message> messages = TableMessage.getMessage(cursor);
+            if (messages != null && ! messages.isEmpty())
+            {
+                return messages.get(0);
+            } else
+            {
+                return null;
+            }
+        } catch (SQLException e)
+        {
+            Log.wtf(TAG, e);
+            return null;
+        } finally
+        {
+            DbUtils.closeCursor(cursor);
+        }
+    }
 }

@@ -37,10 +37,10 @@ public class SyncUtils
 
         Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
         String contentAuthority = credentials.getContentAuthority();
-        String userId = credentials.getClientUserId();
+        String userId = credentials.getCustomerHash();
 
         // Create account, if it's missing. (Either first run, or user has deleted account.)
-        Account account = GenericAccountService.GetAccount(credentials.getClientUserId());
+        Account account = GenericAccountService.GetAccount(credentials.getCustomerHash());
         AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         if (accountManager.addAccountExplicitly(account, null, null))
         {
@@ -77,7 +77,7 @@ public class SyncUtils
         b.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
         String contentAuthority = credentials.getContentAuthority();
-        String accountName = credentials.getClientUserId();
+        String accountName = credentials.getCustomerHash();
         ContentResolver.requestSync(
                 GenericAccountService.GetAccount(accountName),      // Sync account
                 contentAuthority, // Content authority

@@ -5,35 +5,86 @@ package com.joehukum.chat.user;
  */
 public class Credentials
 {
+    private static final String EMPTY = "";
     private String authKey;
     private String phoneNumber;
-    private String clientUserId;
+    private String email;
+    private String pubNubSubscribeKey;
+    private String pubNubPublishKey;
+    private String customerHash;
     private String contentAuthority;
 
-    public Credentials(String authKey, String phoneNumber, String clientUserId)
+    public Credentials(String authKey, String phoneNumber, String email, String publishKey, String subscribeKey, String customerHash, String contentAuthority)
     {
         this.authKey = authKey;
         this.phoneNumber = phoneNumber;
-        this.clientUserId = clientUserId;
+        this.email = email;
+        this.pubNubPublishKey = publishKey;
+        this.pubNubSubscribeKey = subscribeKey;
+        this.customerHash = customerHash;
+        this.contentAuthority = contentAuthority;
     }
 
     public String getAuthKey()
     {
+        if (authKey == null)
+        {
+            return EMPTY;
+        }
         return authKey;
     }
 
     public String getPhoneNumber()
     {
+        if (phoneNumber == null)
+        {
+            return EMPTY;
+        }
         return phoneNumber;
     }
 
-    public String getClientUserId()
+    public String getEmail()
     {
-        return clientUserId;
+        if (email == null)
+        {
+            return EMPTY;
+        }
+        return email;
+    }
+
+    public String getPubNubSubscribeKey()
+    {
+        if (pubNubSubscribeKey == null)
+        {
+            return EMPTY;
+        }
+        return pubNubSubscribeKey;
+    }
+
+    public String getPubNubPublishKey()
+    {
+        if (pubNubPublishKey == null)
+        {
+            return EMPTY;
+        }
+        return pubNubPublishKey;
+    }
+
+    public String getCustomerHash()
+    {
+        if (customerHash == null)
+        {
+            return EMPTY;
+        }
+        return customerHash;
     }
 
     public String getContentAuthority()
     {
+        if (contentAuthority == null)
+        {
+            return EMPTY;
+        }
         return contentAuthority;
     }
 }

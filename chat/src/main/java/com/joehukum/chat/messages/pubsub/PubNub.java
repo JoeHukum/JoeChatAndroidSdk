@@ -1,5 +1,9 @@
 package com.joehukum.chat.messages.pubsub;
 
+import android.content.Context;
+
+import com.joehukum.chat.ServiceFactory;
+import com.joehukum.chat.user.Credentials;
 import com.pubnub.api.Pubnub;
 
 /**
@@ -7,19 +11,18 @@ import com.pubnub.api.Pubnub;
  */
 public class PubNub
 {
-    private static final String PUBLISH_KEY = "pub-c-fa5144c8-8c96-46a1-9b96-af84a8993ebe";
-    private static final String SUBSCRIBE_KEY = "sub-c-f01ca44a-53a1-11e5-9028-02ee2ddab7fe";
 
     private static Object mLock = new Object();
     private static Pubnub instance;
 
-    public static Pubnub getInstance()
+    public static Pubnub getInstance(Context context)
     {
         synchronized (mLock)
         {
             if (instance == null)
             {
-                instance = new Pubnub(PUBLISH_KEY, SUBSCRIBE_KEY);
+                Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
+                instance = new Pubnub(credentials.getPubNubPublishKey(), credentials.getPubNubSubscribeKey());
             }
         }
         return instance;

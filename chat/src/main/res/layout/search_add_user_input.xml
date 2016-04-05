@@ -1,9 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:autolabel="http://schemas.android.com/tools">
 
+    <AutoCompleteTextView
+        android:id="@+id/auto_complete"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
+    <RelativeLayout
+        android:layout_above="@id/auto_complete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/send"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:src="@drawable/ic_send"/>
+
+        <com.dpizarro.autolabel.library.AutoLabelUI
+            android:id="@+id/label_view"
+            android:layout_toLeftOf="@+id/send"
+            android:layout_alignParentLeft="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            autolabel:show_cross="true"
+            autolabel:text_size="14sp"
+            autolabel:icon_cross="@drawable/ic_cross"
+            autolabel:label_padding="4dp"
+            autolabel:label_clickable="true"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

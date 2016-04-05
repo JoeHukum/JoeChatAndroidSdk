@@ -161,4 +161,9 @@ public class TableMessage
         values.put(COLUMN_IS_READ, true);
         return values;
     }
+
+    public static String whereHashNotNull()
+    {
+        return new StringBuilder().append(COLUMN_HASH).append(" is null ").toString();
+    }
 }

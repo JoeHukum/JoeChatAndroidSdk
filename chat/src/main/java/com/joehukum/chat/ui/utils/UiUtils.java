@@ -2,6 +2,8 @@ package com.joehukum.chat.ui.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
@@ -36,5 +38,12 @@ public class UiUtils
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
+    }
+
+    public static ProgressDialog getProgressDialog(Context context)
+    {
+        ProgressDialog pd = new ProgressDialog(context);
+        pd.setCancelable(false);
+        return pd;
     }
 }

@@ -63,6 +63,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 
     private void pullMessages() throws AppServerException, IOException
     {
-
+        Message message = ServiceFactory.MessageDatabaseService().getLatestMessage(getContext());
+        String latestHash = message == null? null : message.getMessageHash();
+        ServiceFactory.MessageNetworkService().pullMessages(getContext(), latestHash);
     }
 }

@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:isScrollContainer="false"
+        android:background="@color/white"
         android:layout_alignParentBottom="true">
 
         <include layout="@layout/user_input_text"/>
