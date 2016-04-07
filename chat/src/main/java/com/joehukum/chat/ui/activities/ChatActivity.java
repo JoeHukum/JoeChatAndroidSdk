@@ -25,7 +25,7 @@ import com.joehukum.chat.ui.fragments.DatePickerFragment;
 import com.joehukum.chat.ui.fragments.TimePickerFragment;
 import com.joehukum.chat.ui.views.DateInputView;
 import com.joehukum.chat.ui.views.OptionsInputView;
-import com.joehukum.chat.ui.views.SearchAddItemsView;
+
 import com.joehukum.chat.ui.views.TextUserInputView;
 import com.joehukum.chat.ui.views.TimeInputView;
 
@@ -38,7 +38,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class ChatActivity extends AppCompatActivity implements TextUserInputView.TextInputCallbacks,
-        SearchAddItemsView.SearchAddItemsCallback, DateInputView.DateInputCallbacks,
+        //SearchAddItemsView.SearchAddItemsCallback,
+        DateInputView.DateInputCallbacks,
         TimeInputView.TimeInputCallback, OptionsInputView.OptionClickCallback
 {
     private static final String TAG = ChatActivity.class.getName();
@@ -62,7 +63,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     private TextUserInputView mTextInputView;
     private DateInputView mDateInputView;
     private TimeInputView mTimeInputView;
-    private SearchAddItemsView mSearchAddInputView;
+    //private SearchAddItemsView mSearchAddInputView;
 
     private ChatAdapter mAdapter;
     private List<Message> mMessages;
@@ -117,7 +118,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     private void populateMessages()
     {
         ServiceFactory.MessageDatabaseService().getMessages(this)
-                .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .subscribe(new Observer<List<Message>>()
                 {
                     @Override
@@ -158,10 +159,10 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
                 mUserInputContainer.addView(mTimeInputView);
             } else if (message.getResponseType() == Message.ResponseType.SEARCH_OPTION)
             {
-                List<Option> options = ServiceFactory.MetaDataService().getOptions(this, message.getId());
-                mSearchAddInputView.setOptions(options);
-                mUserInputContainer.removeAllViews();
-                mUserInputContainer.addView(mSearchAddInputView);
+//                List<Option> options = ServiceFactory.MetaDataService().getOptions(this, message.getId());
+//                mSearchAddInputView.setOptions(options);
+//                mUserInputContainer.removeAllViews();
+//                mUserInputContainer.addView(mSearchAddInputView);
             } else
             {
                 mUserInputContainer.removeAllViews();
@@ -202,7 +203,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         mTextInputView = new TextUserInputView(this, this);
         mDateInputView = new DateInputView(this, this);
         mTimeInputView = new TimeInputView(this, this);
-        mSearchAddInputView = new SearchAddItemsView(this, this);
+        //mSearchAddInputView = new SearchAddItemsView(this, this);
     }
 
     private void init(Bundle savedInstanceState)
@@ -239,8 +240,8 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
             message.setType(Message.Type.SENT);
             message.setContentType(Message.ContentType.TEXT);
             ServiceFactory.MessageDatabaseService().addMessage(this, message)
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
                     .subscribe(new Observer<Boolean>()
                     {
                         @Override
@@ -302,12 +303,12 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         DatePickerFragment.open(getSupportFragmentManager());
     }
 
-    @Override
-    public void onClickAdd(List<Option> selectedOptions)
-    {
-        String data = TextUtils.join(", ", selectedOptions);
-        sendMessage(data);
-    }
+//    @Override
+//    public void onClickAdd(List<Option> selectedOptions)
+//    {
+//        String data = TextUtils.join(", ", selectedOptions);
+//        sendMessage(data);
+//    }
 
     @Override
     public void onOptionClick(Option option)

@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
  */
 public class Api
 {
-    private static final String BASE_URL = "http://stagapi.gogetspeedy.com/api/";
+    private static final String BASE_URL = "http://stagingapi.gogetspeedy.com/api/";
 
     public static class Message
     {
@@ -37,7 +37,7 @@ public class Api
     {
         public static String Url()
         {
-            return new StringBuilder(BASE_URL).append("/customer/init").toString();
+            return new StringBuilder(BASE_URL).append("customer/init").toString();
         }
 
         public static String Json(@NonNull String phoneNumber, @NonNull String email, @NonNull String gcmId)

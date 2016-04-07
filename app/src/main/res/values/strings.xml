@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">ChatModule</string>
-    <string name="account_auth">com.joehukum</string>
+    <string name="account_auth">com.jh</string>
     <string name="title_activity_main">MainActivity</string>
 </resources>

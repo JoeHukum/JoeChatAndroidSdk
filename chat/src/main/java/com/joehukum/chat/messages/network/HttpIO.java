@@ -1,14 +1,17 @@
 package com.joehukum.chat.messages.network;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.joehukum.chat.BuildConfig;
+import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.messages.network.exceptions.AppServerException;
 import com.joehukum.chat.messages.network.exceptions.BadRequestException;
 import com.joehukum.chat.messages.network.exceptions.ResourceNotFoundException;
 import com.joehukum.chat.messages.network.exceptions.ServerErrorException;
+import com.joehukum.chat.user.Credentials;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -29,6 +32,7 @@ public class HttpIO
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static final Object mLock = new Object();
+    public static final String AUTH_KEY = "clHsh";
     private static OkHttpClient mOkHttpClient;
 
     public static enum Method
@@ -36,24 +40,24 @@ public class HttpIO
         POST, PUT, GET
     }
 
-    public static String makeRequest (@NonNull String url, @Nullable String json, Method method)
+    public static String makeRequest(Context context, @NonNull String url, @Nullable String json, Method method)
             throws IOException, AppServerException
     {
         Request request;
         switch (method)
         {
             case PUT:
-                request = generatePutRequest(url, json);
+                request = generatePutRequest(context, url, json);
                 Log.v("HTTP:URL:PUT", url);
                 Log.v("HTTP:JSON:PUT", json);
                 break;
             case POST:
-                request = generatePostRequest(url, json);
+                request = generatePostRequest(context, url, json);
                 Log.v("HTTP:URL:POST", url);
                 Log.v("HTTP:JSON:POST", json);
                 break;
             default:
-                request = generateGetRequest(url);
+                request = generateGetRequest(context, url);
                 Log.v("HTTP:URL:GET", url);
                 break;
         }
@@ -93,32 +97,32 @@ public class HttpIO
         }
     }
 
-    private static Request generateGetRequest(String url)
+    private static Request generateGetRequest(Context context, String url)
     {
         Request.Builder builder = new Request.Builder().url(url).get();
-        builder = addDefaultHeaders(builder);
+        builder = addDefaultHeaders(context, builder);
         return builder.build();
     }
 
-    private static Request generatePostRequest(@NonNull String url, @NonNull String json)
+    private static Request generatePostRequest(Context context, @NonNull String url, @NonNull String json)
     {
         Request.Builder builder = new Request.Builder().url(url).post(RequestBody.create(JSON, json));
-        builder = addDefaultHeaders(builder);
+        builder = addDefaultHeaders(context, builder);
         return builder.build();
     }
 
-    private static Request generatePutRequest(@NonNull String url, @NonNull String json)
+    private static Request generatePutRequest(Context context, @NonNull String url, @NonNull String json)
     {
         Request.Builder builder = new Request.Builder().url(url).put(RequestBody.create(JSON, json));
-        builder = addDefaultHeaders(builder);
+        builder = addDefaultHeaders(context, builder);
         return builder.build();
     }
 
-    public static String multipartPost(@NonNull String url, @NonNull File file)
+    public static String multipartPost(Context context, @NonNull String url, @NonNull File file)
             throws IOException, AppServerException
     {
         Request.Builder builder = new Request.Builder().url(url);
-        builder = addDefaultHeaders(builder);
+        builder = addDefaultHeaders(context, builder);
         MultipartBuilder multipartBuilder = new MultipartBuilder();
         multipartBuilder.addFormDataPart("file", file.getName(),
                 RequestBody.create(MediaType.parse("image/jpeg"), file));
@@ -155,9 +159,11 @@ public class HttpIO
         }
     }
 
-    private static Request.Builder addDefaultHeaders(Request.Builder builder)
+    private static Request.Builder addDefaultHeaders(Context context, Request.Builder builder)
     {
-        //builder.addHeader("X-AndroidAppVersion", String.valueOf(BuildConfig.VERSION_CODE));
+        Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
+        builder.addHeader(AUTH_KEY, credentials.getAuthKey());
+        builder.addHeader("X-AndroidAppVersion", String.valueOf(BuildConfig.VERSION_CODE));
         return builder;
     }
 }

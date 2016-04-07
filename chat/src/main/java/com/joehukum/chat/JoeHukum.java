@@ -27,8 +27,8 @@ public class JoeHukum
         final ProgressDialog pd = UiUtils.getProgressDialog(context);
         showProgress(pd);
         Observable<Boolean> observable = ServiceFactory.CredentialsService().createUser(context, authKey, phoneNumber, email);
-        observable.observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+        observable.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<Boolean>()
                 {
                     @Override
@@ -40,7 +40,7 @@ public class JoeHukum
                     @Override
                     public void onError(Throwable e)
                     {
-
+                        Log.wtf(TAG, e);
                     }
 
                     @Override

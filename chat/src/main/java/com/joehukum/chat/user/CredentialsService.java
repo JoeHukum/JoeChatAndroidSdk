@@ -30,6 +30,7 @@ public class CredentialsService
     private static final String PUBLISH_KEY = "publishKey";
     private static final String SUBSCRIBE_KEY = "subscribeKey";
     private static final String CUSTOMER_HASH = "customerHash";
+    private static final String CONTENT_AUTHORITY = "contentAuthority";
 
     private static final String EMPTY = "";
 
@@ -60,6 +61,7 @@ public class CredentialsService
             String publishKey = preferences.getString(PUBLISH_KEY, EMPTY);
             String subscribeKey = preferences.getString(SUBSCRIBE_KEY, EMPTY);
             String customerHash = preferences.getString(CUSTOMER_HASH, EMPTY);
+            String contentAuthority = preferences.getString(CONTENT_AUTHORITY, EMPTY);
             mCredentialsInstance = new Credentials(authKey, phone, email, publishKey, subscribeKey, customerHash, contentAuthority);
         }
         return mCredentialsInstance;
@@ -75,8 +77,10 @@ public class CredentialsService
                 String gcmId = getGcmId(context);
                 try
                 {
-                    String response = HttpIO.makeRequest(Api.User.Url(), Api.User.Json(phoneNumber, email, gcmId), HttpIO.Method.POST);
-                    Credentials credentials = UserParser.parseResponse(response, authKey, phoneNumber, email);
+                    Credentials credentials = new Credentials(authKey, phoneNumber, email, null, null, null, null);
+                    saveCredentials(context, credentials);
+                    String response = HttpIO.makeRequest(context, Api.User.Url(), Api.User.Json(phoneNumber, email, gcmId), HttpIO.Method.POST);
+                    credentials = UserParser.parseResponse(response, authKey, phoneNumber, email);
                     saveCredentials(context, credentials);
                 } catch (IOException e)
                 {

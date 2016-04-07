@@ -17,7 +17,7 @@ import android.util.Log;
 public class GenericAccountService extends Service
 {
     private static final String TAG = "GenericAccountService";
-    private static final String ACCOUNT_TYPE = "JH-Chat";
+    private static final String ACCOUNT_TYPE = "com.jh";
     private Authenticator mAuthenticator;
 
     /**
