@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -69,8 +70,14 @@ public class TextUserInputView extends FrameLayout implements View.OnClickListen
 
         attachment.setOnClickListener(this);
         attachment.setVisibility(View.GONE); // todo: make it configurable based on client.
-        send.setOnClickListener(this);
-
+        send.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Log.e("ya->", "here");
+            }
+        });
         return view;
     }
 
@@ -84,6 +91,5 @@ public class TextUserInputView extends FrameLayout implements View.OnClickListen
         {
             mListener.onClickAttachment();
         }
-
     }
 }

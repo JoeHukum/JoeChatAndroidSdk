@@ -26,7 +26,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.joehukum.chat.ui.activities.ChatActivity"/>
+        <activity
+            android:name="com.joehukum.chat.ui.activities.ChatActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <service android:name="com.joehukum.chat.messages.sync.GenericAccountService">
             <intent-filter>
@@ -52,6 +54,10 @@
             android:authorities="com.jh"
             android:exported="false"
             android:multiprocess="true"/>
+
+        <meta-data
+            android:name="com.joehukum.authority"
+            android:value="com.jh"/>
 
     </application>
 

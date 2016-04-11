@@ -18,7 +18,7 @@ public class UserParser
     public static final String PUB_NUB_PUBLISH_KEY = "pubNubPublishKey";
     public static final String CUSTOMER_DETAIL = "customerDetail";
     public static final String CUSTOMER_HASH = "customer_hash";
-    public static final String CONTENT_AUTHORITY = "android_provider";
+    public static final String CONTENT_AUTHORITY = "androidPackageName";
 
     @Nullable
     public static Credentials parseResponse(String response, String authKey, String phoneNumber, String email)
@@ -35,6 +35,10 @@ public class UserParser
             {
                 publishKey = jsonObject.getString(PUB_NUB_PUBLISH_KEY);
             }
+            if (jsonObject.has(CONTENT_AUTHORITY))
+            {
+                contentAuthority = jsonObject.getString(CONTENT_AUTHORITY);
+            }
             if (jsonObject.has(CUSTOMER_DETAIL))
             {
                 JSONObject customerJson = jsonObject.getJSONObject(CUSTOMER_DETAIL);
@@ -42,10 +46,6 @@ public class UserParser
                 {
                     customerHash = customerJson.getString(CUSTOMER_HASH);
                 }
-            }
-            if (jsonObject.has(CONTENT_AUTHORITY))
-            {
-                contentAuthority = jsonObject.getString(CONTENT_AUTHORITY);
             }
             Credentials credentials = new Credentials(authKey, phoneNumber, email, publishKey, subscribeKey, customerHash, contentAuthority);
             return credentials;

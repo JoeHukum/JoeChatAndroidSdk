@@ -22,7 +22,7 @@ public class JoeHukum
 {
     private static final String TAG = JoeHukum.class.getName();
 
-    public static void chat(final Context context, String authKey, final String channel, String phoneNumber, String email)
+    public static void chat(final Context context, String authKey, String phoneNumber, String email)
     {
         final ProgressDialog pd = UiUtils.getProgressDialog(context);
         showProgress(pd);
@@ -51,7 +51,7 @@ public class JoeHukum
                         {
                             SyncUtils.CreateSyncAccount(context);
                         }
-                        Intent intent = ChatActivity.getIntent(context, channel);
+                        Intent intent = ChatActivity.getIntent(context, ServiceFactory.CredentialsService().getChannel(context));
                         context.startActivity(intent);
                     }
                 });

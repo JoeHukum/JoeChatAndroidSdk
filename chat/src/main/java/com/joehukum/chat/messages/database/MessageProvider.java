@@ -4,13 +4,14 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.joehukum.chat.ServiceFactory;
 
 /**
  * Created by pulkitkumar on 17/03/16.
@@ -18,7 +19,6 @@ import com.joehukum.chat.ServiceFactory;
 public class MessageProvider extends ContentProvider
 {
     private static final String TAG = MessageProvider.class.getName();
-    private static final long NONE = 0;
 
     public static Uri MESSAGE_URI;
     private static Uri BASE_CONTENT_URI;
@@ -26,12 +26,24 @@ public class MessageProvider extends ContentProvider
     private SQLiteDatabase mDatabase;
     private static UriMatcher uriMatcher;
 
+    private static final long NONE = 0;
+    private static final String JH_AUTHORITY = "com.joehukum.authority";
     private static final String IDENTIFIER_MESSAGES = "messages";
     private static final int MESSAGES = 101;
 
     private void init()
     {
-        String contentAuthority = ServiceFactory.CredentialsService().getUserCredentials(getContext()).getContentAuthority();
+        String contentAuthority = "";
+        ApplicationInfo applicationInfo = null;
+        try
+        {
+            applicationInfo = getContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = applicationInfo.metaData;
+            contentAuthority = bundle.getString(JH_AUTHORITY);
+        } catch (PackageManager.NameNotFoundException e)
+        {
+            Log.wtf(TAG, e);
+        }
         BASE_CONTENT_URI = Uri.parse("content://" + contentAuthority);
         MESSAGE_URI = BASE_CONTENT_URI.buildUpon().appendPath(IDENTIFIER_MESSAGES).build();
 

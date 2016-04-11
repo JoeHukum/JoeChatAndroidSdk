@@ -9,7 +9,7 @@ import com.pubnub.api.Pubnub;
 /**
  * Created by pulkitkumar on 17/03/16.
  */
-public class PubNub
+public class JhPubNub
 {
 
     private static Object mLock = new Object();

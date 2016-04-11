@@ -36,7 +36,7 @@ public class TableMessage
     public static void onCreate(@NonNull SQLiteDatabase db)
     {
         StringBuilder builder = new StringBuilder("Create table ").append(TABLE_NAME).append(" ( ")
-                .append(COLUMN_ID).append(" long primary key autoincrement, ")
+                .append(COLUMN_ID).append(" integer primary key autoincrement, ")
                 .append(COLUMN_HASH).append(" text, ")
                 .append(COLUMN_TYPE).append(" text, ")// not empty
                 .append(COLUMN_CONTENT).append(" text, ")
@@ -51,30 +51,36 @@ public class TableMessage
     }
 
     @Nullable
-    public static List<Message> getMessage(@NonNull Cursor cursor)
+    public static List<Message> getMessage(@Nullable Cursor cursor)
     {
-        if (cursor.moveToFirst())
-        {
-            List<Message> messages = new ArrayList<>();
-            do
-            {
-                Message message = new Message();
-                message.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
-                message.setMessageHash(cursor.getString(cursor.getColumnIndex(COLUMN_HASH)));
-                message.setType(Message.Type.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_TYPE))));
-                message.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
-                message.setContentType(Message.ContentType.valueOf(cursor.getString(cursor.getColumnIndex(COlUMN_CONTENT_TYPE))));
-                message.setResponseType(Message.ResponseType.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_RESPONSE_TYPE))));
-                message.setTime(new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_TIME))));
-                message.setAuthor(cursor.getString(cursor.getColumnIndex(COLUMN_AUTHOR)));
-                message.setMetadata(cursor.getString(cursor.getColumnIndex(COLUMN_METADATA)));
-                message.setIsRead(cursor.getInt(cursor.getColumnIndex(COLUMN_IS_READ)) > 0);
-                messages.add(message);
-            } while (cursor.moveToNext());
-            return messages;
-        } else
+        if (cursor == null)
         {
             return null;
+        } else
+        {
+            if (cursor.moveToFirst())
+            {
+                List<Message> messages = new ArrayList<>();
+                do
+                {
+                    Message message = new Message();
+                    message.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
+                    message.setMessageHash(cursor.getString(cursor.getColumnIndex(COLUMN_HASH)));
+                    message.setType(Message.Type.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_TYPE))));
+                    message.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
+                    message.setContentType(Message.ContentType.valueOf(cursor.getString(cursor.getColumnIndex(COlUMN_CONTENT_TYPE))));
+                    message.setResponseType(Message.ResponseType.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_RESPONSE_TYPE))));
+                    message.setTime(new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_TIME))));
+                    message.setAuthor(cursor.getString(cursor.getColumnIndex(COLUMN_AUTHOR)));
+                    message.setMetadata(cursor.getString(cursor.getColumnIndex(COLUMN_METADATA)));
+                    message.setIsRead(cursor.getInt(cursor.getColumnIndex(COLUMN_IS_READ)) > 0);
+                    messages.add(message);
+                } while (cursor.moveToNext());
+                return messages;
+            } else
+            {
+                return null;
+            }
         }
     }
 

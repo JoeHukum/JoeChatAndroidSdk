@@ -136,9 +136,12 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
                     @Override
                     public void onNext(List<Message> messages)
                     {
-                        mMessages.clear();
-                        mMessages.addAll(messages);
-                        mAdapter.notifyDataSetChanged();
+                        if (messages != null)
+                        {
+                            mMessages.clear();
+                            mMessages.addAll(messages);
+                            mAdapter.notifyDataSetChanged();
+                        }
                         updateUserInputLayout();
                     }
                 });

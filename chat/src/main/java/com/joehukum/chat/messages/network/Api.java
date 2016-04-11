@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
  */
 public class Api
 {
-    private static final String BASE_URL = "http://stagingapi.gogetspeedy.com/api/";
+    private static final String BASE_URL = "http://stagapi.gogetspeedy.com/api/";
 
     public static class Message
     {

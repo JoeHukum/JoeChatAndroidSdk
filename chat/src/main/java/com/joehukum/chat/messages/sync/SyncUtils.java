@@ -37,7 +37,6 @@ public class SyncUtils
 
         Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
         String contentAuthority = credentials.getContentAuthority();
-        String userId = credentials.getCustomerHash();
 
         // Create account, if it's missing. (Either first run, or user has deleted account.)
         Account account = GenericAccountService.GetAccount(credentials.getCustomerHash());

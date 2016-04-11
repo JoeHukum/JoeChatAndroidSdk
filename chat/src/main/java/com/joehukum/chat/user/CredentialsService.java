@@ -109,4 +109,10 @@ public class CredentialsService
             return EMPTY;
         }
     }
+
+    public String getChannel(Context context)
+    {
+        Credentials credentials = getUserCredentials(context);
+        return credentials.getCustomerHash();
+    }
 }

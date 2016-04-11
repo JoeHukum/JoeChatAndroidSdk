@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.joehukum.chat.ServiceFactory;
-import com.joehukum.chat.ui.activities.ChatActivity;
 import com.pubnub.api.Callback;
 import com.pubnub.api.PubnubError;
 import com.pubnub.api.PubnubException;
@@ -20,7 +19,7 @@ public class PubSubService
     {
         try
         {
-            PubNub.getInstance(context).subscribe(channel, new Callback()
+            JhPubNub.getInstance(context).subscribe(channel, new Callback()
             {
                 @Override
                 public void successCallback(String channel, Object messageJson)
@@ -72,6 +71,6 @@ public class PubSubService
 
     public static void unSubscribe(Context context, String channel)
     {
-        PubNub.getInstance(context).unsubscribe(channel);
+        JhPubNub.getInstance(context).unsubscribe(channel);
     }
 }
