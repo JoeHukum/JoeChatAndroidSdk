@@ -25,7 +25,6 @@ import com.joehukum.chat.ui.fragments.DatePickerFragment;
 import com.joehukum.chat.ui.fragments.TimePickerFragment;
 import com.joehukum.chat.ui.views.DateInputView;
 import com.joehukum.chat.ui.views.OptionsInputView;
-
 import com.joehukum.chat.ui.views.TextUserInputView;
 import com.joehukum.chat.ui.views.TimeInputView;
 
@@ -40,7 +39,8 @@ import rx.schedulers.Schedulers;
 public class ChatActivity extends AppCompatActivity implements TextUserInputView.TextInputCallbacks,
         //SearchAddItemsView.SearchAddItemsCallback,
         DateInputView.DateInputCallbacks,
-        TimeInputView.TimeInputCallback, OptionsInputView.OptionClickCallback
+        TimeInputView.TimeInputCallback,
+        OptionsInputView.OptionClickCallback
 {
     private static final String TAG = ChatActivity.class.getName();
     private static final String CHANNEL_NAME = "channelName";
@@ -228,7 +228,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     private void setUpToolbar()
     {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // todo: add text for title.
+        // todo: add client text for title.
         setSupportActionBar(toolbar);
     }
 

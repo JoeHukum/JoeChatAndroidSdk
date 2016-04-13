@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.messages.network.exceptions.AppServerException;
 import com.joehukum.chat.messages.objects.Message;
+import com.joehukum.chat.user.Credentials;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,15 +17,14 @@ import java.util.List;
  */
 public class MessageNetworkService
 {
-    public boolean uploadMessage(@NonNull Message message) throws AppServerException, IOException
+    public boolean uploadMessage(Context context, @NonNull Message message) throws AppServerException, IOException
     {
+        Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
+        String customerHash = credentials.getCustomerHash();
+        String response = HttpIO.makeRequest(context, Api.Message.Url(), Api.Message.Json(customerHash, message.getContent()), HttpIO.Method.POST);
+        String messageHash = MessageParser.parseMessageHash(response);
+        ServiceFactory.MessageDatabaseService().updateHash(context, messageHash, message.getId());
         return true;
-    }
-
-    public void saveMessage(@Nullable Context context, @NonNull String messageJson)
-    {
-        Message message = MessageParser.parseMessage(messageJson);
-        ServiceFactory.MessageDatabaseService().addMessage(context, message);
     }
 
     public void pullMessages(Context context, String latestHash)

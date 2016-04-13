@@ -1,5 +1,7 @@
 package com.joehukum.chat.messages.objects;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 /**
@@ -7,17 +9,23 @@ import java.util.Date;
  */
 public class Message
 {
-    public static final long MINIMUM_ID = -1;
     private long id;
-    private Type type;
+    @NonNull private Type type;
     private String messageHash;
     private Date time;
     private String author;
     private String content;
-    private ContentType contentType;
-    private ResponseType responseType;
+    @NonNull private ContentType contentType;
+    @NonNull  private ResponseType responseType;
     private boolean isRead;
     private String metadata;
+
+    public Message()
+    {
+        type = Type.SENT;
+        contentType = ContentType.TEXT;
+        responseType = ResponseType.TEXT;
+    }
 
     public long getId()
     {

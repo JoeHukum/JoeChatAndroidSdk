@@ -8,7 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.joehukum.chat.messages.network.MessageParser;
 import com.joehukum.chat.messages.objects.Message;
+import com.joehukum.chat.messages.sync.SyncUtils;
 
 import java.util.List;
 
@@ -34,25 +36,19 @@ public class MessageDatabaseService
             {
                 ContentValues values = TableMessage.buildContentValues(message);
                 context.getContentResolver().insert(MessageProvider.MESSAGE_URI, values);
+                SyncUtils.TriggerRefresh(context);
                 return null;
             }
         });
     }
 
-    public Observable<Boolean> updateHash(final Context context, @NonNull final String hash, final long id)
+    public Boolean updateHash(final Context context, @NonNull final String hash, final long id)
     {
-        return Observable.just(true).map(new Func1<Boolean, Boolean>()
-        {
-            @Override
-            public Boolean call(Boolean aBoolean)
-            {
-                ContentValues contentValues = TableMessage.hashContentValue(hash);
-                int count = context.getContentResolver().update(
-                        MessageProvider.MESSAGE_URI, contentValues,
-                        TableMessage.whereId(), new String[]{String.valueOf(id)});
-                return (count > NONE);
-            }
-        });
+        ContentValues contentValues = TableMessage.hashContentValue(hash);
+        int count = context.getContentResolver().update(
+                MessageProvider.MESSAGE_URI, contentValues,
+                TableMessage.whereId(), new String[]{String.valueOf(id)});
+        return (count > NONE);
     }
 
     public Observable<Void> markAllRead(final Context context)
@@ -172,7 +168,7 @@ public class MessageDatabaseService
                 try
                 {
                     cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null, null
-                            , null, TableMessage.COLUMN_TIME + " desc");
+                            , null, TableMessage.COLUMN_TIME + " asc");
                     List<Message> messages = TableMessage.getMessage(cursor);
                     return messages;
                 } catch (SQLException e)
@@ -230,5 +226,12 @@ public class MessageDatabaseService
         {
             DbUtils.closeCursor(cursor);
         }
+    }
+
+    public void savePubSubMessage(@NonNull Context context, @NonNull String json)
+    {
+        Message message = MessageParser.parseMessagesPubNub(json);
+        ContentValues values = TableMessage.buildContentValues(message);
+        context.getContentResolver().insert(MessageProvider.MESSAGE_URI, values);
     }
 }

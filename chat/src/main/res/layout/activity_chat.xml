@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:isScrollContainer="false"
         android:background="@color/white"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true">
 
     </FrameLayout>
@@ -23,9 +24,10 @@
         android:transcriptMode="alwaysScroll"
         android:dividerHeight="0dp"
         android:isScrollContainer="false"
-        android:divider="@color/transparent"
+        android:background="#877777"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"/>
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/userInputContainer"/>
 
 </RelativeLayout>

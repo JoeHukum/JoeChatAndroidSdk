@@ -11,11 +11,10 @@ import com.pubnub.api.Pubnub;
  */
 public class JhPubNub
 {
-
     private static Object mLock = new Object();
     private static Pubnub instance;
 
-    public static Pubnub getInstance(Context context)
+    protected static Pubnub getInstance(Context context)
     {
         synchronized (mLock)
         {

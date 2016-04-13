@@ -45,7 +45,7 @@ public class ChatAdapter extends RecyclerView.Adapter
         ViewHolder viewHolder = (ViewHolder) holder;
 
         Message message = mMessages.get(position);
-        if (message.getType() == Message.Type.SENT)
+        if (message.getType() == Message.Type.RECEIVED)
         {   // show/hide bubbles
             viewHolder.receivedView.setVisibility(View.VISIBLE);
             viewHolder.sentView.setVisibility(View.GONE);
@@ -58,7 +58,7 @@ public class ChatAdapter extends RecyclerView.Adapter
             }
             // show time.
             viewHolder.sentTime.setText(getFormattedDate(message.getTime()));
-        } else if (message.getType() == Message.Type.RECEIVED)
+        } else if (message.getType() == Message.Type.SENT)
         {
             // show/hide bubbles.
             viewHolder.sentView.setVisibility(View.VISIBLE);
@@ -66,12 +66,12 @@ public class ChatAdapter extends RecyclerView.Adapter
             // show received content.
             if (message.getContentType() == Message.ContentType.TEXT)
             {
-                viewHolder.receivedText.setVisibility(View.VISIBLE);
-                viewHolder.receivedImage.setVisibility(View.GONE);
-                viewHolder.receivedText.setText(message.getContent());
+                viewHolder.sentText.setVisibility(View.VISIBLE);
+                viewHolder.sentImage.setVisibility(View.GONE);
+                viewHolder.sentText.setText(message.getContent());
             }
             // show time.
-            viewHolder.receivedTime.setText(getFormattedDate(message.getTime()));
+            viewHolder.sentTime.setText(getFormattedDate(message.getTime()));
             // show tick mark.
             if (TextUtils.isEmpty(message.getMessageHash()))
             {

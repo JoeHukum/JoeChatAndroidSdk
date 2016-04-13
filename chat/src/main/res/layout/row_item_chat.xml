@@ -63,6 +63,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_below="@id/timeReceived"
             android:layout_marginTop="8dp"
+            android:visibility="gone"
             android:text="VIEW IN MAP"
             android:textAllCaps="true"
             android:layout_alignParentRight="true"/>

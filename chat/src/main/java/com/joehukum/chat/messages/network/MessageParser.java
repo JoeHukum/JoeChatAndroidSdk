@@ -1,7 +1,17 @@
 package com.joehukum.chat.messages.network;
 
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.joehukum.chat.messages.objects.Message;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,14 +19,125 @@ import java.util.List;
  */
 public class MessageParser
 {
+    private static final String TAG = MessageParser.class.getName();
 
-    public static Message parseMessage(String messageJson)
-    {
-        return null;
-    }
+    private static final String MESSAGE_JSON_KEY = "ticketMessage";
+    private static final String MESSAGE_HASH = "ticketMessageHash";
+    private static final String MSG_PUB_NUB_JSON_KEY = "tcktMsg";
+    private static final String MESSAGE = "message";
+    private static final String CREATE_DATE = "createDate";
+    private static final String TIME_PATTERN = "dd MMM yyyy HH:mm:ss";
+    private static final String MESSAGE_CONTENT_TYPE = "messageContentType";
+    private static final String CONTENT_TYPE_TEXT = "text";
+    private static final String AUTHOR = "author";
 
     public static List<Message> parseMessages(String s)
     {
         return null;
+    }
+
+    @Nullable
+    public static String parseMessageHash(@Nullable  String response)
+    {
+        try
+        {
+            JSONObject object = new JSONObject(response);
+            if (object.has(MESSAGE_JSON_KEY))
+            {
+                JSONObject messageJson = object.getJSONObject(MESSAGE_JSON_KEY);
+                if (messageJson.has(MESSAGE_HASH))
+                {
+                    return messageJson.getString(MESSAGE_HASH);
+                } else
+                {
+                    return null;
+                }
+            } else
+            {
+                return null;
+            }
+        } catch (JSONException e)
+        {
+            Log.wtf(TAG, e);
+            return null;
+        }
+    }
+
+    @Nullable
+    public static Message parseMessagesPubNub(@Nullable String json)
+    {
+        try
+        {
+            JSONObject object = new JSONObject(json);
+            if (object.has(MSG_PUB_NUB_JSON_KEY))
+            {
+                JSONObject messageJson  = object.getJSONObject(MSG_PUB_NUB_JSON_KEY);
+                Message message = new Message();
+                if (messageJson.has(MESSAGE))
+                {
+                    message.setContent(messageJson.getString(MESSAGE));
+                }
+                if (messageJson.has(CREATE_DATE))
+                {
+                    String time = messageJson.getString(CREATE_DATE);
+                    message.setTime(parseDate(time));
+                }
+                if (messageJson.has(MESSAGE_HASH))
+                {
+                    message.setMessageHash(MESSAGE_HASH);
+                }
+                if (messageJson.has(MESSAGE_CONTENT_TYPE))
+                {
+                    message.setContentType(getContentType(messageJson.getString(MESSAGE_CONTENT_TYPE)));
+                }
+                if (message.getContentType() != null)
+                {
+                    switch (message.getContentType())
+                    {
+                        default:
+                            break;
+                    }
+                } //todo : message response type missing
+                if (messageJson.has(AUTHOR))
+                {
+                    message.setAuthor(messageJson.getString(AUTHOR));
+                }
+                message.setIsRead(true);
+                message.setType(Message.Type.RECEIVED);
+                return message;
+            } else
+            {
+                return null;
+            }
+        } catch (JSONException e)
+        {
+            Log.wtf(TAG, e);
+            return null;
+        }
+    }
+
+    private static Message.ContentType getContentType(String messageContentType)
+    {
+        if (TextUtils.isEmpty(messageContentType))
+        {
+            return Message.ContentType.TEXT;
+        } else if (messageContentType.equals(CONTENT_TYPE_TEXT))
+        {
+            return Message.ContentType.TEXT;
+        }
+        return Message.ContentType.TEXT;
+    }
+
+    private static Date parseDate(String time)
+    {
+        SimpleDateFormat format = new SimpleDateFormat(TIME_PATTERN);
+        try
+        {
+            return format.parse(time);
+        } catch (ParseException e)
+        {
+            Log.wtf(TAG, e);
+            return new Date();
+        }
     }
 }

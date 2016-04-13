@@ -16,9 +16,13 @@ public class Api
             return new StringBuilder(BASE_URL).append("conversation/v2/ticket/smart/").toString();
         }
 
-        public static String Json()
+        public static String Json(String customerHash, String message)
         {
-            return null;
+            String template = new StringBuilder("{\n")
+                    .append("\t\"customer_hash\": \"%s\",\n")
+                    .append("\t\"message\": \"%s\"\n")
+                    .append("}").toString();
+            return String.format(template, customerHash, message);
         }
     }
 

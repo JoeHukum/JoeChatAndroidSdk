@@ -30,12 +30,9 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         fragment.show(fm, SELECT_TIME);
     }
 
-    private TextUserInputView.TextInputCallbacks mListener;
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        mListener = (TextUserInputView.TextInputCallbacks) getActivity();
         final Calendar c = Calendar.getInstance();
         int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
@@ -49,14 +46,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
-        String dateStr = FORMATTER.format(c.getTime());
-        if (mListener != null)
-        {
-            mListener.sendMessage(dateStr);
-        } else
-        {
-            Log.e(TAG, "listener null");
-        }
+        String timeStr = FORMATTER.format(c.getTime());
     }
 }
 

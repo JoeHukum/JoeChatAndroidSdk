@@ -28,7 +28,7 @@ public class PubSubService
                     Log.i(TAG, "message received");
                     if (context != null)
                     {
-                        ServiceFactory.MessageNetworkService().saveMessage(context, messageJson.toString());
+                        ServiceFactory.MessageDatabaseService().savePubSubMessage(context, messageJson.toString());
                     } else
                     {
                         //do nothing
@@ -60,7 +60,7 @@ public class PubSubService
                 public void errorCallback(String channel, PubnubError error)
                 {
                     super.errorCallback(channel, error);
-                    Log.e(TAG, "error");
+                    Log.e(TAG, "error callback pubnub");
                 }
             });
         } catch (PubnubException e)

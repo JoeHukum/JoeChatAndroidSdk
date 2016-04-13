@@ -5,9 +5,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
-
-import com.joehukum.chat.ui.views.TextUserInputView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,12 +26,9 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         fragment.show(fm, SELECT_DATE);
     }
 
-    private TextUserInputView.TextInputCallbacks mListener;
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        mListener = (TextUserInputView.TextInputCallbacks) getActivity();
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
@@ -49,12 +43,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     {
         Date date = new Date(year-1900, monthOfYear, dayOfMonth);
         String dateStr = FORMATTER.format(date);
-        if (mListener != null)
-        {
-            mListener.sendMessage(dateStr);
-        } else
-        {
-            Log.e(TAG, "listener null");
-        }
+
     }
 }

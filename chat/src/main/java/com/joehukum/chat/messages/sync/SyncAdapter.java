@@ -56,7 +56,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         {
             for (Message message: messages)
             {
-                ServiceFactory.MessageNetworkService().uploadMessage(message);
+                ServiceFactory.MessageNetworkService().uploadMessage(getContext(), message);
             }
         }
     }
@@ -66,5 +66,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         Message message = ServiceFactory.MessageDatabaseService().getLatestMessage(getContext());
         String latestHash = message == null? null : message.getMessageHash();
         ServiceFactory.MessageNetworkService().pullMessages(getContext(), latestHash);
+    }
+
+    private void showUnreadNotification()
+    {
+
     }
 }
