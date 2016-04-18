@@ -33,8 +33,10 @@ public class MessageParser
     private static final String MESSAGE_CONTENT_TYPE = "messageContentType";
     private static final String CONTENT_TYPE_TEXT = "text";
     private static final String AUTHOR = "author";
-    public static final String TICKETS = "apiTickets";
-    public static final String FSYNC_MESSAGES = "apiTicketMessages";
+    private static final String TICKETS = "apiTickets";
+    private static final String FSYNC_MESSAGES = "apiTicketMessages";
+    private static final String PUBLIC_NOTE = "publicNote";
+    private static final String CUSTOMER = "Customer";
 
     @Nullable
     public static List<Message> parseMessages(String response)
@@ -49,7 +51,10 @@ public class MessageParser
             for (int i = 0; i< array.length(); i++)
             {
                 Message message = parseMessage(array.getJSONObject(i));
-                messages.add(message);
+                if (message.isPublicNote() && !CUSTOMER.equals(message.getAuthor()))
+                {
+                    messages.add(message);
+                }
             }
             return messages;
         } catch (JSONException e)
@@ -96,7 +101,13 @@ public class MessageParser
             {
                 JSONObject messageJson  = object.getJSONObject(MSG_PUB_NUB_JSON_KEY);
                 Message message = parseMessage(messageJson);
-                return message;
+                if (message.isPublicNote() && !CUSTOMER.equals(message.getAuthor()))
+                {
+                    return message;
+                } else
+                {
+                    return null;
+                }
             } else
             {
                 return null;
@@ -134,12 +145,17 @@ public class MessageParser
             switch (message.getContentType())
             {
                 default:
+                    // todo: add metadata based on content type.
                     break;
             }
         } //todo : message response type missing
         if (messageJson.has(AUTHOR))
         {
             message.setAuthor(messageJson.getString(AUTHOR));
+        }
+        if (messageJson.has(PUBLIC_NOTE))
+        {
+            message.setPublicNote(messageJson.getBoolean(PUBLIC_NOTE));
         }
         message.setIsRead(true);
         message.setType(Message.Type.RECEIVED);

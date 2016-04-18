@@ -18,6 +18,7 @@ public class Message
     @NonNull private ContentType contentType;
     @NonNull  private ResponseType responseType;
     private boolean isRead;
+    private boolean isPublicNote;
     private String metadata;
 
     public Message()
@@ -125,6 +126,16 @@ public class Message
     public String getMetadata()
     {
         return metadata;
+    }
+
+    public boolean isPublicNote()
+    {
+        return isPublicNote;
+    }
+
+    public void setPublicNote(boolean publicNote)
+    {
+        this.isPublicNote = publicNote;
     }
 
     public String getDisplayText()
