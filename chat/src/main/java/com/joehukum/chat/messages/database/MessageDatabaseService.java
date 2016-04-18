@@ -23,8 +23,8 @@ import rx.functions.Func1;
  */
 public class MessageDatabaseService
 {
-
     public static final int NONE = 0;
+
     private static final String TAG = MessageDatabaseService.class.getName();
 
     public Observable<Boolean> addMessage(final Context context, @NonNull final Message message)
@@ -65,95 +65,24 @@ public class MessageDatabaseService
         });
     }
 
-    public Observable<Message> getTicketForId(final Context context, final long id)
+    public List<Message> getUnreadMessages(final Context context)
     {
-        return Observable.just(context).map(new Func1<Context, Message>()
+        Cursor cursor = null;
+        try
         {
-            @Override
-            public Message call(Context context)
-            {
-                Cursor cursor = null;
-                try
-                {
-                    cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null,
-                            TableMessage.whereId(), new String[]{String.valueOf(id)}, null);
-                    List<Message> messages = TableMessage.getMessage(cursor);
-                    Message message = null;
-                    if (messages != null && !messages.isEmpty())
-                    {
-                        message = messages.get(0);
-                    }
-                    return message;
-                } catch (SQLException e)
-                {
-                    Log.wtf(TAG, e);
-                    return null;
-                } finally
-                {
-                    DbUtils.closeCursor(cursor);
-                }
-            }
-        });
-    }
-
-    public Observable<Message> getTicketForHash(final Context context, final String hash)
-    {
-        return Observable.just(true).map(new Func1<Boolean, Message>()
+            cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null,
+                    TableMessage.whereRead(), new String[]{String.valueOf(false)},
+                    TableMessage.COLUMN_TIME + " desc");
+            List<Message> messages = TableMessage.getMessage(cursor);
+            return messages;
+        } catch (SQLException e)
         {
-            @Nullable
-            @Override
-            public Message call(Boolean aBoolean)
-            {
-                Cursor cursor = null;
-                try
-                {
-                    cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null,
-                            TableMessage.whereHash(), new String[]{hash}, null);
-                    List<Message> messages = TableMessage.getMessage(cursor);
-                    Message message = null;
-                    if (messages != null && !messages.isEmpty())
-                    {
-                        message = messages.get(0);
-                    }
-                    return message;
-                } catch (SQLException e)
-                {
-                    Log.wtf(TAG, e);
-                    return null;
-                } finally
-                {
-                    DbUtils.closeCursor(cursor);
-                }
-            }
-        });
-    }
-
-    public Observable<List<Message>> getUnreadMessages(final Context context)
-    {
-        return Observable.just(context).map(new Func1<Context, List<Message>>()
+            Log.wtf(TAG, e);
+            return null;
+        } finally
         {
-            @Nullable
-            @Override
-            public List<Message> call(Context context)
-            {
-                Cursor cursor = null;
-                try
-                {
-                    cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null,
-                            TableMessage.whereRead(), new String[]{String.valueOf(false)},
-                            TableMessage.COLUMN_TIME + " desc");
-                    List<Message> messages = TableMessage.getMessage(cursor);
-                    return messages;
-                } catch (SQLException e)
-                {
-                    Log.wtf(TAG, e);
-                    return null;
-                } finally
-                {
-                    DbUtils.closeCursor(cursor);
-                }
-            }
-        });
+            DbUtils.closeCursor(cursor);
+        }
     }
 
     public Observable<List<Message>> getMessages(final Context context)
@@ -168,7 +97,8 @@ public class MessageDatabaseService
                 try
                 {
                     cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null, null
-                            , null, TableMessage.COLUMN_TIME + " asc");
+                            , null, TableMessage.COLUMN_TIME + " desc");
+                    markAllRead(context);
                     List<Message> messages = TableMessage.getMessage(cursor);
                     return messages;
                 } catch (SQLException e)
@@ -208,8 +138,8 @@ public class MessageDatabaseService
         Cursor cursor = null;
         try
         {
-            cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null, TableMessage.whereHashNotNull(),
-                    null, TableMessage.COLUMN_TIME + " desc");
+            cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null, TableMessage.whereHashNotNullAndType(),
+                    new String[]{Message.Type.RECEIVED.getName()}, TableMessage.COLUMN_TIME + " desc");
             List<Message> messages = TableMessage.getMessage(cursor);
             if (messages != null && ! messages.isEmpty())
             {

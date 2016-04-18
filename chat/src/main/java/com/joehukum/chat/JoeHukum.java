@@ -9,6 +9,7 @@ import com.anupcowkur.reservoir.Reservoir;
 import com.joehukum.chat.messages.sync.SyncUtils;
 import com.joehukum.chat.ui.activities.ChatActivity;
 import com.joehukum.chat.ui.utils.UiUtils;
+import com.joehukum.chat.user.Credentials;
 
 import rx.Observable;
 import rx.Observer;
@@ -51,7 +52,8 @@ public class JoeHukum
                         {
                             SyncUtils.CreateSyncAccount(context);
                         }
-                        Intent intent = ChatActivity.getIntent(context, ServiceFactory.CredentialsService().getChannel(context));
+                        String channelName = ServiceFactory.CredentialsService().getChannel(context);
+                        Intent intent = ChatActivity.getIntent(context, channelName);
                         context.startActivity(intent);
                     }
                 });

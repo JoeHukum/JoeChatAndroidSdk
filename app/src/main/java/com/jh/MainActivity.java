@@ -7,6 +7,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.joehukum.chat.JoeHukum;
+import com.joehukum.chat.messages.objects.Message;
+import com.joehukum.chat.ui.notification.NotificationHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {

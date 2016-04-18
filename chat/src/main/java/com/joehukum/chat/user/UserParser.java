@@ -47,7 +47,7 @@ public class UserParser
                     customerHash = customerJson.getString(CUSTOMER_HASH);
                 }
             }
-            Credentials credentials = new Credentials(authKey, phoneNumber, email, "pub-c-fa5144c8-8c96-46a1-9b96-af84a8993ebe",
+            Credentials credentials = new Credentials(authKey, phoneNumber, email, publishKey,
                     subscribeKey, customerHash, contentAuthority);
             return credentials;
         } catch (JSONException e)

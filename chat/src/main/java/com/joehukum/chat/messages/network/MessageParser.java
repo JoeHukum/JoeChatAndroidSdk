@@ -1,16 +1,19 @@
 package com.joehukum.chat.messages.network;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.joehukum.chat.messages.objects.Message;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,10 +33,30 @@ public class MessageParser
     private static final String MESSAGE_CONTENT_TYPE = "messageContentType";
     private static final String CONTENT_TYPE_TEXT = "text";
     private static final String AUTHOR = "author";
+    public static final String TICKETS = "apiTickets";
+    public static final String FSYNC_MESSAGES = "apiTicketMessages";
 
-    public static List<Message> parseMessages(String s)
+    @Nullable
+    public static List<Message> parseMessages(String response)
     {
-        return null;
+        try
+        {
+            List<Message> messages = new ArrayList<>();
+            JSONObject ticket = new JSONObject(response);
+            JSONArray array = ticket.getJSONArray(TICKETS);
+            ticket = array.getJSONObject(0);
+            array = ticket.getJSONArray(FSYNC_MESSAGES);
+            for (int i = 0; i< array.length(); i++)
+            {
+                Message message = parseMessage(array.getJSONObject(i));
+                messages.add(message);
+            }
+            return messages;
+        } catch (JSONException e)
+        {
+            Log.wtf(TAG, e);
+            return null;
+        }
     }
 
     @Nullable
@@ -72,38 +95,7 @@ public class MessageParser
             if (object.has(MSG_PUB_NUB_JSON_KEY))
             {
                 JSONObject messageJson  = object.getJSONObject(MSG_PUB_NUB_JSON_KEY);
-                Message message = new Message();
-                if (messageJson.has(MESSAGE))
-                {
-                    message.setContent(messageJson.getString(MESSAGE));
-                }
-                if (messageJson.has(CREATE_DATE))
-                {
-                    String time = messageJson.getString(CREATE_DATE);
-                    message.setTime(parseDate(time));
-                }
-                if (messageJson.has(MESSAGE_HASH))
-                {
-                    message.setMessageHash(MESSAGE_HASH);
-                }
-                if (messageJson.has(MESSAGE_CONTENT_TYPE))
-                {
-                    message.setContentType(getContentType(messageJson.getString(MESSAGE_CONTENT_TYPE)));
-                }
-                if (message.getContentType() != null)
-                {
-                    switch (message.getContentType())
-                    {
-                        default:
-                            break;
-                    }
-                } //todo : message response type missing
-                if (messageJson.has(AUTHOR))
-                {
-                    message.setAuthor(messageJson.getString(AUTHOR));
-                }
-                message.setIsRead(true);
-                message.setType(Message.Type.RECEIVED);
+                Message message = parseMessage(messageJson);
                 return message;
             } else
             {
@@ -114,6 +106,44 @@ public class MessageParser
             Log.wtf(TAG, e);
             return null;
         }
+    }
+
+    @NonNull
+    private static Message parseMessage(JSONObject messageJson) throws JSONException
+    {
+        Message message = new Message();
+        if (messageJson.has(MESSAGE))
+        {
+            message.setContent(messageJson.getString(MESSAGE));
+        }
+        if (messageJson.has(CREATE_DATE))
+        {
+            String time = messageJson.getString(CREATE_DATE);
+            message.setTime(parseDate(time));
+        }
+        if (messageJson.has(MESSAGE_HASH))
+        {
+            message.setMessageHash(messageJson.getString(MESSAGE_HASH));
+        }
+        if (messageJson.has(MESSAGE_CONTENT_TYPE))
+        {
+            message.setContentType(getContentType(messageJson.getString(MESSAGE_CONTENT_TYPE)));
+        }
+        if (message.getContentType() != null)
+        {
+            switch (message.getContentType())
+            {
+                default:
+                    break;
+            }
+        } //todo : message response type missing
+        if (messageJson.has(AUTHOR))
+        {
+            message.setAuthor(messageJson.getString(AUTHOR));
+        }
+        message.setIsRead(true);
+        message.setType(Message.Type.RECEIVED);
+        return message;
     }
 
     private static Message.ContentType getContentType(String messageContentType)

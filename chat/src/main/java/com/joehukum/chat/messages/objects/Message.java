@@ -127,6 +127,17 @@ public class Message
         return metadata;
     }
 
+    public String getDisplayText()
+    {
+        if (contentType == ContentType.IMAGE)
+        {
+            return "image";
+        } else
+        {
+            return content;
+        }
+    }
+
     public enum ResponseType
     {
         TEXT("TEXT"), OPTIONS("OPTIONS"), ADDRESS("ADDRESS"), INT("INT"), DATE("DATE"), TIME("TIME")

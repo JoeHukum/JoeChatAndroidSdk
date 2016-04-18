@@ -27,15 +27,18 @@ public class MessageNetworkService
         return true;
     }
 
-    public void pullMessages(Context context, String latestHash)
+    public void pullMessages(Context context, String latestHash) throws IOException, AppServerException
     {
-        //String json = HttpIO.makeRequest();
-        List<Message> messages = MessageParser.parseMessages("");
+        Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
+        String customerHash = credentials.getCustomerHash();
+        String url = Api.Sync.Url(customerHash, latestHash);
+        String response = HttpIO.makeRequest(context, url, null, HttpIO.Method.GET);
+        List<Message> messages = MessageParser.parseMessages(response);
         if (messages != null)
         {
-            for (Message m: messages)
+            for (Message message: messages)
             {
-                ServiceFactory.MessageDatabaseService().addMessage(context, m);
+                ServiceFactory.MessageDatabaseService().addMessage(context, message);
             }
         }
     }

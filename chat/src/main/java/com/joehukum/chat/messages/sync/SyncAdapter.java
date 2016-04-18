@@ -11,6 +11,7 @@ import android.util.Log;
 import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.messages.network.exceptions.AppServerException;
 import com.joehukum.chat.messages.objects.Message;
+import com.joehukum.chat.ui.notification.NotificationHelper;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,6 +41,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         {
             uploadUnsyncedMessages();
             pullMessages();
+            if (!ServiceFactory.PubSubService().isChatActive(getContext()))
+            {
+                showUnreadMessageNotification();
+            }
         } catch (AppServerException e)
         {
             Log.wtf(TAG, e);
@@ -68,8 +73,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
         ServiceFactory.MessageNetworkService().pullMessages(getContext(), latestHash);
     }
 
-    private void showUnreadNotification()
+    private void showUnreadMessageNotification()
     {
-
+        List<Message> messages = ServiceFactory.MessageDatabaseService().getUnreadMessages(getContext());
+        NotificationHelper.showNotification(getContext(), messages);
     }
 }

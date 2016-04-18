@@ -77,6 +77,10 @@
             android:name="com.joehukum.authority"
             android:value="com.jh"/>
 
+        <meta-data
+            android:name="com.joehukum.chat.notification.icon"
+            android:resource="@drawable/ic_notif_big"/>
+
     </application>
 
 </manifest>

@@ -13,6 +13,7 @@ public class Credentials
     private String pubNubPublishKey;
     private String customerHash;
     private String contentAuthority;
+    private String clientName;
 
     public Credentials(String authKey, String phoneNumber, String email, String publishKey, String subscribeKey, String customerHash, String contentAuthority)
     {
@@ -86,5 +87,15 @@ public class Credentials
             return EMPTY;
         }
         return contentAuthority;
+    }
+
+    public String getClientName()
+    {
+        return clientName;
+    }
+
+    public void setClientName(String clientName)
+    {
+        this.clientName = clientName;
     }
 }

@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.joehukum.chat.R;
+import com.joehukum.chat.ui.activities.ChatActivity;
 
 /**
  * Created by pulkitkumar on 29/03/16.
@@ -90,6 +91,11 @@ public class TextUserInputView extends LinearLayout implements View.OnClickListe
         attachment.setOnClickListener(this);
         attachment.setVisibility(View.GONE);
         send.setOnClickListener(this);
+    }
+
+    public void takeInputFocus()
+    {
+        mMessage.requestFocus();
     }
 
     @Override

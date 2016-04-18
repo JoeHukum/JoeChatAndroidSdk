@@ -8,4 +8,7 @@
     <string name="ok">OK</string>
     <string name="select_date">Select Date</string>
     <string name="time_input">Select Time</string>
+    <string name="notifcation_template">Message from %s</string>
+    <string name="notification_summary">%s new messsages.</string>
+    <string name="notification_summary_one">1 new message.</string>
 </resources>

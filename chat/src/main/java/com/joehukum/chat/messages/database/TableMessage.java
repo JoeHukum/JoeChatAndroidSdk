@@ -168,8 +168,8 @@ public class TableMessage
         return values;
     }
 
-    public static String whereHashNotNull()
+    public static String whereHashNotNullAndType()
     {
-        return new StringBuilder().append(COLUMN_HASH).append(" is null ").toString();
+        return new StringBuilder().append(COLUMN_HASH).append(" is not null and ").append(COLUMN_TYPE).append(" = ?").toString();
     }
 }

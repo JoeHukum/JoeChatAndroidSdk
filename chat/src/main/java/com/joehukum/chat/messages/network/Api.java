@@ -7,13 +7,13 @@ import android.support.annotation.NonNull;
  */
 public class Api
 {
-    private static final String BASE_URL = "http://stagapi.gogetspeedy.com/api/";
+    private static final String BASE_URL = "http://stagapi.gogetspeedy.com/";
 
     public static class Message
     {
         public static String Url()
         {
-            return new StringBuilder(BASE_URL).append("conversation/v2/ticket/smart/").toString();
+            return new StringBuilder(BASE_URL).append("api/conversation/v2/ticket/smart/").toString();
         }
 
         public static String Json(String customerHash, String message)
@@ -30,10 +30,12 @@ public class Api
     {
         public static String Url(String customerHash, String ticketMessageHash)
         {
-            String template = new StringBuilder(BASE_URL).append("conversation/sync?")
-                    .append("customerHash=%s")
-                    .append("&ticketMessageHash=%s").toString();
-            return String.format(customerHash, ticketMessageHash);
+            String template = new StringBuilder(BASE_URL).append("api/conversation/v2/fsync?orderBy=asc")
+                    .append("&customerHash=%s")
+                    .append("&ticketMessageHash=%s")
+                    .append("&showCustomerMsg=false")
+                    .toString();
+            return String.format(template, customerHash, ticketMessageHash);
         }
     }
 
@@ -41,7 +43,7 @@ public class Api
     {
         public static String Url()
         {
-            return new StringBuilder(BASE_URL).append("customer/init").toString();
+            return new StringBuilder(BASE_URL).append("api/customer/init").toString();
         }
 
         public static String Json(@NonNull String phoneNumber, @NonNull String email, @NonNull String gcmId)

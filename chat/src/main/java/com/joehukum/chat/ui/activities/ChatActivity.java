@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.joehukum.chat.R;
@@ -49,10 +51,10 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     private static final int REQUEST_CODE_GALLERY = 11;
     private static final int REQUEST_CODE_CAMERA = 12;
 
-    public static Intent getIntent(Context context, String channel)
+    public static Intent getIntent(Context context, String channelName)
     {
         Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra(CHANNEL_NAME, channel);
+        intent.putExtra(CHANNEL_NAME, channelName);
         return intent;
     }
 
@@ -170,11 +172,13 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
             {
                 mUserInputContainer.removeAllViews();
                 mUserInputContainer.addView(mTextInputView);
+                mTextInputView.takeInputFocus();
             }
         } else
         {
             mUserInputContainer.removeAllViews();
             mUserInputContainer.addView(mTextInputView);
+            mTextInputView.takeInputFocus();
         }
     }
 
@@ -197,7 +201,9 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
 
         mMessages = new ArrayList<>();
         mAdapter = new ChatAdapter(this, mMessages);
-        mListView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        layoutManager.setReverseLayout(true);
+        mListView.setLayoutManager(layoutManager);
         mListView.setAdapter(mAdapter);
     }
 
@@ -228,8 +234,8 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     private void setUpToolbar()
     {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // todo: add client text for title.
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -317,6 +323,25 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     public void onOptionClick(Option option)
     {
         sendMessage(option.toString());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if (item.getItemId() == android.R.id.home)
+        {
+            onBackPressed();
+            return true;
+        } else
+        {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
     }
 
     @Override
