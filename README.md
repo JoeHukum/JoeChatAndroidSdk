@@ -81,30 +81,28 @@ Following code needs to be added to the android manifest
 ```
 
 You need to create a file in the xml directory of resources for account creation on the device.
+authenticator.xml
 
-    authenticator.xml
-
-    ```xml
-    <?xml version="1.0" encoding="utf-8"?>
-    <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
-                           android:accountType="your-package-name"
-                           android:icon="@mipmap/ic_launcher"
-                           android:smallIcon="@mipmap/ic_launcher"
-                           android:label="@string/app_name" />
-    ```
-
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+                       android:accountType="your-package-name"
+                       android:icon="@mipmap/ic_launcher"
+                       android:smallIcon="@mipmap/ic_launcher"
+                       android:label="@string/app_name" />
+```
 
 You will also need to add a file syncing the content provider data to the servers.
 
-    sync_adapter.xml
+sync_adapter.xml
 
-    ```xml
-    <?xml version="1.0" encoding="utf-8"?>
-    <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:contentAuthority="your-package-naame"
-                  android:accountType="your-package-name"
-                  android:userVisible="false"
-                  android:supportsUploading="false"
-                  android:allowParallelSyncs="false"
-                  android:isAlwaysSyncable="true" />
-    ```
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:contentAuthority="your-package-naame"
+                    android:accountType="your-package-name"
+                    android:userVisible="false"
+                    android:supportsUploading="false"
+                    android:allowParallelSyncs="false"
+                    android:isAlwaysSyncable="true" />
+```
