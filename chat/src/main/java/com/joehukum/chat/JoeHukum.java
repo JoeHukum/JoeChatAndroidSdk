@@ -9,7 +9,6 @@ import com.anupcowkur.reservoir.Reservoir;
 import com.joehukum.chat.messages.sync.SyncUtils;
 import com.joehukum.chat.ui.activities.ChatActivity;
 import com.joehukum.chat.ui.utils.UiUtils;
-import com.joehukum.chat.user.Credentials;
 
 import rx.Observable;
 import rx.Observer;
@@ -99,4 +98,6 @@ public class JoeHukum
             Log.wtf(TAG, e);
         }
     }
+
+
 }

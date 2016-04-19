@@ -19,6 +19,9 @@ JoeHukum.chat(this, "your-auth-key", "99xxxxxxxx", "abc@xyz.com");
 ```
 `e-mail` and `phone number` are nullable / optional in the above method.
 
+
+
+
 Following code needs to be added to the android manifest
 ```xml
 <activity
@@ -79,6 +82,14 @@ Following code needs to be added to the android manifest
 <!-- GCM elements end -->
 
 ```
+If you have already implemented GCM in your app you can simply add the following code in your app's GcmListenerService
+
+```java
+JhGcmListenerService service = new JhGcmListenerService();
+service.onMessageReceived(from, data);
+```
+
+
 
 You need to create a file in the xml directory of resources for account creation on the device.
 authenticator.xml
@@ -91,6 +102,8 @@ authenticator.xml
                        android:smallIcon="@mipmap/ic_launcher"
                        android:label="@string/app_name" />
 ```
+
+
 
 You will also need to add a file syncing the content provider data to the servers.
 
