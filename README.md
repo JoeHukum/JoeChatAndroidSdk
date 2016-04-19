@@ -4,7 +4,7 @@ Plug and play android SDK for Joe Hukum chat.
 Add the following dependency to your application's build.gradle
 ```gradle
 dependencies {
-	compile 'com.joehukum:chat:0.1.1'
+	compile 'com.joehukum:chat:0.2'
 }
 ```
 
@@ -21,8 +21,8 @@ JoeHukum.chat(this, "your-auth-key", "99xxxxxxxx", "abc@xyz.com");
 
 
 
+Following code needs to be added to the AndroidManifest.xml of your app.
 
-Following code needs to be added to the android manifest
 ```xml
 <activity
 	android:name="com.joehukum.chat.ui.activities.ChatActivity"
@@ -82,6 +82,7 @@ Following code needs to be added to the android manifest
 <!-- GCM elements end -->
 
 ```
+
 If you have already implemented GCM in your app you can simply add the following code in your app's GcmListenerService
 
 ```java
@@ -92,6 +93,7 @@ service.onMessageReceived(from, data);
 
 
 You need to create a file in the xml directory of resources for account creation on the device.
+
 authenticator.xml
 
 ```xml
