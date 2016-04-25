@@ -11,4 +11,6 @@
     <string name="notifcation_template">Message from %s</string>
     <string name="notification_summary">%s new messsages.</string>
     <string name="notification_summary_one">1 new message.</string>
+    <string name="startOver">Start over</string>
+    <string name="auto_complete_error">\"Please select a valid option from search\"</string>
 </resources>

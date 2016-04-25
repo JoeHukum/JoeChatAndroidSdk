@@ -4,14 +4,18 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.messages.network.MessageParser;
 import com.joehukum.chat.messages.objects.Message;
+import com.joehukum.chat.messages.objects.Option;
 import com.joehukum.chat.messages.sync.SyncUtils;
 
+import java.util.Date;
 import java.util.List;
 
 import rx.Observable;
@@ -161,7 +165,43 @@ public class MessageDatabaseService
     public void savePubSubMessage(@NonNull Context context, @NonNull String json)
     {
         Message message = MessageParser.parseMessagesPubNub(json);
-        ContentValues values = TableMessage.buildContentValues(message);
-        context.getContentResolver().insert(MessageProvider.MESSAGE_URI, values);
+        if (message != null)
+        {
+            ContentValues values = TableMessage.buildContentValues(message);
+            context.getContentResolver().insert(MessageProvider.MESSAGE_URI, values);
+            saveMessageMetadata(message);
+        }
+    }
+
+    private void saveMessageMetadata(Message message)
+    {
+        if (message.getResponseType() != null && message.getResponseType() == Message.ResponseType.SEARCH_OPTION)
+        {
+            ServiceFactory.MetaDataService().saveOptions(String.valueOf(message.getMessageHash()), (List<Option>) message.getMetadata());
+        }
+    }
+
+    private Message getGenericMessage()
+    {
+        Message message = new Message();
+        message.setTime(new Date());
+        message.setType(Message.Type.SENT);
+        message.setContentType(Message.ContentType.TEXT);
+        return message;
+    }
+
+    public Message generateTextMessage(String input)
+    {
+        Message message = getGenericMessage();
+        message.setContent(input);
+        return message;
+    }
+
+    public Message generateOptionMessage(Option option)
+    {
+        Message message = getGenericMessage();
+        message.setContentType(Message.ContentType.OPTION);
+        message.setMetadata(option.getId());
+        return message;
     }
 }

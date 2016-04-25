@@ -26,7 +26,7 @@ public class TextUserInputView extends LinearLayout implements View.OnClickListe
 {
     public interface TextInputCallbacks
     {
-        public void sendMessage(String message);
+        public void sendTextMessage(String message);
 
         public void onClickAttachment();
     }
@@ -105,7 +105,7 @@ public class TextUserInputView extends LinearLayout implements View.OnClickListe
         {
             String text = mMessage.getText().toString();
             mMessage.setText(null);
-            mListener.sendMessage(text);
+            mListener.sendTextMessage(text);
         } else if (v.getId() == R.id.attachment)
         {
             mListener.onClickAttachment();

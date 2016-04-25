@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.joehukum.chat.messages.objects.Message;
+import com.joehukum.chat.messages.objects.Option;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +38,10 @@ public class MessageParser
     private static final String FSYNC_MESSAGES = "apiTicketMessages";
     private static final String PUBLIC_NOTE = "publicNote";
     private static final String CUSTOMER = "Customer";
+    private static final String MESSAGE_RESPONSE_TYPE = "replyContentType";
+    public static final String TICKET_MESSAGE_OPTIONS = "ticketMessageOptions";
+    public static final String TMO_DISPLAY_TEXT = "displayText";
+    public static final String TMO_ID = "id";
 
     @Nullable
     public static List<Message> parseMessages(String response)
@@ -45,18 +50,24 @@ public class MessageParser
         {
             List<Message> messages = new ArrayList<>();
             JSONObject ticket = new JSONObject(response);
-            JSONArray array = ticket.getJSONArray(TICKETS);
-            ticket = array.getJSONObject(0);
-            array = ticket.getJSONArray(FSYNC_MESSAGES);
-            for (int i = 0; i< array.length(); i++)
+            if (ticket.has(TICKETS))
             {
-                Message message = parseMessage(array.getJSONObject(i));
-                if (message.isPublicNote() && !CUSTOMER.equals(message.getAuthor()))
+                JSONArray array = ticket.getJSONArray(TICKETS);
+                ticket = array.getJSONObject(0);
+                array = ticket.getJSONArray(FSYNC_MESSAGES);
+                for (int i = 0; i< array.length(); i++)
                 {
-                    messages.add(message);
+                    Message message = parseMessage(array.getJSONObject(i));
+                    if (message.isPublicNote() && !CUSTOMER.equals(message.getAuthor()))
+                    {
+                        messages.add(message);
+                    }
                 }
+                return messages;
+            } else
+            {
+                return null;
             }
-            return messages;
         } catch (JSONException e)
         {
             Log.wtf(TAG, e);
@@ -140,15 +151,18 @@ public class MessageParser
         {
             message.setContentType(getContentType(messageJson.getString(MESSAGE_CONTENT_TYPE)));
         }
-        if (message.getContentType() != null)
+        if (messageJson.has(MESSAGE_RESPONSE_TYPE))
         {
-            switch (message.getContentType())
+            message.setResponseType(getResponseType(messageJson.getString(MESSAGE_RESPONSE_TYPE)));
+            if (message.getResponseType() == Message.ResponseType.SEARCH_OPTION)
             {
-                default:
-                    // todo: add metadata based on content type.
-                    break;
+                if (messageJson.has(TICKET_MESSAGE_OPTIONS))
+                {
+                    List<Option> options = parseOptions(messageJson.getJSONArray(TICKET_MESSAGE_OPTIONS));
+                    message.setMetadata(options);
+                }
             }
-        } //todo : message response type missing
+        }
         if (messageJson.has(AUTHOR))
         {
             message.setAuthor(messageJson.getString(AUTHOR));
@@ -160,6 +174,30 @@ public class MessageParser
         message.setIsRead(true);
         message.setType(Message.Type.RECEIVED);
         return message;
+    }
+
+    private static List<Option> parseOptions(JSONArray jsonArray) throws JSONException
+    {
+        List<Option> options = new ArrayList<>();
+        for (int i=0; i< jsonArray.length(); i++)
+        {
+            JSONObject object = jsonArray.getJSONObject(i);
+            int id = object.getInt(TMO_ID);
+            String displayText = object.getString(TMO_DISPLAY_TEXT);
+            options.add(new Option(String.valueOf(id), displayText));
+        }
+        return options;
+    }
+
+    private static Message.ResponseType getResponseType(String string)
+    {
+        if ("opt".equals(string))
+        {
+            return Message.ResponseType.SEARCH_OPTION;
+        } else
+        {
+            return Message.ResponseType.TEXT;
+        }
     }
 
     private static Message.ContentType getContentType(String messageContentType)

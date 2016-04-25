@@ -83,7 +83,7 @@ public class JoeHukum
         }
     }
 
-    public static void init(Context context, String authority)
+    public static void init(Context context)
     {
         initReservoir(context);
     }
@@ -92,7 +92,7 @@ public class JoeHukum
     {
         try
         {
-            Reservoir.init(context, 32768); //32kb in bytes
+            Reservoir.init(context, 65536); //64kb in bytes
         } catch (Exception e)
         {
             Log.wtf(TAG, e);

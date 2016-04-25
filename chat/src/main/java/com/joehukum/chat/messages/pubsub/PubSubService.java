@@ -31,7 +31,7 @@ public class PubSubService
                 {
                     super.successCallback(channel, messageJson);
                     Log.i(TAG, "message received");
-                    Log.d(TAG, messageJson.toString());
+                    Log.i(TAG, messageJson.toString());
                     if (context != null)
                     {
                         ServiceFactory.MessageDatabaseService().savePubSubMessage(context, messageJson.toString());

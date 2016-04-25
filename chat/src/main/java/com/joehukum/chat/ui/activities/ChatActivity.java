@@ -13,25 +13,25 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.joehukum.chat.R;
 import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.messages.database.MessageProvider;
+import com.joehukum.chat.messages.network.MessageNetworkService;
 import com.joehukum.chat.messages.objects.Message;
 import com.joehukum.chat.messages.objects.Option;
 import com.joehukum.chat.ui.adapters.ChatAdapter;
 import com.joehukum.chat.ui.fragments.DatePickerFragment;
 import com.joehukum.chat.ui.fragments.TimePickerFragment;
 import com.joehukum.chat.ui.views.DateInputView;
-import com.joehukum.chat.ui.views.OptionsInputView;
+import com.joehukum.chat.ui.views.SearchableOptionsView;
 import com.joehukum.chat.ui.views.TextUserInputView;
 import com.joehukum.chat.ui.views.TimeInputView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import rx.Observer;
@@ -39,10 +39,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class ChatActivity extends AppCompatActivity implements TextUserInputView.TextInputCallbacks,
-        //SearchAddItemsView.SearchAddItemsCallback,
+        SearchableOptionsView.SearchOptionSelectionCallback,
         DateInputView.DateInputCallbacks,
-        TimeInputView.TimeInputCallback,
-        OptionsInputView.OptionClickCallback
+        TimeInputView.TimeInputCallback
 {
     private static final String TAG = ChatActivity.class.getName();
     private static final String CHANNEL_NAME = "channelName";
@@ -62,10 +61,10 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
 
     private RecyclerView mListView;
     private FrameLayout mUserInputContainer;
-    private TextUserInputView mTextInputView;
-    private DateInputView mDateInputView;
-    private TimeInputView mTimeInputView;
-    //private SearchAddItemsView mSearchAddInputView;
+    private TextUserInputView mTextInput;
+    private DateInputView mDateInput;
+    private TimeInputView mTimeInput;
+    private SearchableOptionsView mSearchableOptionInput;
 
     private ChatAdapter mAdapter;
     private List<Message> mMessages;
@@ -157,28 +156,28 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
             if (message.getResponseType() == Message.ResponseType.DATE)
             {
                 mUserInputContainer.removeAllViews();
-                mUserInputContainer.addView(mDateInputView);
+                mUserInputContainer.addView(mDateInput);
             } else if (message.getResponseType() == Message.ResponseType.TIME)
             {
                 mUserInputContainer.removeAllViews();
-                mUserInputContainer.addView(mTimeInputView);
+                mUserInputContainer.addView(mTimeInput);
             } else if (message.getResponseType() == Message.ResponseType.SEARCH_OPTION)
             {
-//                List<Option> options = ServiceFactory.MetaDataService().getOptions(this, message.getId());
-//                mSearchAddInputView.setOptions(options);
-//                mUserInputContainer.removeAllViews();
-//                mUserInputContainer.addView(mSearchAddInputView);
+                List<Option> options = ServiceFactory.MetaDataService().getOptions(this, message.getMessageHash());
+                mSearchableOptionInput.setOptions(options);
+                mUserInputContainer.removeAllViews();
+                mUserInputContainer.addView(mSearchableOptionInput);
             } else
             {
                 mUserInputContainer.removeAllViews();
-                mUserInputContainer.addView(mTextInputView);
-                mTextInputView.takeInputFocus();
+                mUserInputContainer.addView(mTextInput);
+                mTextInput.takeInputFocus();
             }
         } else
         {
             mUserInputContainer.removeAllViews();
-            mUserInputContainer.addView(mTextInputView);
-            mTextInputView.takeInputFocus();
+            mUserInputContainer.addView(mTextInput);
+            mTextInput.takeInputFocus();
         }
     }
 
@@ -186,7 +185,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     {
         if (mMessages != null && !mMessages.isEmpty())
         {
-            return mMessages.get(mMessages.size()-1);
+            return mMessages.get(mMessages.size() - 1);
         } else
         {
             return null;
@@ -209,10 +208,10 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
 
     private void initializeInputLayouts()
     {
-        mTextInputView = new TextUserInputView(this, this);
-        mDateInputView = new DateInputView(this, this);
-        mTimeInputView = new TimeInputView(this, this);
-        //mSearchAddInputView = new SearchAddItemsView(this, this);
+        mTextInput = new TextUserInputView(this, this);
+        mDateInput = new DateInputView(this, this);
+        mTimeInput = new TimeInputView(this, this);
+        mSearchableOptionInput = new SearchableOptionsView(this, this);
     }
 
     private void init(Bundle savedInstanceState)
@@ -238,39 +237,45 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    private void startOver()
+    {
+        sendTextMessage(MessageNetworkService.START_OVER_TEXT);
+    }
+
+    public void sendMessage(Message message)
+    {
+        ServiceFactory.MessageDatabaseService().addMessage(this, message)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<Boolean>()
+                {
+                    @Override
+                    public void onCompleted()
+                    {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e)
+                    {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean)
+                    {
+                        //todo
+                    }
+                });
+    }
+
     @Override
-    public void sendMessage(String input)
+    public void sendTextMessage(String input)
     {
         if (!TextUtils.isEmpty(input))
         {
-            Message message = new Message();
-            message.setTime(new Date());
-            message.setContent(input);
-            message.setType(Message.Type.SENT);
-            message.setContentType(Message.ContentType.TEXT);
-            ServiceFactory.MessageDatabaseService().addMessage(this, message)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new Observer<Boolean>()
-                    {
-                        @Override
-                        public void onCompleted()
-                        {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e)
-                        {
-
-                        }
-
-                        @Override
-                        public void onNext(Boolean aBoolean)
-                        {
-                            //todo
-                        }
-                    });
+            Message message = ServiceFactory.MessageDatabaseService().generateTextMessage(input);
+            sendMessage(message);
         }
     }
 
@@ -312,17 +317,21 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         DatePickerFragment.open(getSupportFragmentManager());
     }
 
-//    @Override
-//    public void onClickAdd(List<Option> selectedOptions)
-//    {
-//        String data = TextUtils.join(", ", selectedOptions);
-//        sendMessage(data);
-//    }
 
     @Override
-    public void onOptionClick(Option option)
+    public void onClickSearchableOption(Option option)
     {
-        sendMessage(option.toString());
+        if (option != null)
+        {
+            Message message = ServiceFactory.MessageDatabaseService().generateOptionMessage(option);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.chat, menu);
+        return true;
     }
 
     @Override
@@ -331,6 +340,10 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         if (item.getItemId() == android.R.id.home)
         {
             onBackPressed();
+            return true;
+        } else if (item.getItemId() == R.id.startOver)
+        {
+            startOver();
             return true;
         } else
         {

@@ -22,8 +22,6 @@ import com.squareup.okhttp.Response;
 import java.io.File;
 import java.io.IOException;
 
-
-
 /**
  * Created by pulkitkumar on 17/03/16.
  */

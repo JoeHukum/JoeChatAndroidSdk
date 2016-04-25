@@ -27,9 +27,9 @@ public class AutoCompleteAdapter extends ArrayAdapter<Option>
             List<Option> filteredOptions = new ArrayList<>();
             for (Option option : mOptions)
             {
-                if (!TextUtils.isEmpty(option.getText()))
+                if (!TextUtils.isEmpty(option.getDisplayText()))
                 {
-                    if (option.getText().startsWith(searchTerm))
+                    if (option.getDisplayText().startsWith(searchTerm))
                     {
                         filteredOptions.add(option);
                     }
