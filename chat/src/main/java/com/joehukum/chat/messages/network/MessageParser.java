@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.joehukum.chat.messages.objects.DateMetaData;
 import com.joehukum.chat.messages.objects.Message;
 import com.joehukum.chat.messages.objects.Option;
 
@@ -42,6 +43,9 @@ public class MessageParser
     public static final String TICKET_MESSAGE_OPTIONS = "ticketMessageOptions";
     public static final String TMO_DISPLAY_TEXT = "displayText";
     public static final String TMO_ID = "id";
+    public static final String DATE_META_DATA = "mtdt";
+    public static final String FROM = "frm";
+    public static final String TO = "to";
 
     @Nullable
     public static List<Message> parseMessages(String response)
@@ -161,6 +165,13 @@ public class MessageParser
                     List<Option> options = parseOptions(messageJson.getJSONArray(TICKET_MESSAGE_OPTIONS));
                     message.setMetadata(options);
                 }
+            } else if (message.getResponseType() == Message.ResponseType.DATE)
+            {
+                if (messageJson.has(DATE_META_DATA))
+                {
+                    DateMetaData dateMetaData = parseDateMetadata(messageJson.getJSONObject(DATE_META_DATA));
+                    message.setMetadata(dateMetaData);
+                }
             }
         }
         if (messageJson.has(AUTHOR))
@@ -174,6 +185,20 @@ public class MessageParser
         message.setIsRead(true);
         message.setType(Message.Type.RECEIVED);
         return message;
+    }
+
+    private static DateMetaData parseDateMetadata(JSONObject jsonObject) throws JSONException
+    {
+        Date start = null, end = null;
+        if (jsonObject.has(FROM))
+        {
+            start = parseDate(jsonObject.getString(FROM));
+        }
+        if (jsonObject.has(TO))
+        {
+            end = parseDate(jsonObject.getString(TO));
+        }
+        return new DateMetaData(start, end);
     }
 
     private static List<Option> parseOptions(JSONArray jsonArray) throws JSONException
@@ -194,6 +219,12 @@ public class MessageParser
         if ("opt".equals(string))
         {
             return Message.ResponseType.SEARCH_OPTION;
+        } else if ("cntNum".equals(string))
+        {
+            return Message.ResponseType.INT;
+        } else if ("date".equals(string))
+        {
+            return Message.ResponseType.DATE;
         } else
         {
             return Message.ResponseType.TEXT;

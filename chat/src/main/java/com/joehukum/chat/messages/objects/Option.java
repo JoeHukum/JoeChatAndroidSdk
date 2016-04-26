@@ -36,4 +36,10 @@ public class Option
     {
         this.displayText = displayText;
     }
+
+    @Override
+    public String toString()
+    {
+        return displayText;
+    }
 }

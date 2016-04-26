@@ -9,6 +9,7 @@ import android.util.Log;
 import com.anupcowkur.reservoir.Reservoir;
 import com.google.gson.reflect.TypeToken;
 import com.joehukum.chat.JoeHukum;
+import com.joehukum.chat.messages.objects.DateMetaData;
 import com.joehukum.chat.messages.objects.Option;
 
 import java.lang.reflect.Type;
@@ -29,7 +30,7 @@ public class MetadataService
         {
             try
             {
-                JoeHukum.initReservoir(context);
+                JoeHukum.initReservoir(context.getApplicationContext());
                 if (Reservoir.contains(messageHash))
                 {
                     Type resultType = new TypeToken<ArrayList<Option>>()
@@ -60,6 +61,45 @@ public class MetadataService
             try
             {
                 Reservoir.put(messageHash, options);
+            } catch (Exception e)
+            {
+                Log.wtf(TAG, e);
+            }
+        }
+    }
+
+    public DateMetaData getDateMetaData(Context context, String messageHash)
+    {
+        if (!TextUtils.isEmpty(messageHash))
+        {
+            JoeHukum.initReservoir(context.getApplicationContext());
+            try
+            {
+                if (Reservoir.contains(messageHash))
+                {
+                    return Reservoir.get(messageHash, DateMetaData.class);
+                } else
+                {
+                    return null;
+                }
+            } catch (Exception e)
+            {
+                Log.wtf(TAG, e);
+                return null;
+            }
+        } else
+        {
+            return null;
+        }
+    }
+
+    public void saveDateMetadata(String messageHash, DateMetaData metadata)
+    {
+        if (!TextUtils.isEmpty(messageHash))
+        {
+            try
+            {
+                Reservoir.put(messageHash, metadata);
             } catch (Exception e)
             {
                 Log.wtf(TAG, e);

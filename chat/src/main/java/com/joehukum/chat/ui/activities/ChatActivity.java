@@ -21,6 +21,7 @@ import com.joehukum.chat.R;
 import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.messages.database.MessageProvider;
 import com.joehukum.chat.messages.network.MessageNetworkService;
+import com.joehukum.chat.messages.objects.DateMetaData;
 import com.joehukum.chat.messages.objects.Message;
 import com.joehukum.chat.messages.objects.Option;
 import com.joehukum.chat.ui.adapters.ChatAdapter;
@@ -31,7 +32,9 @@ import com.joehukum.chat.ui.views.SearchableOptionsView;
 import com.joehukum.chat.ui.views.TextUserInputView;
 import com.joehukum.chat.ui.views.TimeInputView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import rx.Observer;
@@ -41,12 +44,16 @@ import rx.schedulers.Schedulers;
 public class ChatActivity extends AppCompatActivity implements TextUserInputView.TextInputCallbacks,
         SearchableOptionsView.SearchOptionSelectionCallback,
         DateInputView.DateInputCallbacks,
-        TimeInputView.TimeInputCallback
+        TimeInputView.TimeInputCallback,
+        DatePickerFragment.DateSelectedCallback
 {
     private static final String TAG = ChatActivity.class.getName();
     private static final String CHANNEL_NAME = "channelName";
     private static final int CAMERA_POSITION = 0;
     private static final int GALLERY_POSITION = 1;
+    public static final String DATE_PATTERN = "dd MMM yyyy";
+    public static final SimpleDateFormat FORMATTER = new SimpleDateFormat(DATE_PATTERN);
+
     private static final int REQUEST_CODE_GALLERY = 11;
     private static final int REQUEST_CODE_CAMERA = 12;
 
@@ -157,6 +164,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
             {
                 mUserInputContainer.removeAllViews();
                 mUserInputContainer.addView(mDateInput);
+                mDateInput.setMetadata(ServiceFactory.MetaDataService().getDateMetaData(this, message.getMessageHash()));
             } else if (message.getResponseType() == Message.ResponseType.TIME)
             {
                 mUserInputContainer.removeAllViews();
@@ -167,16 +175,25 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
                 mSearchableOptionInput.setOptions(options);
                 mUserInputContainer.removeAllViews();
                 mUserInputContainer.addView(mSearchableOptionInput);
+                mSearchableOptionInput.takeInputFocus();
+            } else if (message.getResponseType() == Message.ResponseType.INT)
+            {
+                mUserInputContainer.removeAllViews();
+                mUserInputContainer.addView(mTextInput);
+                mTextInput.setNumberInput(true);
+                mTextInput.takeInputFocus();
             } else
             {
                 mUserInputContainer.removeAllViews();
                 mUserInputContainer.addView(mTextInput);
+                mTextInput.setNumberInput(false);
                 mTextInput.takeInputFocus();
             }
         } else
         {
             mUserInputContainer.removeAllViews();
             mUserInputContainer.addView(mTextInput);
+            mTextInput.setNumberInput(false);
             mTextInput.takeInputFocus();
         }
     }
@@ -185,7 +202,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     {
         if (mMessages != null && !mMessages.isEmpty())
         {
-            return mMessages.get(mMessages.size() - 1);
+            return mMessages.get(0);
         } else
         {
             return null;
@@ -280,6 +297,13 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     }
 
     @Override
+    public void onDateSelected(Date date)
+    {
+        String dateStr = FORMATTER.format(date);
+        sendTextMessage(dateStr);
+    }
+
+    @Override
     public void onClickAttachment()
     {
         CharSequence colors[] = new CharSequence[]
@@ -312,9 +336,9 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     }
 
     @Override
-    public void onClickDateInput()
+    public void onClickDateInput(DateMetaData metaData)
     {
-        DatePickerFragment.open(getSupportFragmentManager());
+        DatePickerFragment.open(getSupportFragmentManager(), metaData);
     }
 
 
@@ -324,6 +348,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         if (option != null)
         {
             Message message = ServiceFactory.MessageDatabaseService().generateOptionMessage(option);
+            sendMessage(message);
         }
     }
 

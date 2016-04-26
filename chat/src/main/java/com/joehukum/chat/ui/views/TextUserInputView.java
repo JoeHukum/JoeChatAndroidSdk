@@ -1,23 +1,20 @@
 package com.joehukum.chat.ui.views;
 
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.joehukum.chat.R;
-import com.joehukum.chat.ui.activities.ChatActivity;
 
 /**
  * Created by pulkitkumar on 29/03/16.
@@ -60,7 +57,7 @@ public class TextUserInputView extends LinearLayout implements View.OnClickListe
     {
         mMessage = (EditText) findViewById(R.id.message);
         final ImageButton attachment = (ImageButton) findViewById(R.id.attachment);
-        final ImageButton send = (ImageButton) findViewById(R.id.send);
+        final FloatingActionButton send = (FloatingActionButton) findViewById(R.id.send);
         mMessage.addTextChangedListener(new TextWatcher()
         {
             @Override
@@ -91,6 +88,17 @@ public class TextUserInputView extends LinearLayout implements View.OnClickListe
         attachment.setOnClickListener(this);
         attachment.setVisibility(View.GONE);
         send.setOnClickListener(this);
+    }
+
+    public void setNumberInput(boolean numberInput)
+    {
+        if (numberInput)
+        {
+            mMessage.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+        } else
+        {
+            mMessage.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        }
     }
 
     public void takeInputFocus()

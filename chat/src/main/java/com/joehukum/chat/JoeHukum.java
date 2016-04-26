@@ -47,6 +47,7 @@ public class JoeHukum
                     public void onNext(Boolean aBoolean)
                     {
                         hideProgress(pd);
+
                         if (!SyncUtils.isPrefSetupComplete(context))
                         {
                             SyncUtils.CreateSyncAccount(context);

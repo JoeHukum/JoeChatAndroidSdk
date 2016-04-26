@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.joehukum.chat.ui.views.NiceAutoCompleteTextView
         android:id="@+id/auto_complete"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:hint="@string/chatBoxHint"
+        android:inputType="textMultiLine|textCapSentences"
+        android:maxLines="1"
+        android:paddingLeft="8dp"
+        android:layout_weight="0.8"/>
 
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/send"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:padding="12dp"
         android:src="@drawable/ic_send"/>
 
-</RelativeLayout>
+</merge>

@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.messages.network.MessageParser;
+import com.joehukum.chat.messages.objects.DateMetaData;
 import com.joehukum.chat.messages.objects.Message;
 import com.joehukum.chat.messages.objects.Option;
 import com.joehukum.chat.messages.sync.SyncUtils;
@@ -101,7 +102,7 @@ public class MessageDatabaseService
                 try
                 {
                     cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null, null
-                            , null, TableMessage.COLUMN_TIME + " desc");
+                            , null, TableMessage.COLUMN_ID + " desc");
                     markAllRead(context);
                     List<Message> messages = TableMessage.getMessage(cursor);
                     return messages;
@@ -167,9 +168,12 @@ public class MessageDatabaseService
         Message message = MessageParser.parseMessagesPubNub(json);
         if (message != null)
         {
+            if (message.getMetadata() != null)
+            {
+                saveMessageMetadata(message);
+            }
             ContentValues values = TableMessage.buildContentValues(message);
             context.getContentResolver().insert(MessageProvider.MESSAGE_URI, values);
-            saveMessageMetadata(message);
         }
     }
 
@@ -177,7 +181,10 @@ public class MessageDatabaseService
     {
         if (message.getResponseType() != null && message.getResponseType() == Message.ResponseType.SEARCH_OPTION)
         {
-            ServiceFactory.MetaDataService().saveOptions(String.valueOf(message.getMessageHash()), (List<Option>) message.getMetadata());
+            ServiceFactory.MetaDataService().saveOptions(message.getMessageHash(), (List<Option>) message.getMetadata());
+        } else if (message.getResponseType() != null && message.getResponseType() == Message.ResponseType.DATE)
+        {
+            ServiceFactory.MetaDataService().saveDateMetadata(message.getMessageHash(), (DateMetaData) message.getMetadata());
         }
     }
 
@@ -201,6 +208,7 @@ public class MessageDatabaseService
     {
         Message message = getGenericMessage();
         message.setContentType(Message.ContentType.OPTION);
+        message.setContent(option.getDisplayText());
         message.setMetadata(option.getId());
         return message;
     }

@@ -63,6 +63,12 @@ public class NiceAutoCompleteTextView extends AppCompatAutoCompleteTextView
         mSelectionFromPopUp = true;
     }
 
+    @Override
+    public boolean enoughToFilter()
+    {
+        return true;
+    }
+
     public boolean isSelectionFromPopUp()
     {
         return mSelectionFromPopUp;

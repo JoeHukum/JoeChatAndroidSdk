@@ -17,19 +17,24 @@ import java.util.List;
  */
 public class AutoCompleteAdapter extends ArrayAdapter<Option>
 {
+    private static final CharSequence EMPTY = "";
     private Filter  mFilter = new Filter()
     {
         @Override
         protected FilterResults performFiltering(CharSequence constraint)
         {
+            if (constraint == null)
+            {
+                constraint = EMPTY;
+            }
             String searchTerm = constraint.toString().toLowerCase();
             FilterResults results = new FilterResults();
             List<Option> filteredOptions = new ArrayList<>();
-            for (Option option : mOptions)
+            for (Option option : mAllOptions)
             {
                 if (!TextUtils.isEmpty(option.getDisplayText()))
                 {
-                    if (option.getDisplayText().startsWith(searchTerm))
+                    if (option.getDisplayText().toLowerCase().contains(searchTerm))
                     {
                         filteredOptions.add(option);
                     }
@@ -57,10 +62,13 @@ public class AutoCompleteAdapter extends ArrayAdapter<Option>
     };
 
     private List<Option> mOptions;
+    private List<Option> mAllOptions;
 
     public AutoCompleteAdapter(Context context, List<Option> objects)
     {
         super(context, android.R.layout.simple_list_item_1, objects);
+        mOptions = objects;
+        mAllOptions = new ArrayList<>(objects);
     }
 
     @Override
@@ -73,5 +81,14 @@ public class AutoCompleteAdapter extends ArrayAdapter<Option>
     public Filter getFilter()
     {
         return mFilter;
+    }
+
+    public void setOptions(List<Option> options)
+    {
+        mOptions.clear();
+        mOptions.addAll(options);
+        mAllOptions.clear();
+        mAllOptions.addAll(options);
+        notifyDataSetChanged();
     }
 }

@@ -25,14 +25,16 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final String email = "pk01@joehukum.com";
+        final String phone = "1234511132";
         fab.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                JoeHukum.chat(MainActivity.this, "joe", "9970061974", "pulkit@joehukum.com");
+                JoeHukum.chat(MainActivity.this, "joe", phone, email);
             }
         });
-        JoeHukum.chat(this, "joe", "9970061974", "pulkit@joehukum.com");
+        JoeHukum.chat(this, "joe", phone, email);
     }
 }

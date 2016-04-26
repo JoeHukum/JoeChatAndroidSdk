@@ -64,7 +64,8 @@ public class ChatAdapter extends RecyclerView.Adapter
             viewHolder.sentView.setVisibility(View.VISIBLE);
             viewHolder.receivedView.setVisibility(View.GONE);
             // show received content.
-            if (message.getContentType() == Message.ContentType.TEXT)
+            if (message.getContentType() == Message.ContentType.TEXT ||
+                    message.getContentType() == Message.ContentType.OPTION)
             {
                 viewHolder.sentText.setVisibility(View.VISIBLE);
                 viewHolder.sentImage.setVisibility(View.GONE);
