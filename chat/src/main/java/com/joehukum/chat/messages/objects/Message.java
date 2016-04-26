@@ -19,7 +19,7 @@ public class Message
     @NonNull  private ResponseType responseType;
     private boolean isRead;
     private boolean isPublicNote;
-    private String metadata;
+    private Object metadata;
 
     public Message()
     {
@@ -118,12 +118,12 @@ public class Message
         this.isRead = isRead;
     }
 
-    public void setMetadata(String metadata)
+    public void setMetadata(Object metadata)
     {
         this.metadata = metadata;
     }
 
-    public String getMetadata()
+    public Object getMetadata()
     {
         return metadata;
     }
@@ -169,7 +169,7 @@ public class Message
 
     public enum ContentType
     {
-        TEXT("TEXT"), IMAGE("IMAGE");
+        TEXT("TEXT"), IMAGE("IMAGE"), OPTION("OPTION");
 
         private String name;
 

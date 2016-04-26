@@ -74,6 +74,7 @@ public class TableMessage
                     message.setAuthor(cursor.getString(cursor.getColumnIndex(COLUMN_AUTHOR)));
                     message.setMetadata(cursor.getString(cursor.getColumnIndex(COLUMN_METADATA)));
                     message.setIsRead(cursor.getInt(cursor.getColumnIndex(COLUMN_IS_READ)) > 0);
+                    message.setMetadata(cursor.getString(cursor.getColumnIndex(COLUMN_METADATA)));
                     messages.add(message);
                 } while (cursor.moveToNext());
                 return messages;
@@ -113,13 +114,17 @@ public class TableMessage
         {
             contentValues.put(COLUMN_TIME, message.getTime().getTime());
         }
-        if (TextUtils.isEmpty(message.getAuthor()))
+        if (!TextUtils.isEmpty(message.getAuthor()))
         {
             contentValues.put(COLUMN_AUTHOR, message.getAuthor());
         }
         if (message.isRead())
         {
             contentValues.put(COLUMN_IS_READ, message.isRead());
+        }
+        if (message.getMetadata() != null)
+        {
+            contentValues.put(COLUMN_METADATA, message.getMetadata().toString());
         }
         return contentValues;
     }

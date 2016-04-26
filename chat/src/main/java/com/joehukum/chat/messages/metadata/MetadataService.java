@@ -1,11 +1,15 @@
 package com.joehukum.chat.messages.metadata;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.anupcowkur.reservoir.Reservoir;
 import com.google.gson.reflect.TypeToken;
 import com.joehukum.chat.JoeHukum;
+import com.joehukum.chat.messages.objects.DateMetaData;
 import com.joehukum.chat.messages.objects.Option;
 
 import java.lang.reflect.Type;
@@ -19,23 +23,24 @@ public class MetadataService
 {
     private static final String TAG = MetadataService.class.getName();
 
-    public List<Option> getOptions(Context context, long id)
+    @NonNull
+    public List<Option> getOptions(Context context,@Nullable String messageHash)
     {
-        if (id > 0)
+        if (!TextUtils.isEmpty(messageHash))
         {
             try
             {
-                JoeHukum.initReservoir(context);
-                if (Reservoir.contains(String.valueOf(id)))
+                JoeHukum.initReservoir(context.getApplicationContext());
+                if (Reservoir.contains(messageHash))
                 {
                     Type resultType = new TypeToken<ArrayList<Option>>()
                     {
                     }.getType();
-                    ArrayList<Option> options = Reservoir.get(String.valueOf(id), resultType);
+                    ArrayList<Option> options = Reservoir.get(messageHash, resultType);
                     return options;
                 } else
                 {
-                    Log.e(TAG, "No options for ticket message " + id);
+                    Log.e(TAG, "No options for ticket message " + messageHash);
                     return new ArrayList<>();
                 }
             } catch (Exception e)
@@ -49,13 +54,52 @@ public class MetadataService
         }
     }
 
-    public void saveOptions(long id, List<Option> options)
+    public void saveOptions(String messageHash, List<Option> options)
     {
-        if (id > 0)
+        if (!TextUtils.isEmpty(messageHash))
         {
             try
             {
-                Reservoir.put(String.valueOf(id), options);
+                Reservoir.put(messageHash, options);
+            } catch (Exception e)
+            {
+                Log.wtf(TAG, e);
+            }
+        }
+    }
+
+    public DateMetaData getDateMetaData(Context context, String messageHash)
+    {
+        if (!TextUtils.isEmpty(messageHash))
+        {
+            JoeHukum.initReservoir(context.getApplicationContext());
+            try
+            {
+                if (Reservoir.contains(messageHash))
+                {
+                    return Reservoir.get(messageHash, DateMetaData.class);
+                } else
+                {
+                    return null;
+                }
+            } catch (Exception e)
+            {
+                Log.wtf(TAG, e);
+                return null;
+            }
+        } else
+        {
+            return null;
+        }
+    }
+
+    public void saveDateMetadata(String messageHash, DateMetaData metadata)
+    {
+        if (!TextUtils.isEmpty(messageHash))
+        {
+            try
+            {
+                Reservoir.put(messageHash, metadata);
             } catch (Exception e)
             {
                 Log.wtf(TAG, e);

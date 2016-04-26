@@ -21,16 +21,16 @@
 // */
 //public class SearchAddItemsView extends FrameLayout
 //{
-//    public interface SearchAddItemsCallback
+//    public interface SearchOptionSelectionCallback
 //    {
-//        void onClickAdd(List<Option> selectedOptions);
+//        void onClickSearchableOption(List<Option> selectedOptions);
 //    }
 //
-//    private SearchAddItemsCallback mListener;
+//    private SearchOptionSelectionCallback mListener;
 //    private List<Option> mAllOptions;
 //    private AutoCompleteAdapter mAdapter;
 //
-//    public SearchAddItemsView(Context context, SearchAddItemsCallback listener)
+//    public SearchAddItemsView(Context context, SearchOptionSelectionCallback listener)
 //    {
 //        super(context);
 //        mListener = listener;
@@ -47,7 +47,7 @@
 //
 //    private View getSearchAddView(Context context)
 //    {
-//        View view = View.inflate(context, R.layout.search_add_user_input, null);
+//        View view = View.inflate(context, R.layout.search_user_input, null);
 //        final AutoCompleteTextView autoComplete = (AutoCompleteTextView) view.findViewById(R.id.auto_complete);
 //        final FloatingActionButton send = (FloatingActionButton) view.findViewById(R.id.send);
 //        final AutoLabelUI autoLabel = (AutoLabelUI) view.findViewById(R.id.label_view);
@@ -64,7 +64,7 @@
 //                {
 //                    return;
 //                }
-//                mListener.onClickAdd(getSelectedOptions(autoLabel.getLabels()));
+//                mListener.onClickSearchableOption(getSelectedOptions(autoLabel.getLabels()));
 //            }
 //        });
 //        autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener()

@@ -1,10 +1,14 @@
 package com.joehukum.chat.ui.fragments;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
+
+import com.joehukum.chat.messages.objects.DateMetaData;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,14 +19,28 @@ import java.util.Date;
  */
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener
 {
-    public static final String DATE_PATTERN = "dd MMM yyyy";
-    public static final SimpleDateFormat FORMATTER = new SimpleDateFormat(DATE_PATTERN);
     private static final String SELECT_DATE = "Select Date";
     private static final String TAG = DatePickerFragment.class.getName();
 
-    public static void open(FragmentManager fm)
+    private DateMetaData mMetaData;
+    private DateSelectedCallback mListener;
+
+    public interface DateSelectedCallback
+    {
+        public void onDateSelected(Date date);
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        mListener = (DateSelectedCallback) activity;
+    }
+
+    public static void open(FragmentManager fm, DateMetaData metaData)
     {
         DatePickerFragment fragment = new DatePickerFragment();
+        fragment.setMetaData(metaData);
         fragment.show(fm, SELECT_DATE);
     }
 
@@ -34,15 +52,47 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        setMetaDataAttributes(dialog);
         return dialog;
     }
 
+    private void setMetaDataAttributes(DatePickerDialog dialog)
+    {
+        if (mMetaData != null)
+        {
+            if (mMetaData.getStart() != null)
+            {
+                dialog.getDatePicker().setMinDate(mMetaData.getStart().getTime());
+            }
+            if (mMetaData.getEnd() != null)
+            {
+                dialog.getDatePicker().setMaxDate(mMetaData.getEnd().getTime());
+            }
+        }
+    }
+
+    private void setMetaData(DateMetaData metaData)
+    {
+        mMetaData = metaData;
+    }
 
     @Override
     public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth)
     {
         Date date = new Date(year-1900, monthOfYear, dayOfMonth);
-        String dateStr = FORMATTER.format(date);
+        if (mListener != null)
+        {
+            mListener.onDateSelected(date);
+        } else
+        {
+            Log.i(TAG, "onDateSet: activity null");
+        }
+    }
 
+    @Override
+    public void onDetach()
+    {
+        mListener = null;
+        super.onDetach();
     }
 }

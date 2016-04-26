@@ -4,14 +4,19 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.messages.network.MessageParser;
+import com.joehukum.chat.messages.objects.DateMetaData;
 import com.joehukum.chat.messages.objects.Message;
+import com.joehukum.chat.messages.objects.Option;
 import com.joehukum.chat.messages.sync.SyncUtils;
 
+import java.util.Date;
 import java.util.List;
 
 import rx.Observable;
@@ -97,7 +102,7 @@ public class MessageDatabaseService
                 try
                 {
                     cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null, null
-                            , null, TableMessage.COLUMN_TIME + " desc");
+                            , null, TableMessage.COLUMN_ID + " desc");
                     markAllRead(context);
                     List<Message> messages = TableMessage.getMessage(cursor);
                     return messages;
@@ -161,7 +166,50 @@ public class MessageDatabaseService
     public void savePubSubMessage(@NonNull Context context, @NonNull String json)
     {
         Message message = MessageParser.parseMessagesPubNub(json);
-        ContentValues values = TableMessage.buildContentValues(message);
-        context.getContentResolver().insert(MessageProvider.MESSAGE_URI, values);
+        if (message != null)
+        {
+            if (message.getMetadata() != null)
+            {
+                saveMessageMetadata(message);
+            }
+            ContentValues values = TableMessage.buildContentValues(message);
+            context.getContentResolver().insert(MessageProvider.MESSAGE_URI, values);
+        }
+    }
+
+    private void saveMessageMetadata(Message message)
+    {
+        if (message.getResponseType() != null && message.getResponseType() == Message.ResponseType.SEARCH_OPTION)
+        {
+            ServiceFactory.MetaDataService().saveOptions(message.getMessageHash(), (List<Option>) message.getMetadata());
+        } else if (message.getResponseType() != null && message.getResponseType() == Message.ResponseType.DATE)
+        {
+            ServiceFactory.MetaDataService().saveDateMetadata(message.getMessageHash(), (DateMetaData) message.getMetadata());
+        }
+    }
+
+    private Message getGenericMessage()
+    {
+        Message message = new Message();
+        message.setTime(new Date());
+        message.setType(Message.Type.SENT);
+        message.setContentType(Message.ContentType.TEXT);
+        return message;
+    }
+
+    public Message generateTextMessage(String input)
+    {
+        Message message = getGenericMessage();
+        message.setContent(input);
+        return message;
+    }
+
+    public Message generateOptionMessage(Option option)
+    {
+        Message message = getGenericMessage();
+        message.setContentType(Message.ContentType.OPTION);
+        message.setContent(option.getDisplayText());
+        message.setMetadata(option.getId());
+        return message;
     }
 }

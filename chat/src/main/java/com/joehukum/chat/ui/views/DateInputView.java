@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.joehukum.chat.R;
+import com.joehukum.chat.messages.objects.DateMetaData;
 
 /**
  * Created by pulkitkumar on 29/03/16.
@@ -15,10 +16,11 @@ public class DateInputView extends FrameLayout implements View.OnClickListener
 {
     public interface DateInputCallbacks
     {
-        public void onClickDateInput();
+        public void onClickDateInput(DateMetaData metaData);
     }
 
     private DateInputCallbacks mListener;
+    private DateMetaData mMetaData;
 
     public DateInputView(Context context, DateInputCallbacks listener)
     {
@@ -36,9 +38,14 @@ public class DateInputView extends FrameLayout implements View.OnClickListener
         return view;
     }
 
+    public void setMetadata(DateMetaData dateMetaData)
+    {
+        mMetaData = dateMetaData;
+    }
+
     @Override
     public void onClick(View v)
     {
-        mListener.onClickDateInput();
+        mListener.onClickDateInput(mMetaData);
     }
 }

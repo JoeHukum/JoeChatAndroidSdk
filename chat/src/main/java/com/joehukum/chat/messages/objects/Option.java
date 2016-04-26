@@ -8,41 +8,38 @@ import android.text.TextUtils;
 public class Option
 {
     public static final String TEXT_PRICE_PATTERN = "%s -Rs %0.2f";
-    private long id;
-    private String text;
-    private String price;
+    private String id;
+    private String displayText;
 
-    public Option(long id, String text, String price)
+    public Option(String id, String displayText)
     {
         this.id = id;
-        this.text = text;
-        this.price = price;
+        this.displayText = displayText;
     }
 
-    public long getId()
+    public String getId()
     {
         return id;
     }
 
-    public String getText()
+    public void setId(String id)
     {
-        return text;
+        this.id = id;
     }
 
-    public String getPrice()
+    public String getDisplayText()
     {
-        return price;
+        return displayText;
+    }
+
+    public void setDisplayText(String displayText)
+    {
+        this.displayText = displayText;
     }
 
     @Override
     public String toString()
     {
-        if (TextUtils.isEmpty(price))
-        {
-            return text;
-        } else
-        {
-            return String.format(TEXT_PRICE_PATTERN, text, price);
-        }
+        return displayText;
     }
 }

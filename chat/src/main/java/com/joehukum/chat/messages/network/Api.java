@@ -20,6 +20,7 @@ public class Api
         {
             String template = new StringBuilder("{\n")
                     .append("\t\"customer_hash\": \"%s\",\n")
+                    .append("\t\"channel\":\"android_app_channel\",")
                     .append("\t\"message\": \"%s\"\n")
                     .append("}").toString();
             return String.format(template, customerHash, message);
@@ -51,6 +52,7 @@ public class Api
             String jsonTemplate = new StringBuilder().append("{\"phone\":\"%s\",")
                     .append("\"verified\":true,")
                     .append("\"email\":\"%s\",")
+                    .append("\"channel\":\"android_app_channel\",")
                     .append("\"gcm_id\":\"%s\"}")
                     .toString();
             return String.format(jsonTemplate, phoneNumber, email, gcmId);

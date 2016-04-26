@@ -62,7 +62,7 @@ Following code needs to be added to the AndroidManifest.xml of your app.
 	android:name="com.joehukum.chat.notification.icon"
 	android:resource="@drawable/notification_icon"/>
 
-<!-- if your app doesn't implement GCM add this -->
+<!-- if your app doesn't implement GCM, Add this -->
 <service
 	android:name="com.joehukum.chat.messages.pubsub.JhGcmListenerService"
 	android:exported="false">
