@@ -3,8 +3,13 @@ package com.jh;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.joehukum.chat.JoeHukum;
 import com.joehukum.chat.messages.objects.Message;
@@ -13,28 +18,59 @@ import com.joehukum.chat.ui.notification.NotificationHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends AppCompatActivity
 {
+    @BindView(R.id.client_hash)
+    EditText clientHash;
+    @BindView(R.id.email)
+    EditText email;
+    @BindView(R.id.phone_number)
+    EditText phoneNumber;
+
+
+    UserStore userStore = new UserStore();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        final String email = "pk01@joehukum.com";
-        final String phone = "1234511132";
-        fab.setOnClickListener(new View.OnClickListener()
+        User user = userStore.getUser(this);
+        if (user != null)
         {
-            @Override
-            public void onClick(View v)
-            {
-                JoeHukum.chat(MainActivity.this, "joe", phone, email);
-            }
-        });
-        JoeHukum.chat(this, "joe", phone, email);
+            clientHash.setText(user.getClientHash());
+            email.setText(user.getEmail());
+            phoneNumber.setText(user.getPhone());
+            clientHash.setKeyListener(null);
+            email.setKeyListener(null);
+            phoneNumber.setKeyListener(null);
+            JoeHukum.chat(this, user.getClientHash(), user.getPhone(), user.getEmail());
+        } else
+        {
+
+        }
+    }
+
+    @OnClick(R.id.btn)
+    public void btnClick(View v)
+    {
+        String clHash = clientHash.getText().toString();
+        if (TextUtils.isEmpty(clHash))
+        {
+            clientHash.setError("Enter client hash");
+            return;
+        }
+        String em = email.getText().toString();
+        String ph = phoneNumber.getText().toString();
+        userStore.saveUser(this, new User(clHash, ph, em));
+        JoeHukum.chat(this, clHash, ph, em);
     }
 }
