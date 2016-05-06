@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.user.Credentials;
@@ -18,6 +19,7 @@ public class SyncUtils
 {
     private static final long SYNC_FREQUENCY = 60 * 10;  // 10 minutes (in seconds)
     private static final String PREF_SETUP_COMPLETE = "setup_complete";
+    private static final String TAG = SyncUtils.class.getName();
 
 
     public static boolean isPrefSetupComplete(@Nullable Context context)
@@ -36,7 +38,7 @@ public class SyncUtils
                 .getDefaultSharedPreferences(context).getBoolean(PREF_SETUP_COMPLETE, false);
 
         Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
-        String contentAuthority = credentials.getContentAuthority();
+        String contentAuthority = context.getPackageName();
 
         // Create account, if it's missing. (Either first run, or user has deleted account.)
         Account account = GenericAccountService.GetAccount(credentials.getCustomerHash());
@@ -75,7 +77,7 @@ public class SyncUtils
         b.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         b.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
-        String contentAuthority = credentials.getContentAuthority();
+        String contentAuthority = context.getPackageName();
         String accountName = credentials.getCustomerHash();
         ContentResolver.requestSync(
                 GenericAccountService.GetAccount(accountName),      // Sync account
