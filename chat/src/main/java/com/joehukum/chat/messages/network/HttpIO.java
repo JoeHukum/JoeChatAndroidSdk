@@ -30,7 +30,7 @@ public class HttpIO
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static final Object mLock = new Object();
-    public static final String AUTH_KEY = "clHsh";
+    public static final String AUTH_KEY = "X-ClientId";
     private static OkHttpClient mOkHttpClient;
 
     public static enum Method

@@ -24,6 +24,14 @@ JoeHukum.chat(this, "your-auth-key", "99xxxxxxxx", "abc@xyz.com");
 Following code needs to be added to the AndroidManifest.xml of your app.
 
 ```xml
+<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+```
+
+Inside `<application>`
+```xml
 <activity
 	android:name="com.joehukum.chat.ui.activities.ChatActivity"
     android:theme="@style/AppTheme.NoActionBar"/>
