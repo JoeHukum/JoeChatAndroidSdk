@@ -3,6 +3,10 @@ Plug and play android SDK for Joe Hukum chat.
 
 Add the following dependency to your application's build.gradle
 ```gradle
+repositories {
+    maven { url 'http://clojars.org/repo' }
+}
+
 dependencies {
 	compile 'com.joehukum:chat:0.3.1'
 }

@@ -1,6 +1,5 @@
 package com.joehukum.chat.user;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -10,12 +9,10 @@ import org.json.JSONObject;
 /**
  * Created by pulkitkumar on 05/04/16.
  */
-public class UserParser
+public class CredentialsParser
 {
-    private static final String TAG = UserParser.class.getName();
+    private static final String TAG = CredentialsParser.class.getName();
     private static final String EMPTY = "";
-    public static final String PUB_NUB_SUBSCRIBE_KEY = "pubNubSubscribeKey";
-    public static final String PUB_NUB_PUBLISH_KEY = "pubNubPublishKey";
     public static final String CUSTOMER_DETAIL = "customerDetail";
     public static final String CUSTOMER_HASH = "customer_hash";
     public static final String CONTENT_AUTHORITY = "androidPackageName";
@@ -26,15 +23,7 @@ public class UserParser
         try
         {
             JSONObject jsonObject = new JSONObject(response);
-            String subscribeKey = EMPTY, publishKey = EMPTY, customerHash = EMPTY, contentAuthority = EMPTY;
-            if (jsonObject.has(PUB_NUB_SUBSCRIBE_KEY))
-            {
-                subscribeKey = jsonObject.getString(PUB_NUB_SUBSCRIBE_KEY);
-            }
-            if (jsonObject.has(PUB_NUB_PUBLISH_KEY))
-            {
-                publishKey = jsonObject.getString(PUB_NUB_PUBLISH_KEY);
-            }
+            String customerHash = EMPTY, contentAuthority = EMPTY;
             if (jsonObject.has(CONTENT_AUTHORITY))
             {
                 contentAuthority = jsonObject.getString(CONTENT_AUTHORITY);
@@ -47,8 +36,7 @@ public class UserParser
                     customerHash = customerJson.getString(CUSTOMER_HASH);
                 }
             }
-            Credentials credentials = new Credentials(authKey, phoneNumber, email, publishKey,
-                    subscribeKey, customerHash, contentAuthority);
+            Credentials credentials = new Credentials(authKey, phoneNumber, email, customerHash, contentAuthority);
             return credentials;
         } catch (JSONException e)
         {
