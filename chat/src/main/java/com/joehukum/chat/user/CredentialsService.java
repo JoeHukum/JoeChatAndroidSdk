@@ -28,7 +28,6 @@ public class CredentialsService
     private static final String PHONE = "phone";
     private static final String EMAIL = "email";
     private static final String CUSTOMER_HASH = "customerHash";
-    private static final String CONTENT_AUTHORITY = "contentAuthority";
 
     private static final String EMPTY = "";
 
@@ -55,8 +54,7 @@ public class CredentialsService
             String phone = preferences.getString(PHONE, EMPTY);
             String email = preferences.getString(EMAIL, EMPTY);
             String customerHash = preferences.getString(CUSTOMER_HASH, EMPTY);
-            String contentAuthority = preferences.getString(CONTENT_AUTHORITY, EMPTY);
-            mCredentialsInstance = new Credentials(authKey, phone, email, customerHash, contentAuthority);
+            mCredentialsInstance = new Credentials(authKey, phone, email, customerHash);
         }
         return mCredentialsInstance;
     }
@@ -71,7 +69,7 @@ public class CredentialsService
                 String gcmId = getGcmId(context);
                 try
                 {
-                    Credentials credentials = new Credentials(authKey, phoneNumber, email, null, null);
+                    Credentials credentials = new Credentials(authKey, phoneNumber, email, null);
                     saveCredentials(context, credentials);
                     String response = HttpIO.makeRequest(context, Api.User.Url(), Api.User.Json(phoneNumber, email, gcmId), HttpIO.Method.POST);
                     credentials = CredentialsParser.parseResponse(response, authKey, phoneNumber, email);

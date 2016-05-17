@@ -10,16 +10,14 @@ public class Credentials
     private String phoneNumber;
     private String email;
     private String customerHash;
-    private String contentAuthority;
     private String clientName;
 
-    public Credentials(String authKey, String phoneNumber, String email, String customerHash, String contentAuthority)
+    public Credentials(String authKey, String phoneNumber, String email, String customerHash)
     {
         this.authKey = authKey;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.customerHash = customerHash;
-        this.contentAuthority = contentAuthority;
     }
 
     public String getAuthKey()
@@ -56,15 +54,6 @@ public class Credentials
             return EMPTY;
         }
         return customerHash;
-    }
-
-    public String getContentAuthority()
-    {
-        if (contentAuthority == null)
-        {
-            return EMPTY;
-        }
-        return contentAuthority;
     }
 
     public String getClientName()

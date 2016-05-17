@@ -15,7 +15,6 @@ public class CredentialsParser
     private static final String EMPTY = "";
     public static final String CUSTOMER_DETAIL = "customerDetail";
     public static final String CUSTOMER_HASH = "customer_hash";
-    public static final String CONTENT_AUTHORITY = "androidPackageName";
 
     @Nullable
     public static Credentials parseResponse(String response, String authKey, String phoneNumber, String email)
@@ -23,11 +22,7 @@ public class CredentialsParser
         try
         {
             JSONObject jsonObject = new JSONObject(response);
-            String customerHash = EMPTY, contentAuthority = EMPTY;
-            if (jsonObject.has(CONTENT_AUTHORITY))
-            {
-                contentAuthority = jsonObject.getString(CONTENT_AUTHORITY);
-            }
+            String customerHash = EMPTY;
             if (jsonObject.has(CUSTOMER_DETAIL))
             {
                 JSONObject customerJson = jsonObject.getJSONObject(CUSTOMER_DETAIL);
@@ -36,7 +31,7 @@ public class CredentialsParser
                     customerHash = customerJson.getString(CUSTOMER_HASH);
                 }
             }
-            Credentials credentials = new Credentials(authKey, phoneNumber, email, customerHash, contentAuthority);
+            Credentials credentials = new Credentials(authKey, phoneNumber, email, customerHash);
             return credentials;
         } catch (JSONException e)
         {
