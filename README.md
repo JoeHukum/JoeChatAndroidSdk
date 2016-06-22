@@ -4,7 +4,7 @@ Plug and play android SDK for Joe Hukum chat.
 Add the following dependency to your application's build.gradle
 ```gradle
 dependencies {
-	compile 'com.joehukum:chat:0.3.1'
+	compile 'com.joehukum:chat:0.3'
 }
 ```
 
