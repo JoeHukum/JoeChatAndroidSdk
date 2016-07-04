@@ -9,21 +9,15 @@ public class Credentials
     private String authKey;
     private String phoneNumber;
     private String email;
-    private String pubNubSubscribeKey;
-    private String pubNubPublishKey;
     private String customerHash;
-    private String contentAuthority;
     private String clientName;
 
-    public Credentials(String authKey, String phoneNumber, String email, String publishKey, String subscribeKey, String customerHash, String contentAuthority)
+    public Credentials(String authKey, String phoneNumber, String email, String customerHash)
     {
         this.authKey = authKey;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.pubNubPublishKey = publishKey;
-        this.pubNubSubscribeKey = subscribeKey;
         this.customerHash = customerHash;
-        this.contentAuthority = contentAuthority;
     }
 
     public String getAuthKey()
@@ -53,24 +47,6 @@ public class Credentials
         return email;
     }
 
-    public String getPubNubSubscribeKey()
-    {
-        if (pubNubSubscribeKey == null)
-        {
-            return EMPTY;
-        }
-        return pubNubSubscribeKey;
-    }
-
-    public String getPubNubPublishKey()
-    {
-        if (pubNubPublishKey == null)
-        {
-            return EMPTY;
-        }
-        return pubNubPublishKey;
-    }
-
     public String getCustomerHash()
     {
         if (customerHash == null)
@@ -78,15 +54,6 @@ public class Credentials
             return EMPTY;
         }
         return customerHash;
-    }
-
-    public String getContentAuthority()
-    {
-        if (contentAuthority == null)
-        {
-            return EMPTY;
-        }
-        return contentAuthority;
     }
 
     public String getClientName()

@@ -5,9 +5,9 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.joehukum.chat.ServiceFactory;
-import com.pubnub.api.Callback;
-import com.pubnub.api.PubnubError;
-import com.pubnub.api.PubnubException;
+import com.joehukum.chat.messages.sync.SyncUtils;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.SubscriptionEventListener;
 
 /**
  * Created by pulkitkumar on 17/03/16.
@@ -18,61 +18,29 @@ public class PubSubService
 
     private static final String SCREEN_OPEN = "chatActive";
     private static final String SCREEN_PREFERENCES = "screenPreferences";
+    public static final String MESSAGE_EVENT = "MessageOnTicket";
 
-    public static void subscribe(String channel, final Context context)
+    public static void subscribe(String channelName, final Context context)
     {
-        try
-        {
-            chatActive(context);
-            JhPubNub.getInstance(context).subscribe(channel, new Callback()
+        chatActive(context);
+        SyncUtils.TriggerRefresh(context.getApplicationContext());
+        Channel channel = JhPubNub.getInstance(context).subscribe(channelName);
+
+        channel.bind(MESSAGE_EVENT, new SubscriptionEventListener() {
+            @Override
+            public void onEvent(String channelName, String eventName, final String data)
             {
-                @Override
-                public void successCallback(String channel, Object messageJson)
+                Log.i(TAG, "message received");
+                Log.i(TAG, data);
+                if (context != null)
                 {
-                    super.successCallback(channel, messageJson);
-                    Log.i(TAG, "message received");
-                    Log.i(TAG, messageJson.toString());
-                    if (context != null)
-                    {
-                        ServiceFactory.MessageDatabaseService().savePubSubMessage(context, messageJson.toString());
-                    } else
-                    {
-                        //do nothing
-                    }
-                }
-
-                @Override
-                public void connectCallback(String channel, Object message)
+                    ServiceFactory.MessageDatabaseService().savePubSubMessage(context, data);
+                } else
                 {
-                    super.connectCallback(channel, message);
-                    Log.i(TAG, "connected");
+                    //do nothing
                 }
-
-                @Override
-                public void reconnectCallback(String channel, Object message)
-                {
-                    super.reconnectCallback(channel, message);
-                    Log.i(TAG, "re-connected");
-                }
-
-                @Override
-                public void disconnectCallback(String channel, Object message)
-                {
-                    super.disconnectCallback(channel, message);
-                    Log.e(TAG, "disconnected");
-                }
-
-                @Override
-                public void errorCallback(String channel, PubnubError error)
-                {
-                    super.errorCallback(channel, error);
-                    Log.e(TAG, "error callback pubnub");
-                }
-            });
-        } catch (PubnubException e)
-        {
-            Log.wtf(TAG, e);
-        }
+            }
+        });
     }
 
     public static void unSubscribe(Context context, String channel)

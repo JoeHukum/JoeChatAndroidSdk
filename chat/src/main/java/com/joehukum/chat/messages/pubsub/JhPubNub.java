@@ -2,26 +2,26 @@ package com.joehukum.chat.messages.pubsub;
 
 import android.content.Context;
 
-import com.joehukum.chat.ServiceFactory;
-import com.joehukum.chat.user.Credentials;
-import com.pubnub.api.Pubnub;
+import com.pusher.client.Pusher;
 
 /**
  * Created by pulkitkumar on 17/03/16.
  */
 public class JhPubNub
 {
-    private static Object mLock = new Object();
-    private static Pubnub instance;
+    private static final String PUSHER_API_KEY = "48343e1fe46337b29929";
 
-    protected static Pubnub getInstance(Context context)
+    private static Object mLock = new Object();
+    private static Pusher instance;
+
+    protected static Pusher getInstance(Context context)
     {
         synchronized (mLock)
         {
             if (instance == null)
             {
-                Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
-                instance = new Pubnub(credentials.getPubNubPublishKey(), credentials.getPubNubSubscribeKey());
+                instance = new Pusher(PUSHER_API_KEY);
+                instance.connect();
             }
         }
         return instance;
