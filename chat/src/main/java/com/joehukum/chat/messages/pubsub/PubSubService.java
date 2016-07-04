@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.joehukum.chat.ServiceFactory;
+import com.joehukum.chat.messages.sync.SyncUtils;
 import com.pusher.client.channel.Channel;
 import com.pusher.client.channel.SubscriptionEventListener;
 
@@ -17,12 +18,12 @@ public class PubSubService
 
     private static final String SCREEN_OPEN = "chatActive";
     private static final String SCREEN_PREFERENCES = "screenPreferences";
-    public static final String MESSAGE_EVENT = "messageEvent";
+    public static final String MESSAGE_EVENT = "MessageOnTicket";
 
     public static void subscribe(String channelName, final Context context)
     {
-
         chatActive(context);
+        SyncUtils.TriggerRefresh(context.getApplicationContext());
         Channel channel = JhPubNub.getInstance(context).subscribe(channelName);
 
         channel.bind(MESSAGE_EVENT, new SubscriptionEventListener() {
