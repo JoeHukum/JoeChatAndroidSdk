@@ -27,7 +27,7 @@ public class MessageParser
     private static final String TAG = MessageParser.class.getName();
 
     private static final String MESSAGE_JSON_KEY = "ticketMessage";
-    private static final String MESSAGE_HASH = "ticketMessageHash";
+    private static final String MESSAGE_HASH = "tcktMsgHsh";
     private static final String MSG_PUB_NUB_JSON_KEY = "tcktMsg";
     private static final String MESSAGE = "message";
     private static final String CREATE_DATE = "createDate";

@@ -9,7 +9,7 @@ import com.pusher.client.Pusher;
  */
 public class JhPubNub
 {
-    private static final String PUSHER_API_KEY = "48343e1fe46337b29929";
+    private static final String PUSHER_API_KEY = "48343e1fe46337b20020";
 
     private static Object mLock = new Object();
     private static Pusher instance;
