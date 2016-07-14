@@ -40,12 +40,12 @@ public class MessageParser
     private static final String PUBLIC_NOTE = "publicNote";
     private static final String CUSTOMER = "Customer";
     private static final String MESSAGE_RESPONSE_TYPE = "replyContentType";
-    public static final String TICKET_MESSAGE_OPTIONS = "ticketMessageOptions";
-    public static final String TMO_DISPLAY_TEXT = "displayText";
-    public static final String TMO_ID = "id";
-    public static final String DATE_META_DATA = "mtdt";
-    public static final String FROM = "frm";
-    public static final String TO = "to";
+    private static final String TICKET_MESSAGE_OPTIONS = "ticketMessageOptions";
+    private static final String TMO_DISPLAY_TEXT = "displayText";
+    private static final String TMO_ID = "id";
+    private static final String DATE_META_DATA = "mtdt";
+    private static final String FROM = "frm";
+    private static final String TO = "to";
 
     @Nullable
     public static List<Message> parseMessages(String response)
