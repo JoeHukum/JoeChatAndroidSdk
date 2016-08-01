@@ -57,22 +57,18 @@
             android:multiprocess="true"/>
 
         <service
-            android:name="com.joehukum.chat.messages.pubsub.JhGcmListenerService"
-            android:exported="false">
+            android:name="com.joehukum.chat.user.FirebaseTokenRefreshService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
+        <service
+            android:name="com.joehukum.chat.messages.pubsub.JhGcmListenerService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <category android:name="gcm.play.android.samples.com.gcmquickstart"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </receiver>
+        </service>
 
         <meta-data
             android:name="com.joehukum.authority"
