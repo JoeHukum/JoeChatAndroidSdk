@@ -7,7 +7,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.user.Credentials;
@@ -41,7 +40,7 @@ public class SyncUtils
         String contentAuthority = context.getPackageName();
 
         // Create account, if it's missing. (Either first run, or user has deleted account.)
-        Account account = GenericAccountService.GetAccount(credentials.getCustomerHash());
+        Account account = GenericAccountService.GetAccount(context, credentials.getCustomerHash());
         AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         if (accountManager.addAccountExplicitly(account, null, null))
         {
@@ -80,7 +79,7 @@ public class SyncUtils
         String contentAuthority = context.getPackageName();
         String accountName = credentials.getCustomerHash();
         ContentResolver.requestSync(
-                GenericAccountService.GetAccount(accountName),      // Sync account
+                GenericAccountService.GetAccount(context, accountName),      // Sync account
                 contentAuthority, // Content authority
                 b);                                      // Extras
     }
