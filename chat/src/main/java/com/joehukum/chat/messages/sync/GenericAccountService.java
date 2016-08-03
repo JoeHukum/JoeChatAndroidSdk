@@ -7,6 +7,8 @@ import android.accounts.NetworkErrorException;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -17,7 +19,8 @@ import android.util.Log;
 public class GenericAccountService extends Service
 {
     private static final String TAG = "GenericAccountService";
-    private static final String ACCOUNT_TYPE = "com.jh";
+    //private static final String ACCOUNT_TYPE = "com.jh";
+    private static final String JH_AUTHORITY = "com.joehukum.authority";
     private Authenticator mAuthenticator;
 
     /**
@@ -26,9 +29,21 @@ public class GenericAccountService extends Service
      * @return Handle to application's account (not guaranteed to resolve unless CreateSyncAccount()
      * has been called)
      */
-    public static Account GetAccount(final String accountName)
+
+    public static Account GetAccount(Context context, final String accountName)
     {
-        return new Account(accountName, ACCOUNT_TYPE);
+        ApplicationInfo applicationInfo = null;
+        try
+        {
+            applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = applicationInfo.metaData;
+            String accountType = bundle.getString(JH_AUTHORITY);
+            return new Account(accountName, accountType);
+        } catch (PackageManager.NameNotFoundException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
