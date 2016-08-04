@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-
 ext {
     bintrayRepo = 'maven'
     bintrayName = 'joe-chat-android-client'
@@ -58,7 +57,7 @@ dependencies {
     compile 'com.pusher:pusher-java-client:0.3.3'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.android.support:design:23.1.1'
-    compile "com.google.firebase:firebase-messaging:9.2.0"
+    compile "com.google.firebase:firebase-messaging:9.4.0"
     testCompile 'junit:junit:4.12'
 }
 
@@ -160,3 +159,5 @@ bintray {
         }
     }
 }
+
+apply plugin: 'com.google.gms.google-services'
