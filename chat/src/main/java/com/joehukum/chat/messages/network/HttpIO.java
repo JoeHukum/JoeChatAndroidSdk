@@ -161,6 +161,7 @@ public class HttpIO
     {
         Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
         builder.addHeader(AUTH_KEY, credentials.getAuthKey());
+        builder.addHeader("X-CommChannel", "android_app_channel");
         builder.addHeader("X-AndroidAppVersion", String.valueOf(BuildConfig.VERSION_CODE));
         return builder;
     }

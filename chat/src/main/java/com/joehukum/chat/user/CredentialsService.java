@@ -11,6 +11,7 @@ import com.joehukum.chat.messages.network.HttpIO;
 import com.joehukum.chat.messages.network.exceptions.AppServerException;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import rx.Observable;
 import rx.functions.Func1;
