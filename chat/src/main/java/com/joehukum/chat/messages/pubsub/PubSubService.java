@@ -18,13 +18,13 @@ public class PubSubService
 
     private static final String SCREEN_OPEN = "chatActive";
     private static final String SCREEN_PREFERENCES = "screenPreferences";
-    public static final String MESSAGE_EVENT = "MessageOnTicket";
+    private static final String MESSAGE_EVENT = "MessageOnTicket";
 
-    public static void subscribe(String channelName, final Context context)
+    public void subscribe(String channelName, final Context context)
     {
         chatActive(context);
         SyncUtils.TriggerRefresh(context.getApplicationContext());
-        Channel channel = JhPubNub.getInstance(context).subscribe(channelName);
+        Channel channel = JhPubNub.getInstance().subscribe(channelName);
 
         channel.bind(MESSAGE_EVENT, new SubscriptionEventListener() {
             @Override
@@ -32,24 +32,18 @@ public class PubSubService
             {
                 Log.i(TAG, "message received");
                 Log.i(TAG, data);
-                if (context != null)
-                {
-                    ServiceFactory.MessageDatabaseService().savePubSubMessage(context, data);
-                } else
-                {
-                    //do nothing
-                }
+                ServiceFactory.MessageDatabaseService().savePubSubMessage(context, data);
             }
         });
     }
 
-    public static void unSubscribe(Context context, String channel)
+    public void unSubscribe(Context context, String channel)
     {
-        JhPubNub.getInstance(context).unsubscribe(channel);
+        JhPubNub.getInstance().unsubscribe(channel);
         chatInactive(context);
     }
 
-    public static void chatActive(Context context)
+    private static void chatActive(Context context)
     {
         SharedPreferences preferences = context.getSharedPreferences(SCREEN_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -57,7 +51,7 @@ public class PubSubService
         editor.commit();
     }
 
-    public static void chatInactive(Context context)
+    private void chatInactive(Context context)
     {
         SharedPreferences preferences = context.getSharedPreferences(SCREEN_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -65,7 +59,7 @@ public class PubSubService
         editor.commit();
     }
 
-    public static boolean isChatActive(Context context)
+    public boolean isChatActive(Context context)
     {
         SharedPreferences preferences = context.getSharedPreferences(SCREEN_PREFERENCES, Context.MODE_PRIVATE);
         return preferences.getBoolean(SCREEN_OPEN, false);

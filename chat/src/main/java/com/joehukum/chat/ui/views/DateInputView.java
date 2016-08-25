@@ -16,7 +16,7 @@ public class DateInputView extends FrameLayout implements View.OnClickListener
 {
     public interface DateInputCallbacks
     {
-        public void onClickDateInput(DateMetaData metaData);
+        void onClickDateInput(DateMetaData metaData);
     }
 
     private DateInputCallbacks mListener;

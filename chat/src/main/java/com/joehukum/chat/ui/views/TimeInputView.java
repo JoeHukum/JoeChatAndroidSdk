@@ -15,7 +15,7 @@ public class TimeInputView extends FrameLayout implements View.OnClickListener
 {
     public interface TimeInputCallback
     {
-        public void onClickTimeInput();
+        void onClickTimeInput();
     }
 
     private TimeInputCallback mListener;

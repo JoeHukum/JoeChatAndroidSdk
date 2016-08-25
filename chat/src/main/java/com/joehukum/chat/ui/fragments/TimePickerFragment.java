@@ -5,10 +5,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.widget.TimePicker;
-
-import com.joehukum.chat.ui.views.TextUserInputView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,8 +16,8 @@ import java.util.Calendar;
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener
 {
-    public static final String DATE_PATTERN = "hh:mm a";
-    public static final SimpleDateFormat FORMATTER = new SimpleDateFormat(DATE_PATTERN);
+    private static final String DATE_PATTERN = "hh:mm a";
+    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat(DATE_PATTERN);
     private static final String SELECT_TIME = "Select Time";
     private static final String TAG = TimePickerFragment.class.getName();
 

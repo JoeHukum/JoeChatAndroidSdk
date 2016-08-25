@@ -20,7 +20,7 @@ public class OptionsInputView extends FrameLayout
 {
     public interface OptionClickCallback
     {
-        public void onOptionClick(Option option);
+        void onOptionClick(Option option);
     }
 
     private OptionClickCallback mListener;

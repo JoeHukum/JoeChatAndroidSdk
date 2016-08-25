@@ -23,14 +23,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter
 {
     private static final String TAG = SyncAdapter.class.getName();
 
-    public SyncAdapter(Context context, boolean autoInitialize)
+    public SyncAdapter(Context context)
     {
-        this(context, autoInitialize, false);
-    }
-
-    public SyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs)
-    {
-        super(context, autoInitialize, allowParallelSyncs);
+        super(context, false, false);
     }
 
     @Override

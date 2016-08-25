@@ -27,13 +27,13 @@ import java.io.IOException;
  */
 public class HttpIO
 {
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static final Object mLock = new Object();
-    public static final String AUTH_KEY = "X-ClientId";
+    private static final String AUTH_KEY = "X-ClientId";
     private static OkHttpClient mOkHttpClient;
 
-    public static enum Method
+    public enum Method
     {
         POST, PUT, GET
     }
@@ -102,14 +102,14 @@ public class HttpIO
         return builder.build();
     }
 
-    private static Request generatePostRequest(Context context, @NonNull String url, @NonNull String json)
+    private static Request generatePostRequest(Context context, @NonNull String url, String json)
     {
         Request.Builder builder = new Request.Builder().url(url).post(RequestBody.create(JSON, json));
         builder = addDefaultHeaders(context, builder);
         return builder.build();
     }
 
-    private static Request generatePutRequest(Context context, @NonNull String url, @NonNull String json)
+    private static Request generatePutRequest(Context context, @NonNull String url, String json)
     {
         Request.Builder builder = new Request.Builder().url(url).put(RequestBody.create(JSON, json));
         builder = addDefaultHeaders(context, builder);

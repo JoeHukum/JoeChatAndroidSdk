@@ -23,9 +23,8 @@ public class TextUserInputView extends LinearLayout implements View.OnClickListe
 {
     public interface TextInputCallbacks
     {
-        public void sendTextMessage(String message);
-
-        public void onClickAttachment();
+        void sendTextMessage(String message);
+        void onClickAttachment();
     }
 
     private TextInputCallbacks mListener;

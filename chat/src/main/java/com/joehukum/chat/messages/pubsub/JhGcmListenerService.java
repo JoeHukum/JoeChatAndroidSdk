@@ -1,7 +1,5 @@
 package com.joehukum.chat.messages.pubsub;
 
-import android.os.Bundle;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.joehukum.chat.messages.sync.SyncUtils;

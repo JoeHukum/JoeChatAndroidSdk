@@ -23,15 +23,15 @@ public class TableMessage
 
     public static final String TABLE_NAME = "message";
     public static final String COLUMN_ID = "id";
-    public static final String COLUMN_HASH = "message_hash";
-    public static final String COLUMN_TYPE = "type";
-    public static final String COLUMN_CONTENT = "content";
-    public static final String COlUMN_CONTENT_TYPE = "content_type";
-    public static final String COLUMN_RESPONSE_TYPE = "response_type";
+    private static final String COLUMN_HASH = "message_hash";
+    private static final String COLUMN_TYPE = "type";
+    private static final String COLUMN_CONTENT = "content";
+    private static final String COlUMN_CONTENT_TYPE = "content_type";
+    private static final String COLUMN_RESPONSE_TYPE = "response_type";
     public static final String COLUMN_TIME = "date";
-    public static final String COLUMN_AUTHOR = "author";
-    public static final String COLUMN_IS_READ = "is_read";
-    public static final String COLUMN_METADATA = "metadata";
+    private static final String COLUMN_AUTHOR = "author";
+    private static final String COLUMN_IS_READ = "is_read";
+    private static final String COLUMN_METADATA = "metadata";
 
     public static void onCreate(@NonNull SQLiteDatabase db)
     {

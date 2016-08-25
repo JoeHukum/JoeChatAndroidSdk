@@ -2,7 +2,6 @@ package com.joehukum.chat.messages.network;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.messages.network.exceptions.AppServerException;
@@ -11,9 +10,6 @@ import com.joehukum.chat.user.Credentials;
 
 import java.io.IOException;
 import java.util.List;
-
-import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by pulkitkumar on 17/03/16.

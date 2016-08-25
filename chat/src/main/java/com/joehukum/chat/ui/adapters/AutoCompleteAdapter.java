@@ -1,6 +1,7 @@
 package com.joehukum.chat.ui.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,12 +72,14 @@ public class AutoCompleteAdapter extends ArrayAdapter<Option>
         mAllOptions = new ArrayList<>(objects);
     }
 
+    @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
         return super.getView(position, convertView, parent);
     }
 
+    @NonNull
     @Override
     public Filter getFilter()
     {

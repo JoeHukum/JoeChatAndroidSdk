@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -28,7 +27,7 @@ import rx.functions.Func1;
  */
 public class MessageDatabaseService
 {
-    public static final int NONE = 0;
+    private static final int NONE = 0;
 
     private static final String TAG = MessageDatabaseService.class.getName();
 
@@ -56,7 +55,7 @@ public class MessageDatabaseService
         return (count > NONE);
     }
 
-    public Observable<Void> markAllRead(final Context context)
+    private Observable<Void> markAllRead(final Context context)
     {
         return Observable.just(true).map(new Func1<Boolean, Void>()
         {

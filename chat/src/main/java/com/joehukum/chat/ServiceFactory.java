@@ -11,7 +11,7 @@ import com.joehukum.chat.user.CredentialsService;
  */
 public class ServiceFactory
 {
-    private static Object mLock = new Object();
+    private static final Object mLock = new Object();
 
     private static PubSubService mPubSubService;
     private static CredentialsService mCredentialsService;
