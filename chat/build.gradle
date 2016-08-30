@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/JoeHukum/JoeChatAndroidSdk'
     gitUrl = 'https://github.com/JoeHukum/JoeChatAndroidSdk.git'
 
-    libraryVersion = '0.43-beta1'
+    libraryVersion = '0.44'
 
     developerId = 'pulkitkumar'
     developerName = 'Pulkit Kumar'
