@@ -9,7 +9,7 @@ import android.util.Log;
 /**
  * Created by pulkitkumar on 17/03/16.
  */
-public class SQLiteHelper extends SQLiteOpenHelper
+class SQLiteHelper extends SQLiteOpenHelper
 {
     private static final String TAG = SQLiteHelper.class.getName();
 

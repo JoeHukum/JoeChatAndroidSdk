@@ -19,7 +19,7 @@ public class SyncService extends Service
         {
             if (sSyncAdapter == null)
             {
-                sSyncAdapter = new SyncAdapter(getApplicationContext(), false);
+                sSyncAdapter = new SyncAdapter(getApplicationContext());
             }
         }
     }

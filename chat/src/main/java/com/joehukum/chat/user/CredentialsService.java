@@ -2,9 +2,10 @@ package com.joehukum.chat.user;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.joehukum.chat.messages.network.Api;
 import com.joehukum.chat.messages.network.HttpIO;
 import com.joehukum.chat.messages.network.exceptions.AppServerException;
@@ -66,45 +67,48 @@ public class CredentialsService
             @Override
             public Boolean call(Boolean aBoolean)
             {
-                String gcmId = getGcmId(context);
-                try
-                {
-                    Credentials credentials = new Credentials(authKey, phoneNumber, email, null);
-                    saveCredentials(context, credentials);
-                    String response = HttpIO.makeRequest(context, Api.User.Url(), Api.User.Json(phoneNumber, email, gcmId), HttpIO.Method.POST);
-                    credentials = CredentialsParser.parseResponse(response, authKey, phoneNumber, email);
-                    saveCredentials(context, credentials);
-                } catch (IOException e)
-                {
-                    Log.wtf(TAG, e);
-                    return false;
-                } catch (AppServerException e)
-                {
-                    Log.wtf(TAG, e);
-                    return false;
-                }
-                return true;
+                Credentials credentials = new Credentials(authKey, phoneNumber, email, null);
+                saveCredentials(context, credentials);
+                return uploadCredentials(context, credentials);
             }
         });
     }
 
-    private String getGcmId(Context context)
+    @NonNull
+    private Boolean uploadCredentials(Context context, Credentials credentials)
     {
-        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
         try
         {
-            String regId = gcm.register(GOOGLE_PROJECT_ID);
-            return regId;
+            String response = HttpIO.makeRequest(context, Api.User.Url(), Api.User.Json(credentials.getPhoneNumber(), credentials.getEmail(), getFirebaseToken()), HttpIO.Method.POST);
+            credentials = CredentialsParser.parseResponse(response, credentials.getAuthKey(), credentials.getPhoneNumber(), credentials.getEmail());
+            saveCredentials(context, credentials);
+        } catch (AppServerException e)
+        {
+            Log.wtf(TAG, e);
+            return false;
         } catch (IOException e)
         {
             Log.wtf(TAG, e);
-            return EMPTY;
+            return false;
         }
+        return true;
+    }
+
+    private String getFirebaseToken()
+    {
+        String firebaseToken = FirebaseInstanceId.getInstance().getToken();
+        return firebaseToken;
     }
 
     public String getChannel(Context context)
     {
         Credentials credentials = getUserCredentials(context);
         return credentials.getCustomerHash();
+    }
+
+    public void updateFirebaseToken(Context context)
+    {
+        Credentials credentials = getUserCredentials(context);
+        uploadCredentials(context, credentials);
     }
 }

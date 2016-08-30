@@ -1,7 +1,5 @@
 package com.joehukum.chat.messages.objects;
 
-import android.text.TextUtils;
-
 /**
  * Created by pulkitkumar on 29/03/16.
  */

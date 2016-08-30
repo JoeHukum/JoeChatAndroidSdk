@@ -21,8 +21,7 @@ public class MessageProvider extends ContentProvider
     private static final String TAG = MessageProvider.class.getName();
 
     public static Uri MESSAGE_URI;
-    private static Uri BASE_CONTENT_URI;
-    private Object mLock = new Object();
+    private final Object mLock = new Object();
     private SQLiteDatabase mDatabase;
     private static UriMatcher uriMatcher;
 
@@ -44,7 +43,7 @@ public class MessageProvider extends ContentProvider
         {
             Log.wtf(TAG, e);
         }
-        BASE_CONTENT_URI = Uri.parse("content://" + contentAuthority);
+        Uri BASE_CONTENT_URI = Uri.parse("content://" + contentAuthority);
         MESSAGE_URI = BASE_CONTENT_URI.buildUpon().appendPath(IDENTIFIER_MESSAGES).build();
 
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);

@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.joehukum.chat.messages.objects.DateMetaData;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -27,7 +26,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public interface DateSelectedCallback
     {
-        public void onDateSelected(Date date);
+        void onDateSelected(Date date);
     }
 
     @Override
@@ -79,7 +78,11 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     @Override
     public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth)
     {
-        Date date = new Date(year-1900, monthOfYear, dayOfMonth);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        Date date = calendar.getTime();
         if (mListener != null)
         {
             mListener.onDateSelected(date);

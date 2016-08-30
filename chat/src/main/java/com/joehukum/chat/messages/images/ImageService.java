@@ -31,7 +31,7 @@ import java.util.Map;
 public class ImageService
 {
     private static final String TAG = ImageService.class.getName();
-    private Object mImageLock = new Object();
+    private final Object mImageLock = new Object();
 
     public void downloadImages(final Context context)
     {
