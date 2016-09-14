@@ -24,7 +24,11 @@ public class JoeHukum
 
     public static void chat(final Context context, String authKey, String phoneNumber, String email)
     {
-        final ProgressDialog pd = UiUtils.getProgressDialog(context);
+        chat(context, authKey, phoneNumber, email, UiUtils.getProgressDialog(context));
+    }
+
+    public static void chat(final Context context, String authKey, String phoneNumber, String email, final ProgressDialog pd)
+    {
         showProgress(pd);
         Observable<Boolean> observable = ServiceFactory.CredentialsService().createUser(context, authKey, phoneNumber, email);
         observable.observeOn(AndroidSchedulers.mainThread())

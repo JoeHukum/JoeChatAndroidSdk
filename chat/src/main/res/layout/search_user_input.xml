@@ -9,7 +9,8 @@
         android:inputType="textMultiLine|textCapSentences"
         android:maxLines="1"
         android:paddingLeft="8dp"
-        android:layout_weight="0.8"/>
+        android:layout_weight="0.8"
+        android:textColor="?inputTextColor"/>
 
 
     <android.support.design.widget.FloatingActionButton
@@ -18,6 +19,6 @@
         android:layout_weight="0.2"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:src="@drawable/ic_send"/>
+        android:src="?sendIcon"/>
 
 </merge>

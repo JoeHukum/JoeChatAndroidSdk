@@ -16,7 +16,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:layout_marginRight="80dp"
-        android:background="@color/gray">
+        android:background="?receiveChatBg">
 
         <RelativeLayout
             android:id="@+id/receivedContent"
@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                fontPath="fonts/Gotham.otf"
+                android:textColor="?receiveTextColor"
                 android:text="assa aasf s sfkasassa aasf s sfkasassa aasf s sfkasassa aasf s sfkas "/>
 
         </RelativeLayout>
@@ -51,7 +51,6 @@
             android:textSize="10sp"
             android:textColor="@color/material_blue_grey_800"
             android:text="10 18 pm"
-            fontPath="fonts/Gotham.otf"
             android:layout_below="@id/receivedContent"
             android:layout_alignParentRight="true"/>
 
@@ -80,7 +79,7 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:layout_marginLeft="80dp"
-        android:background="@color/gray">
+        android:background="?sendChatBg">
 
         <FrameLayout
             android:id="@+id/contentSent"
@@ -101,7 +100,7 @@
                 android:autoLink="all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                fontPath="fonts/Gotham.otf"
+                android:textColor="?sendTextColor"
                 android:padding="4dp"
                 android:text="Hey!"/>
 
@@ -122,7 +121,6 @@
             android:layout_toLeftOf="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fontPath="fonts/Gotham.otf"
             android:layout_marginBottom="1dp"
             android:textSize="10sp"
             android:text="10 : 20 pm"/>

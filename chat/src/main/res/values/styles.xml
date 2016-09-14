@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="JoeTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+        <item name="colorAccent">@color/secondary_color</item>
+    </style>
+
+    <style name="JoeChatTheme" parent="JoeTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="receiveChatBg">@color/gray</item>
+        <item name="sendChatBg">@color/gray</item>
+        <item name="receiveTextColor">@color/black</item>
+        <item name="sendTextColor">@color/black</item>
+        <item name="sendIcon">@drawable/ic_send</item>
+        <item name="inputTextColor">@color/black</item>
+    </style>
+
+</resources>

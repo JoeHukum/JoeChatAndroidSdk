@@ -16,13 +16,14 @@
         android:layout_weight="0.8"
         android:hint="@string/chatBoxHint"
         android:inputType="textMultiLine|textCapSentences"
-        android:paddingLeft="8dp"/>
+        android:paddingLeft="8dp"
+        android:textColor="?attr/inputTextColor"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:src="@drawable/ic_send"/>
+        android:src="?sendIcon"/>
 
 </merge>

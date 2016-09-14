@@ -38,7 +38,7 @@ Inside `<application>`
 ```xml
 <activity
 	android:name="com.joehukum.chat.ui.activities.ChatActivity"
-    android:theme="@style/AppTheme.NoActionBar"/>
+    android:theme="@style/JoeChatTheme"/>
 
 <service android:name="com.joehukum.chat.messages.sync.GenericAccountService">
 	<intent-filter>
@@ -126,10 +126,43 @@ sync_adapter.xml
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:contentAuthority="your-package-naame"
+                    android:contentAuthority="your-package-name"
                     android:accountType="your-package-name"
                     android:userVisible="false"
                     android:supportsUploading="false"
                     android:allowParallelSyncs="false"
                     android:isAlwaysSyncable="true" />
 ```
+
+
+# Customizing the chat UI 
+
+You can sub class the theme `JoeChatTheme` and use the theme in your AndroidManifest.xml for ChatActivity
+
+Here is an example theme
+
+```xml
+   <style name="JoeChatTheme.Custom" parent="JoeChatTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/activity_background</item>
+        <item name="receiveChatBg">@color/gray</item>
+        <item name="sendChatBg">@color/gray</item>
+        <item name="receiveTextColor">@color/black</item>
+        <item name="sendTextColor">@color/black</item>
+        <item name="sendIcon">@drawable/ic_send</item>
+        <item name="inputTextColor">@color/black</item>
+    </style>
+```
+
+And in AndroidManifest.xml
+
+```xml
+<activity
+    android:name="com.joehukum.chat.ui.activities.ChatActivity"
+    android:theme="@style/JoeChatTheme.Custom"/>
+```
+
+The customizable items of the screen are mapped with theme attribute in the following image.
+
+![Alt text](android_customizable_colors.png?raw=true)

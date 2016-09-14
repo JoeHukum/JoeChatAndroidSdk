@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
             clientHash.setKeyListener(null);
             email.setKeyListener(null);
             phoneNumber.setKeyListener(null);
-            JoeHukum.chat(this, user.getClientHash(), user.getPhone(), user.getEmail());
+            JoeHukum.chat(this, user.getClientHash(), user.getPhone(), user.getEmail(), null);
         } else
         {
 
@@ -71,6 +71,6 @@ public class MainActivity extends AppCompatActivity
         String em = email.getText().toString();
         String ph = phoneNumber.getText().toString();
         userStore.saveUser(this, new User(clHash, ph, em));
-        JoeHukum.chat(this, clHash, ph, em);
+        JoeHukum.chat(this, clHash, ph, em, null);
     }
 }

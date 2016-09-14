@@ -216,7 +216,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         mUserInputContainer = (FrameLayout) findViewById(R.id.userInputContainer);
 
         mMessages = new ArrayList<>();
-        mAdapter = new ChatAdapter(this, mMessages);
+        mAdapter = new ChatAdapter(mListView.getContext(), mMessages);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         layoutManager.setReverseLayout(true);
         mListView.setLayoutManager(layoutManager);
