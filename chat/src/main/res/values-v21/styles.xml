@@ -2,8 +2,8 @@
     <style name="JoeChatTheme" parent="JoeTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="receiveChatBg">@color/black</item>
-        <item name="sendChatBg">@color/wallet_holo_blue_light</item>
+        <item name="receiveChatBg">@color/gray</item>
+        <item name="sendChatBg">@color/gray</item>
         <item name="receiveTextColor">@color/black</item>
         <item name="sendTextColor">@color/black</item>
         <item name="sendIcon">@drawable/ic_send</item>

@@ -47,15 +47,15 @@ public class Api
             return new StringBuilder(BASE_URL).append("api/customer/init").toString();
         }
 
-        public static String Json(@NonNull String phoneNumber, @NonNull String email, @NonNull String gcmId)
+        public static String Json(@NonNull String phoneNumber, @NonNull String email, @NonNull String firebaseToken)
         {
             String jsonTemplate = new StringBuilder().append("{\"phone\":\"%s\",")
                     .append("\"verified\":true,")
                     .append("\"email\":\"%s\",")
                     .append("\"channel\":\"android_app_channel\",")
-                    .append("\"gcm_id\":\"%s\"}")
+                    .append("\"firebase_token\":\"%s\"}")
                     .toString();
-            return String.format(jsonTemplate, phoneNumber, email, gcmId);
+            return String.format(jsonTemplate, phoneNumber, email, firebaseToken);
         }
     }
 }

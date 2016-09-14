@@ -9,6 +9,7 @@
     <style name="JoeChatTheme" parent="JoeTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/activity_background</item>
         <item name="receiveChatBg">@color/gray</item>
         <item name="sendChatBg">@color/gray</item>
         <item name="receiveTextColor">@color/black</item>

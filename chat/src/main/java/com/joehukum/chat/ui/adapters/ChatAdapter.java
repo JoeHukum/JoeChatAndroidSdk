@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class ChatAdapter extends RecyclerView.Adapter
 {
-    public static final String TIME_PATTERN = "hh:mm a";
+    private static final String TIME_PATTERN = "hh:mm a";
     private Context mContext;
     private List<Message> mMessages;
 
