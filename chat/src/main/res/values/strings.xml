@@ -13,4 +13,8 @@
     <string name="notification_summary_one">1 new message.</string>
     <string name="startOver">Start over</string>
     <string name="auto_complete_error">\"Please select a valid option from search\"</string>
+    <string name="cancel">cancel</string>
+    <string name="npsTitle">Please rate the chat.</string>
+    <string name="npsHint">Comments..</string>
+    <string name="rating_error">Please select a valid rating.</string>
 </resources>
