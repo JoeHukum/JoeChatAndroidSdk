@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-	compile 'com.joehukum:chat:0.45'
+	compile 'com.joehukum:chat:0.46'
 }
 ```
 
@@ -98,7 +98,7 @@ Inside `<application>`
 If you have implemented GCM Listener Service in your app you can simply add the following code in your app's GcmListenerService
 
 ```java
-JhGcmListenerService service = new JhFcmListenerService();
+JhFcmListenerService service = new JhFcmListenerService();
 service.onMessageReceived(from, data);
 ```
 

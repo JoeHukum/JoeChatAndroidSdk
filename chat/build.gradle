@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/JoeHukum/JoeChatAndroidSdk'
     gitUrl = 'https://github.com/JoeHukum/JoeChatAndroidSdk.git'
 
-    libraryVersion = '0.45'
+    libraryVersion = '0.46'
 
     developerId = 'pulkitkumar'
     developerName = 'Pulkit Kumar'
@@ -140,7 +140,7 @@ artifacts {
 
 // Bintray
 Properties properties = new Properties()
-//properties.load(project.rootProject.file('local.properties').newDataInputStream())
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 bintray {
     user = properties.getProperty("bintray.user")
