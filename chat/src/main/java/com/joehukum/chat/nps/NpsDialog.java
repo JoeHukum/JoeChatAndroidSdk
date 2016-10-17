@@ -17,7 +17,6 @@ import com.joehukum.chat.R;
 /**
  * Created by pulkitkumar on 22/09/16.
  */
-
 public class NpsDialog extends DialogFragment implements View.OnClickListener
 {
     public interface NpsDialogListener

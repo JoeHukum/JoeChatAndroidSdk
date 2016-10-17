@@ -95,10 +95,10 @@ Inside `<application>`
 
 ```
 
-If you have already implemented GCM in your app you can simply add the following code in your app's GcmListenerService
+If you have implemented GCM Listener Service in your app you can simply add the following code in your app's GcmListenerService
 
 ```java
-JhGcmListenerService service = new JhGcmListenerService();
+JhGcmListenerService service = new JhFcmListenerService();
 service.onMessageReceived(from, data);
 ```
 
