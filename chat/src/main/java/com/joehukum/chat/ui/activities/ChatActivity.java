@@ -217,8 +217,9 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
 
         mMessages = new ArrayList<>();
         mAdapter = new ChatAdapter(mListView.getContext(), mMessages);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        layoutManager.setReverseLayout(true);
+        mListView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
+        layoutManager.setStackFromEnd(true);
         mListView.setLayoutManager(layoutManager);
         mListView.setAdapter(mAdapter);
     }
@@ -275,7 +276,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
                     @Override
                     public void onError(Throwable e)
                     {
-
+                        Log.wtf(TAG, e);
                     }
 
                     @Override
