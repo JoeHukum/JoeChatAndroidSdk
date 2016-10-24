@@ -1,11 +1,12 @@
 package com.joehukum.chat.ui.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ import java.util.List;
 /**
  * Created by pulkitkumar on 17/03/16.
  */
-public class ChatAdapter extends RecyclerView.Adapter
+public class ChatAdapter extends ArrayAdapter<Message>
 {
     private static final String TIME_PATTERN = "hh:mm a";
     private Context mContext;
@@ -28,22 +29,25 @@ public class ChatAdapter extends RecyclerView.Adapter
 
     public ChatAdapter(Context context, List<Message> messages)
     {
+        super(context, -1, messages);
         mContext = context;
         mMessages = messages;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public View getView(int position, View convertView, ViewGroup parent)
     {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.row_item_chat, parent, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
-    {
-        ViewHolder viewHolder = (ViewHolder) holder;
-
+        ViewHolder viewHolder;
+        if (convertView == null)
+        {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.row_item_chat, parent, false);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else
+        {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
         Message message = mMessages.get(position);
         if (message.getType() == Message.Type.RECEIVED)
         {   // show/hide bubbles
@@ -82,6 +86,7 @@ public class ChatAdapter extends RecyclerView.Adapter
                 viewHolder.deliveryStatus.setImageResource(R.drawable.ic_action_done);
             }
         }
+        return convertView;
     }
 
     private String getFormattedDate(Date time)
@@ -91,17 +96,7 @@ public class ChatAdapter extends RecyclerView.Adapter
         return formattedDate;
     }
 
-    @Override
-    public int getItemCount()
-    {
-        if (mMessages == null)
-        {
-            return 0;
-        }
-        return mMessages.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder
+    public class ViewHolder
     {
         View receivedView;
         View sentView;
@@ -116,7 +111,6 @@ public class ChatAdapter extends RecyclerView.Adapter
 
         public ViewHolder(View itemView)
         {
-            super(itemView);
             receivedView = itemView.findViewById(R.id.received);
             sentView = itemView.findViewById(R.id.sent);
             receivedText = (TextView) itemView.findViewById(R.id.messageReceived);

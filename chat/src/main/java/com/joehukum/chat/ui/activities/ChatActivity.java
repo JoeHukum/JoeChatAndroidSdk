@@ -8,14 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import com.joehukum.chat.R;
 import com.joehukum.chat.ServiceFactory;
@@ -66,7 +65,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
 
     private String mChannelName;
 
-    private RecyclerView mListView;
+    private ListView mListView;
     private FrameLayout mUserInputContainer;
     private TextUserInputView mTextInput;
     private DateInputView mDateInput;
@@ -212,16 +211,14 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     private void initializeUI()
     {
         initializeInputLayouts();
-        mListView = (RecyclerView) findViewById(R.id.list);
+        mListView = (ListView) findViewById(R.id.list);
         mUserInputContainer = (FrameLayout) findViewById(R.id.userInputContainer);
 
         mMessages = new ArrayList<>();
         mAdapter = new ChatAdapter(mListView.getContext(), mMessages);
-        mListView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
-        layoutManager.setStackFromEnd(true);
-        mListView.setLayoutManager(layoutManager);
         mListView.setAdapter(mAdapter);
+        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+        mListView.setStackFromBottom(true);
     }
 
     private void initializeInputLayouts()
