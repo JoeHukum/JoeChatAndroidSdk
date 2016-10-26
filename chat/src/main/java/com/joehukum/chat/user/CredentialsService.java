@@ -87,7 +87,7 @@ public class CredentialsService
     {
         try
         {
-            String response = HttpIO.makeRequest(context, Api.User.Url(), Api.User.Json(credentials.getPhoneNumber(),
+            String response = HttpIO.makeRequest(context, Api.User.Url(), Api.User.Json(credentials.getCustomerHash(), credentials.getPhoneNumber(),
                     credentials.getEmail(), getFirebaseToken(), credentials.getParamString()), HttpIO.Method.POST);
             credentials = CredentialsParser.parseResponse(response, credentials.getAuthKey(), credentials.getPhoneNumber(), credentials.getEmail());
             credentials.setParamString(readParamString(context));

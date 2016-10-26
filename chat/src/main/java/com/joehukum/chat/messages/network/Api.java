@@ -56,16 +56,17 @@ public class Api
             return new StringBuilder(BASE_URL).append("api/customer/init").toString();
         }
 
-        public static String Json(@NonNull String phoneNumber, @NonNull String email, @NonNull String firebaseToken, String params)
+        public static String Json(String customerHash, @NonNull String phoneNumber, @NonNull String email, @NonNull String firebaseToken, String params)
         {
             String jsonTemplate = new StringBuilder().append("{\"phone\":\"%s\",")
                     .append("\"verified\":true,")
                     .append("\"email\":\"%s\",")
                     .append("\"channel\":\"android_app_channel\",")
                     .append("\t\"prms\": \"%s\",")
+                    .append("\t\"customer_hash\":\"%s\",")
                     .append("\"firebase_token\":\"%s\"}")
                     .toString();
-            return String.format(jsonTemplate, phoneNumber, email, params, firebaseToken);
+            return String.format(jsonTemplate, phoneNumber, email, params, customerHash, firebaseToken);
         }
     }
 }
