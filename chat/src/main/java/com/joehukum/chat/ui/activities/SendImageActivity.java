@@ -1,4 +1,3 @@
-/*
 package com.joehukum.chat.ui.activities;
 
 import android.Manifest;
@@ -7,12 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +23,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.joehukum.chat.R;
+import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.ui.utils.UiUtils;
 
 import java.io.File;
@@ -34,24 +31,29 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-*/
-/**
- * Created by pulkitkumar on 17/03/16.
- *//*
+import rx.Observable;
+import rx.Observer;
 
+/*
+ * Created by pulkitkumar on 17/03/16.
+ */
 public class SendImageActivity extends AppCompatActivity implements View.OnClickListener
 {
-    public static final int TYPE_CAMERA = 1;
-    public static final int TYPE_GALLERY = 2;
     private static final String TAG = SendImageActivity.class.getName();
     private static final String TYPE = "type";
 
+    public static final int TYPE_CAMERA = 1;
+    public static final int TYPE_GALLERY = 2;
+    public static final String URL = "url";
+    public static final String PATH = "path";
+
     private int mType;
     private String mPath;
-
     private Uri mImageUri;
     private Bitmap mPhoto;
+
     private ImageView imageView;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,15 +65,16 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
 
         setContentView(R.layout.activity_image_display);
         setUpToolbar();
+
         imageView = (ImageView) findViewById(R.id.image);
+        pd = new ProgressDialog(this);
         final Button cancel = (Button) findViewById(R.id.cancel);
         final Button send = (Button) findViewById(R.id.send);
 
         cancel.setOnClickListener(this);
         send.setOnClickListener(this);
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        if (checkWriteStoragePermission())
         {
             UiUtils.requestWritePermission(SendImageActivity.this, findViewById(R.id.main));
         } else
@@ -80,27 +83,43 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    private boolean checkWriteStoragePermission()
+    {
+        return ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED;
+    }
+
     private void openCameraOrGallery()
     {
         if (mType == TYPE_CAMERA)
         {
-            //File file = Factory.getImageService().createExternalStoragePublicPicture(this);
-//            if (file != null)
-//            {
-//                mImageUri = Uri.fromFile(file);
-//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageUri);
-//                startActivityForResult(intent, TYPE_CAMERA);
-//            } else
-//            {
-//                finish();
-//            }
+            openCamera();
         } else if (mType == TYPE_GALLERY)
         {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image*/
-/*");
-            startActivityForResult(intent, TYPE_GALLERY);
+            openGallery();
+        }
+    }
+
+    private void openGallery()
+    {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image");
+        startActivityForResult(intent, TYPE_GALLERY);
+    }
+
+    private void openCamera()
+    {
+        File file = ServiceFactory.ImageService().createExternalStoragePublicPicture(this);
+        if (file != null)
+        {
+            mImageUri = Uri.fromFile(file);
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+            startActivityForResult(intent, TYPE_CAMERA);
+        } else
+        {
+            //If no external storage.
+            finish();
         }
     }
 
@@ -116,7 +135,6 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
         }
         return;
     }
-
 
     private void setUpToolbar()
     {
@@ -137,7 +155,7 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
                 try
                 {
                     File file = new File(mPath);
-                    //mPhoto = Factory.getImageService().loadFromUri(Uri.fromFile(file), 1080, 1080);
+                    mPhoto = ServiceFactory.ImageService().loadFromUri(Uri.fromFile(file), 1080, 1080);
                     out = new FileOutputStream(file);
                     mPhoto.compress(Bitmap.CompressFormat.JPEG, 80, out);
                     out.close();
@@ -154,7 +172,7 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
             } else if (requestCode == TYPE_GALLERY)
             {
                 Uri imageUri = data.getData();
-                mPath = getPath(imageUri);
+                mPath = ServiceFactory.ImageService().getPathFromUri(this, imageUri);
                 Glide.with(this).load(mPath).fitCenter()
                         .placeholder(R.drawable.ic_image_placeholder).into(imageView);
             } else
@@ -164,45 +182,6 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
         } else
         {
             finish();
-        }
-    }
-
-    private String getPath(Uri uri)
-    {
-        Cursor cursor = null;
-        try
-        {
-            cursor = getContentResolver().query(uri, null, null, null, null);
-
-            cursor.moveToFirst();
-            String documentId = cursor.getString(0);
-            if (documentId != null)
-            {
-                documentId = documentId.substring(documentId.lastIndexOf(':') + 1);
-                cursor.close();
-                cursor = getContentResolver().
-                        query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                null, BaseColumns._ID + " = ? ", new String[]{documentId}, null);
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
-                String path = cursor.getString(columnIndex);
-
-                return path;
-            } else
-            {
-                return null;
-            }
-        } catch (CursorIndexOutOfBoundsException e)
-        {
-            Toast.makeText(this, "Please select images from gallery only, Dropbox/ Drive is not supported", Toast.LENGTH_SHORT).show();
-            finish();
-            return null;
-        } finally
-        {
-            if (cursor != null)
-            {
-                cursor.close();
-            }
         }
     }
 
@@ -231,65 +210,70 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
                 setResult(RESULT_CANCELED);
                 finish();
             }
-            //final ListenableFuture<String> future = Factory.getImageService().sendImage(mPath);
-            final ProgressDialog pd = new ProgressDialog(this);
-            pd.setCancelable(true);
-            pd.setOnCancelListener(new DialogInterface.OnCancelListener()
+            Observable<String> imgUpload = ServiceFactory.ImageService().sendImage(this, mPath);
+
+            showProgress();
+            imgUpload.subscribe(new Observer<String>()
             {
                 @Override
-                public void onCancel(DialogInterface dialog)
+                public void onCompleted()
                 {
-                    setResult(RESULT_CANCELED);
-                    //future.cancel(false);
-                    finish();
+
+                }
+
+                @Override
+                public void onError(Throwable e)
+                {
+
+                }
+
+                @Override
+                public void onNext(String url)
+                {
+                    hideProgress();
+                    if (!TextUtils.isEmpty(url))
+                    {
+                        Intent intent = new Intent();
+                        intent.putExtra(URL, url);
+                        intent.putExtra(PATH, mPath);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    } else
+                    {
+                        setResult(RESULT_CANCELED);
+                        finish();
+                    }
                 }
             });
-            pd.setMessage("Sending Image");
-            pd.setCanceledOnTouchOutside(false);
-            pd.show();
-//            Futures.addCallback(future, new FutureCallback<String>()
-//            {
-//                @Override
-//                public void onSuccess(String result)
-//                {
-//                    try
-//                    {
-//                        pd.dismiss();
-//                    }
-//                    catch (Exception e)
-//                    {
-//
-//                    }
-//                    if (!TextUtils.isEmpty(result))
-//                    {
-//                        Intent intent = new Intent();
-//                        intent.putExtra(Constants.URL, result);
-//                        intent.putExtra(Constants.PATH, mPath);
-//                        setResult(RESULT_OK, intent);
-//                        finish();
-//                    }
-//                    else
-//                    {
-//                        setResult(RESULT_CANCELED);
-//                        finish();
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Throwable t)
-//                {
-//                    try
-//                    {
-//                        pd.dismiss();
-//                        Toast.makeText(SendImageActivity.this, "Could not upload image, Please try later", Toast.LENGTH_SHORT).show();
-//                    }
-//                    catch (Exception e)
-//                    {
-//
-//                    }
-//                }
-//            }, ExecutorUtils.onUIThread());
         }
+    }
+
+    private void hideProgress()
+    {
+        try
+        {
+            pd.dismiss();
+        } catch (Exception e)
+        {
+            // illegal state pd already dismissed
+        }
+    }
+
+    private void showProgress()
+    {
+        pd.setCancelable(true);
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener()
+        {
+            @Override
+            public void onCancel(DialogInterface dialog)
+            {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
+        pd.setMessage("Sending Image");
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
     }
 
     @Override
@@ -316,4 +300,3 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
         return intent;
     }
 }
-*/

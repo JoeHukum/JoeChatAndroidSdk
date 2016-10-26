@@ -1,6 +1,7 @@
 package com.joehukum.chat;
 
 import com.joehukum.chat.messages.database.MessageDatabaseService;
+import com.joehukum.chat.messages.images.ImageService;
 import com.joehukum.chat.messages.metadata.MetadataService;
 import com.joehukum.chat.messages.network.MessageNetworkService;
 import com.joehukum.chat.messages.pubsub.PubSubService;
@@ -18,6 +19,7 @@ public class ServiceFactory
     private static MessageDatabaseService mMessageDatabaseService;
     private static MessageNetworkService mMessageNetworkService;
     private static MetadataService mMetadataService;
+    private static ImageService mImageService;
 
     public static MessageDatabaseService MessageDatabaseService()
     {
@@ -77,5 +79,18 @@ public class ServiceFactory
             }
         }
         return mMetadataService;
+    }
+
+    public static ImageService ImageService()
+
+    {
+        synchronized (mLock)
+        {
+            if (mImageService == null)
+            {
+                mImageService = new ImageService();
+            }
+        }
+        return mImageService;
     }
 }
