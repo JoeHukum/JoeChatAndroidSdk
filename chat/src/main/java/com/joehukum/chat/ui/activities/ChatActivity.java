@@ -201,7 +201,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     {
         if (mMessages != null && !mMessages.isEmpty())
         {
-            return mMessages.get(0);
+            return mMessages.get(mMessages.size()-1);
         } else
         {
             return null;
