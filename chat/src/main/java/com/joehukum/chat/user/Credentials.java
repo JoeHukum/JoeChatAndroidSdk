@@ -11,6 +11,7 @@ public class Credentials
     private String email;
     private String customerHash;
     private String clientName;
+    private String paramString;
 
     public Credentials(String authKey, String phoneNumber, String email, String customerHash)
     {
@@ -54,6 +55,20 @@ public class Credentials
             return EMPTY;
         }
         return customerHash;
+    }
+
+    public void setParamString(String paramString)
+    {
+        this.paramString = paramString;
+    }
+
+    public String getParamString()
+    {
+        if (customerHash == null)
+        {
+            return EMPTY;
+        }
+        return paramString;
     }
 
     public String getClientName()

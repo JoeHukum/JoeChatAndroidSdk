@@ -11,12 +11,28 @@ import com.joehukum.chat.user.Credentials;
 import java.io.IOException;
 import java.util.List;
 
+import rx.Observable;
+import rx.functions.Func1;
+
 /**
  * Created by pulkitkumar on 17/03/16.
  */
 public class MessageNetworkService
 {
     public static final String START_OVER_TEXT = "/startOver";
+
+    public boolean initChat(Context context)
+    {
+        Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context.getApplicationContext());
+        try
+        {
+            String response = HttpIO.makeRequest(context, Api.Chat.Url(credentials.getCustomerHash()), null, HttpIO.Method.GET);
+            return true;
+        } catch (Exception e)
+        {
+            return false;
+        }
+    }
 
     public boolean uploadMessage(Context context, @NonNull Message message) throws AppServerException, IOException
     {

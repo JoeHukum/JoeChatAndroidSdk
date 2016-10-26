@@ -30,14 +30,14 @@
         android:layout_above="@id/userInputContainer"
         android:layout_below="@id/toolbar">
 
-        <android.support.v7.widget.RecyclerView
+        <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:dividerHeight="0dp"
-            app:stackFromEnd="true"
-            app:reverseLayout="true"/>
+            android:divider="@null"
+            android:stackFromBottom="true"/>
 
     </RelativeLayout>
 

@@ -10,6 +10,8 @@ import com.joehukum.chat.messages.sync.SyncUtils;
 import com.joehukum.chat.ui.activities.ChatActivity;
 import com.joehukum.chat.ui.utils.UiUtils;
 
+import java.util.Map;
+
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -60,6 +62,11 @@ public class JoeHukum
                         context.startActivity(intent);
                     }
                 });
+    }
+
+    public static void setUserParams(Context context, Map<String, String> params)
+    {
+        ServiceFactory.CredentialsService().updateParams(context, params);
     }
 
     private static void hideProgress(ProgressDialog pd)

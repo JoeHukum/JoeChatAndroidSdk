@@ -46,6 +46,7 @@ public class MessageParser
     private static final String DATE_META_DATA = "mtdt";
     private static final String FROM = "frm";
     private static final String TO = "to";
+    private static final String CONTENT_TYPE_IMAGE = "img";
 
     @Nullable
     public static List<Message> parseMessages(String response)
@@ -239,6 +240,9 @@ public class MessageParser
         } else if (messageContentType.equals(CONTENT_TYPE_TEXT))
         {
             return Message.ContentType.TEXT;
+        } else if (messageContentType.equals(CONTENT_TYPE_IMAGE))
+        {
+            return Message.ContentType.IMAGE;
         }
         return Message.ContentType.TEXT;
     }
