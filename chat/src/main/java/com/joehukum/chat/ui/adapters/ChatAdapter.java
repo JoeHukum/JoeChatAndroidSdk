@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.joehukum.chat.R;
 import com.joehukum.chat.messages.objects.Message;
 
@@ -59,6 +60,11 @@ public class ChatAdapter extends ArrayAdapter<Message>
                 viewHolder.receivedText.setVisibility(View.VISIBLE);
                 viewHolder.receivedImage.setVisibility(View.GONE);
                 viewHolder.receivedText.setText(message.getContent());
+            } else if (message.getContentType() == Message.ContentType.IMAGE)
+            {
+                viewHolder.receivedText.setVisibility(View.GONE);
+                viewHolder.receivedImage.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(message.getContent()).into(viewHolder.receivedImage);
             }
             // show time.
             viewHolder.sentTime.setText(getFormattedDate(message.getTime()));
@@ -74,6 +80,11 @@ public class ChatAdapter extends ArrayAdapter<Message>
                 viewHolder.sentText.setVisibility(View.VISIBLE);
                 viewHolder.sentImage.setVisibility(View.GONE);
                 viewHolder.sentText.setText(message.getContent());
+            } else if (message.getContentType() == Message.ContentType.IMAGE)
+            {
+                viewHolder.sentText.setVisibility(View.GONE);
+                viewHolder.sentImage.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(message.getContent()).into(viewHolder.sentImage);
             }
             // show time.
             viewHolder.sentTime.setText(getFormattedDate(message.getTime()));

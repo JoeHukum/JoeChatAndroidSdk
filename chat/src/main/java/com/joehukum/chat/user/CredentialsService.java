@@ -70,7 +70,10 @@ public class CredentialsService
             @Override
             public Boolean call(Boolean aBoolean)
             {
-                Credentials credentials = new Credentials(authKey, phoneNumber, email, null);
+                Credentials credentials = getUserCredentials(context);
+                credentials.setAuthKey(authKey);
+                credentials.setPhoneNumber(phoneNumber);
+                credentials.setEmail(email);
                 saveCredentials(context, credentials);
                 credentials.setParamString(readParamString(context));
                 return uploadCredentials(context, credentials) &&

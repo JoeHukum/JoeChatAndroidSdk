@@ -216,9 +216,9 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
 
         mMessages = new ArrayList<>();
         mAdapter = new ChatAdapter(mListView.getContext(), mMessages);
-        mListView.setAdapter(mAdapter);
-        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         mListView.setStackFromBottom(true);
+        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+        mListView.setAdapter(mAdapter);
     }
 
     private void initializeInputLayouts()

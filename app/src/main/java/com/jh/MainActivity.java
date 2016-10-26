@@ -16,6 +16,7 @@ import com.joehukum.chat.messages.objects.Message;
 import com.joehukum.chat.ui.notification.NotificationHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity
         String em = email.getText().toString();
         String ph = phoneNumber.getText().toString();
         userStore.saveUser(this, new User(clHash, ph, em));
+        JoeHukum.setUserParams(this, new HashMap<String, String>());
         JoeHukum.chat(this, clHash, ph, em, null);
     }
 }

@@ -101,7 +101,7 @@ public class MessageDatabaseService
                 try
                 {
                     cursor = context.getContentResolver().query(MessageProvider.MESSAGE_URI, null, null
-                            , null, TableMessage.COLUMN_ID + " desc");
+                            , null, TableMessage.COLUMN_ID + " asc");
                     markAllRead(context);
                     List<Message> messages = TableMessage.getMessage(cursor);
                     return messages;

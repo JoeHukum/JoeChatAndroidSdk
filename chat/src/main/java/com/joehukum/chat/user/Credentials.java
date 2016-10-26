@@ -21,6 +21,26 @@ public class Credentials
         this.customerHash = customerHash;
     }
 
+    public void setAuthKey(String authKey)
+    {
+        this.authKey = authKey;
+    }
+
+    public void setPhoneNumber(String phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    public void setCustomerHash(String customerHash)
+    {
+        this.customerHash = customerHash;
+    }
+
     public String getAuthKey()
     {
         if (authKey == null)
