@@ -19,6 +19,7 @@ import com.joehukum.chat.messages.database.MessageProvider;
 import com.joehukum.chat.messages.database.TableMessage;
 import com.joehukum.chat.messages.network.Api;
 import com.joehukum.chat.messages.network.HttpIO;
+import com.joehukum.chat.messages.network.ImageParser;
 import com.joehukum.chat.messages.network.exceptions.AppServerException;
 import com.joehukum.chat.messages.objects.ImageUpload;
 import com.joehukum.chat.messages.objects.Message;
@@ -165,7 +166,7 @@ public class ImageService
                 ImageUpload image = ImageParser.parseResponse(response);
                 if (image.isSuccess())
                 {
-                    return image.getUrl();
+                    return image.getImageUrl();
                 } else
                 {
                     return null;

@@ -69,4 +69,14 @@ public class Api
             return String.format(jsonTemplate, phoneNumber, email, params, customerHash, firebaseToken);
         }
     }
+
+
+    public static class Image
+    {
+        public static String url()
+        {
+            StringBuilder url = new StringBuilder().append(BASE_URL).append("api/file/upload");
+            return url.toString();
+        }
+    }
 }
