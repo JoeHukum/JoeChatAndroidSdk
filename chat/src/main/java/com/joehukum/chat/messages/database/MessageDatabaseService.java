@@ -173,6 +173,7 @@ public class MessageDatabaseService
             }
             ContentValues values = TableMessage.buildContentValues(message);
             context.getContentResolver().insert(MessageProvider.MESSAGE_URI, values);
+            ServiceFactory.CredentialsService().saveTicketHash(context, message.getTicketHash());
         }
     }
 

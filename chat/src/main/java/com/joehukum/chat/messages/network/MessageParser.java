@@ -47,6 +47,9 @@ public class MessageParser
     private static final String FROM = "frm";
     private static final String TO = "to";
     private static final String CONTENT_TYPE_IMAGE = "img";
+    private static final String TICKET_HASH = "tcktHsh";
+    public static final String ACTION = "actn";
+    public static final String ACTION_TYPE = "typ";
 
     @Nullable
     public static List<Message> parseMessages(String response)
@@ -152,6 +155,10 @@ public class MessageParser
         {
             message.setMessageHash(messageJson.getString(MESSAGE_HASH));
         }
+        if (messageJson.has(TICKET_HASH))
+        {
+            message.setTicketHash(messageJson.getString(TICKET_HASH));
+        }
         if (messageJson.has(MESSAGE_CONTENT_TYPE))
         {
             message.setContentType(getContentType(messageJson.getString(MESSAGE_CONTENT_TYPE)));
@@ -174,6 +181,10 @@ public class MessageParser
                     message.setMetadata(dateMetaData);
                 }
             }
+        }
+        if (messageJson.has(ACTION))
+        {
+            message.setResponseType(getResponseTypeFromAction(messageJson.getJSONObject(ACTION)));
         }
         if (messageJson.has(AUTHOR))
         {
@@ -215,15 +226,33 @@ public class MessageParser
         return options;
     }
 
-    private static Message.ResponseType getResponseType(String string)
+    private static Message.ResponseType getResponseTypeFromAction(JSONObject action)
     {
-        if ("opt".equals(string))
+        if (action != null && action.has(ACTION_TYPE))
+        {
+            try
+            {
+                if ("TAKE_FEEDBACK".equals(action.getString(ACTION_TYPE)))
+                {
+                    return Message.ResponseType.RATING;
+                }
+            } catch (JSONException e)
+            {
+                Log.wtf(TAG, e);
+            }
+        }
+        return Message.ResponseType.TEXT;
+    }
+
+    private static Message.ResponseType getResponseType(String responseType)
+    {
+        if ("opt".equals(responseType))
         {
             return Message.ResponseType.SEARCH_OPTION;
-        } else if ("cntNum".equals(string))
+        } else if ("cntNum".equals(responseType))
         {
             return Message.ResponseType.INT;
-        } else if ("date".equals(string))
+        } else if ("date".equals(responseType))
         {
             return Message.ResponseType.DATE;
         } else

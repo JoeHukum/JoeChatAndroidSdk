@@ -3,11 +3,10 @@
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
     <color name="gray">#d3d3d3</color>
-
-
     <color name="primary_color">#6ACAD5</color>
     <color name="primary_color_dark">#65C0CB</color>
     <color name="secondary_color">#3C434C</color>
     <color name="activity_background">#F2F2F2</color>
+    <color name="yellow">#D4AF37</color>
 
 </resources>

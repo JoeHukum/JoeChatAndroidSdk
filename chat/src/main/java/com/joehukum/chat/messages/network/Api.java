@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
  */
 public class Api
 {
-    private static final String BASE_URL = "http://stagapi.gogetspeedy.com/";
+    private static final String BASE_URL = "http://api.gogetspeedy.com/";
 
     public static class Message
     {
@@ -40,7 +40,7 @@ public class Api
             String template = new StringBuilder("{\n")
                     .append("\"fdbck\":\"%s\",\n")
                     .append("\"tcktHsh\":\"%s\",\n")
-                    .append("\"rtng\":%d\n")
+                    .append("\"rtng\":%f\n")
                     .append("}").toString();
             return String.format(template, feedback, ticketHash, rating);
         }

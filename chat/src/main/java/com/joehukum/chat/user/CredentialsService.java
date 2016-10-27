@@ -77,8 +77,7 @@ public class CredentialsService
                 credentials.setEmail(email);
                 saveCredentials(context, credentials);
                 credentials.setParamString(readParamString(context));
-                return uploadCredentials(context, credentials) &&
-                        ServiceFactory.MessageNetworkService().initChat(context);
+                return uploadCredentials(context, credentials);
             }
         });
     }
@@ -155,6 +154,7 @@ public class CredentialsService
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(TICKET_HASH, ticketHash);
+        editor.commit();
     }
 
     public String getTicketHash(Context context)

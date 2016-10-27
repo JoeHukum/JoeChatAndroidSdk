@@ -55,6 +55,7 @@ public class ChatAdapter extends ArrayAdapter<Message>
             viewHolder.receivedView.setVisibility(View.VISIBLE);
             viewHolder.sentView.setVisibility(View.GONE);
             // show sent content.
+            viewHolder.author.setText(message.getAuthor());
             if (message.getContentType() == Message.ContentType.TEXT)
             {
                 viewHolder.receivedText.setVisibility(View.VISIBLE);
@@ -67,7 +68,7 @@ public class ChatAdapter extends ArrayAdapter<Message>
                 Glide.with(mContext).load(message.getContent()).into(viewHolder.receivedImage);
             }
             // show time.
-            viewHolder.sentTime.setText(getFormattedDate(message.getTime()));
+            viewHolder.receivedTime.setText(getFormattedDate(message.getTime()));
         } else if (message.getType() == Message.Type.SENT)
         {
             // show/hide bubbles.
@@ -111,6 +112,7 @@ public class ChatAdapter extends ArrayAdapter<Message>
     {
         View receivedView;
         View sentView;
+        TextView author;
         TextView receivedText;
         TextView sentText;
         TextView receivedTime;
@@ -124,6 +126,7 @@ public class ChatAdapter extends ArrayAdapter<Message>
         {
             receivedView = itemView.findViewById(R.id.received);
             sentView = itemView.findViewById(R.id.sent);
+            author = (TextView) itemView.findViewById(R.id.author);
             receivedText = (TextView) itemView.findViewById(R.id.messageReceived);
             sentText = (TextView) itemView.findViewById(R.id.messageSent);
             receivedTime = (TextView) itemView.findViewById(R.id.timeReceived);

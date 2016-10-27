@@ -197,7 +197,11 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
                 mTextInput.takeInputFocus();
             } else if (message.getResponseType() == Message.ResponseType.RATING)
             {
-                if (ServiceFactory.MetaDataService().isRatingSent(this, message.getMessageHash()))
+                mUserInputContainer.removeAllViews();
+                mUserInputContainer.addView(mTextInput);
+                mTextInput.setNumberInput(false);
+                mTextInput.takeInputFocus();
+                if (!ServiceFactory.MetaDataService().isRatingSent(this, message.getMessageHash()))
                 {
                     showRatingDialog();
                 }
@@ -220,6 +224,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     private void showRatingDialog()
     {
         NpsDialog dialog = new NpsDialog();
+
         dialog.setCancelable(false);
         dialog.show(getSupportFragmentManager(), "NPS");
     }
@@ -438,7 +443,9 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     public void onClickOk(float rating, String comments)
     {
         Snackbar.make(mListView, getString(R.string.sending_feedback), Snackbar.LENGTH_SHORT).show();
-        ServiceFactory.MessageNetworkService().sendFeedback(this, comments, rating).subscribe(new Subscriber<Boolean>()
+        ServiceFactory.MessageNetworkService().sendFeedback(this, comments, rating).
+                observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<Boolean>()
         {
             @Override
             public void onCompleted()
@@ -449,6 +456,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
             @Override
             public void onError(Throwable e)
             {
+                Log.wtf(TAG, e);
                 Snackbar.make(mListView, getString(R.string.feedback_error), Snackbar.LENGTH_SHORT).show();
             }
 

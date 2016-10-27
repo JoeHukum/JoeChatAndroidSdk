@@ -7,5 +7,9 @@
         <attr name="sendTextColor" format="reference"/>
         <attr name="sendIcon" format="reference"/>
         <attr name="inputTextColor" format="reference"/>
+        <attr name="dialogButtonColor" format="reference"/>
+        <attr name="dialogTextColor" format="reference"/>
+        <attr name="ratingColor" format="reference"/>
+        <attr name="dialogInputTextColor" format="reference"/>
     </declare-styleable>
 </resources>

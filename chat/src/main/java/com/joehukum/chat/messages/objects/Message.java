@@ -20,6 +20,7 @@ public class Message
     private boolean isRead;
     private boolean isPublicNote;
     private Object metadata;
+    private String ticketHash;
 
     public Message()
     {
@@ -136,6 +137,16 @@ public class Message
     public void setPublicNote(boolean publicNote)
     {
         this.isPublicNote = publicNote;
+    }
+
+    public String getTicketHash()
+    {
+        return ticketHash;
+    }
+
+    public void setTicketHash(String ticketHash)
+    {
+        this.ticketHash = ticketHash;
     }
 
     public String getDisplayText()

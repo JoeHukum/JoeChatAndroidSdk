@@ -27,8 +27,6 @@ public class MessageNetworkService
         try
         {
             String response = HttpIO.makeRequest(context, Api.Chat.Url(credentials.getCustomerHash()), null, HttpIO.Method.GET);
-            String ticketHash = InitChatParser.getTicketHash(response);
-            ServiceFactory.CredentialsService().saveTicketHash(context, ticketHash);
             return true;
         } catch (Exception e)
         {
@@ -111,6 +109,7 @@ public class MessageNetworkService
             for (Message message: messages)
             {
                 ServiceFactory.MessageDatabaseService().addMessage(context, message);
+                ServiceFactory.CredentialsService().saveTicketHash(context, message.getTicketHash());
             }
         }
     }

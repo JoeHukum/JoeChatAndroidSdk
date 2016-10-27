@@ -38,6 +38,13 @@ public class NpsDialog extends DialogFragment implements View.OnClickListener
         listener = (NpsDialogListener) getActivity();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.JoeThemeDialog);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -61,11 +68,17 @@ public class NpsDialog extends DialogFragment implements View.OnClickListener
             onOkClick();
         } else if (view.getId() == R.id.btnNegative)
         {
-            listener.onClickCancel();
+            onCancelClick();
         } else
         {
             return;
         }
+    }
+
+    public void onCancelClick()
+    {
+        listener.onClickCancel();
+        dismiss();
     }
 
     private void onOkClick()
@@ -73,6 +86,7 @@ public class NpsDialog extends DialogFragment implements View.OnClickListener
         if (ratingBar.getRating() > 0)
         {
             listener.onClickOk(ratingBar.getRating(), comments.getText().toString());
+            dismiss();
         } else
         {
             showError();

@@ -2,12 +2,18 @@ package com.joehukum.chat.messages.pubsub;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Log;
 
 import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.messages.sync.SyncUtils;
 import com.pusher.client.channel.Channel;
 import com.pusher.client.channel.SubscriptionEventListener;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action;
+import rx.functions.Func1;
 
 /**
  * Created by pulkitkumar on 17/03/16.
@@ -33,6 +39,47 @@ public class PubSubService
                 Log.i(TAG, "message received");
                 Log.i(TAG, data);
                 ServiceFactory.MessageDatabaseService().savePubSubMessage(context, data);
+            }
+        });
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                initChat(context);
+            }
+        }, 2000);
+
+    }
+
+    public void initChat(final Context context)
+    {
+        Observable.just(true).map(new Func1<Boolean, Boolean>()
+        {
+            @Override
+            public Boolean call(Boolean aBoolean)
+            {
+                ServiceFactory.MessageNetworkService().initChat(context);
+                return true;
+            }
+        }).subscribe(new Subscriber<Boolean>()
+        {
+            @Override
+            public void onCompleted()
+            {
+
+            }
+
+            @Override
+            public void onError(Throwable e)
+            {
+
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean)
+            {
+
             }
         });
     }
