@@ -1,5 +1,6 @@
 package com.joehukum.chat.ui.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
@@ -29,6 +32,7 @@ import com.joehukum.chat.ui.adapters.ChatAdapter;
 import com.joehukum.chat.ui.fragments.DatePickerFragment;
 import com.joehukum.chat.ui.fragments.TimePickerFragment;
 import com.joehukum.chat.ui.views.DateInputView;
+import com.joehukum.chat.ui.views.OptionsInputView;
 import com.joehukum.chat.ui.views.SearchableOptionsView;
 import com.joehukum.chat.ui.views.TextUserInputView;
 import com.joehukum.chat.ui.views.TimeInputView;
@@ -48,7 +52,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         DateInputView.DateInputCallbacks,
         TimeInputView.TimeInputCallback,
         DatePickerFragment.DateSelectedCallback,
-        NpsDialog.NpsDialogListener
+        NpsDialog.NpsDialogListener, OptionsInputView.OptionClickCallback
 {
     private static final String TAG = ChatActivity.class.getName();
     private static final String CHANNEL_NAME = "channelName";
@@ -75,6 +79,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     private DateInputView mDateInput;
     private TimeInputView mTimeInput;
     private SearchableOptionsView mSearchableOptionInput;
+    private OptionsInputView mListInputOption;
 
     private ChatAdapter mAdapter;
     private List<Message> mMessages;
@@ -174,11 +179,16 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
                 mUserInputContainer.addView(mTimeInput);
             } else if (message.getResponseType() == Message.ResponseType.SEARCH_OPTION)
             {
+//                List<Option> options = ServiceFactory.MetaDataService().getOptions(this, message.getMessageHash());
+//                mSearchableOptionInput.setOptions(options);
+//                mUserInputContainer.removeAllViews();
+//                mUserInputContainer.addView(mSearchableOptionInput);
+//                mSearchableOptionInput.takeInputFocus();
+                hideKeyboard();
                 List<Option> options = ServiceFactory.MetaDataService().getOptions(this, message.getMessageHash());
-                mSearchableOptionInput.setOptions(options);
+                mListInputOption.setOptions(options);
                 mUserInputContainer.removeAllViews();
-                mUserInputContainer.addView(mSearchableOptionInput);
-                mSearchableOptionInput.takeInputFocus();
+                mUserInputContainer.addView(mListInputOption);
             } else if (message.getResponseType() == Message.ResponseType.INT)
             {
                 mUserInputContainer.removeAllViews();
@@ -244,6 +254,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         mDateInput = new DateInputView(this, this);
         mTimeInput = new TimeInputView(this, this);
         mSearchableOptionInput = new SearchableOptionsView(this, this);
+        mListInputOption = new OptionsInputView(this, this);
     }
 
     private void init(Bundle savedInstanceState)
@@ -438,5 +449,26 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     public void onClickCancel()
     {
         ServiceFactory.MetaDataService().ratingSent(getLastMessage().getMessageHash());
+    }
+
+    @Override
+    public void onOptionClick(Option option)
+    {
+        if (option != null)
+        {
+            Message message = ServiceFactory.MessageDatabaseService().generateOptionMessage(option);
+            sendMessage(message);
+        }
+    }
+
+    private void hideKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = getCurrentFocus();
+        if (view == null)
+        {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
