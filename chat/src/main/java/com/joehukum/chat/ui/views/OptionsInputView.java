@@ -10,7 +10,9 @@ import android.widget.ListView;
 
 import com.joehukum.chat.R;
 import com.joehukum.chat.messages.objects.Option;
+import com.joehukum.chat.ui.adapters.OptionListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,23 +26,24 @@ public class OptionsInputView extends FrameLayout
     }
 
     private OptionClickCallback mListener;
+    private Context mContext;
+    private ListView mListView;
 
-    public OptionsInputView(Context context, List<Option> options, OptionClickCallback listener)
+    public OptionsInputView(Context context, OptionClickCallback listener)
     {
         super(context);
         mListener = listener;
+        mContext = context;
         removeAllViews();
-        addView(getOptionsList(context, options));
+        addView(getOptionsList(context));
+
     }
 
-    private View getOptionsList(Context context, final List<Option> options)
+    public void setOptions(final List<Option> options)
     {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_option, null, false);
-        ListView listView = (ListView) view.findViewById(R.id.list);
-
-        ArrayAdapter<Option> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, options);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        ArrayAdapter<Option> adapter = new OptionListAdapter(mContext, options);
+        mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -48,6 +51,12 @@ public class OptionsInputView extends FrameLayout
                 mListener.onOptionClick(options.get(position));
             }
         });
+    }
+
+    private View getOptionsList(Context context)
+    {
+        View view = LayoutInflater.from(context).inflate(R.layout.list_option, null, false);
+        mListView = (ListView) view.findViewById(R.id.list);
         return view;
     }
 }

@@ -27,6 +27,24 @@ public class Api
         }
     }
 
+    public static class Feedback
+    {
+        public static String Url()
+        {
+            return new StringBuilder(BASE_URL).append("api/ticket/rate/").toString();
+        }
+
+        public static String Json(String feedback, float rating, String ticketHash)
+        {
+            String template = new StringBuilder("{\n")
+                    .append("\"fdbck\":\"%s\",\n")
+                    .append("\"tcktHsh\":\"%s\",\n")
+                    .append("\"rtng\":%d\n")
+                    .append("}").toString();
+            return String.format(template, feedback, ticketHash, rating);
+        }
+    }
+
     public static class Chat
     {
         public static String Url(String customerHash)

@@ -27,11 +27,36 @@ public class MessageNetworkService
         try
         {
             String response = HttpIO.makeRequest(context, Api.Chat.Url(credentials.getCustomerHash()), null, HttpIO.Method.GET);
+            String ticketHash = InitChatParser.getTicketHash(response);
+            ServiceFactory.CredentialsService().saveTicketHash(context, ticketHash);
             return true;
         } catch (Exception e)
         {
             return false;
         }
+    }
+
+    public Observable<Boolean> sendFeedback(Context context, final String feedback, final float rating)
+    {
+        return Observable.just(context).map(new Func1<Context, Boolean>()
+        {
+            @Override
+            public Boolean call(Context context)
+            {
+                try
+                {
+                    String ticketHash = ServiceFactory.CredentialsService().getTicketHash(context);
+                    String response = HttpIO.makeRequest(context, Api.Feedback.Url(), Api.Feedback.Json(feedback, rating, ticketHash) , HttpIO.Method.POST);
+                    return true;
+                } catch (AppServerException e)
+                {
+                    return false;
+                } catch (IOException e)
+                {
+                    return false;
+                }
+            }
+        });
     }
 
     public boolean uploadMessage(Context context, @NonNull Message message) throws AppServerException, IOException

@@ -1,11 +1,13 @@
 package com.joehukum.chat.ui.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +15,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
@@ -23,10 +27,12 @@ import com.joehukum.chat.messages.network.MessageNetworkService;
 import com.joehukum.chat.messages.objects.DateMetaData;
 import com.joehukum.chat.messages.objects.Message;
 import com.joehukum.chat.messages.objects.Option;
+import com.joehukum.chat.nps.NpsDialog;
 import com.joehukum.chat.ui.adapters.ChatAdapter;
 import com.joehukum.chat.ui.fragments.DatePickerFragment;
 import com.joehukum.chat.ui.fragments.TimePickerFragment;
 import com.joehukum.chat.ui.views.DateInputView;
+import com.joehukum.chat.ui.views.OptionsInputView;
 import com.joehukum.chat.ui.views.SearchableOptionsView;
 import com.joehukum.chat.ui.views.TextUserInputView;
 import com.joehukum.chat.ui.views.TimeInputView;
@@ -37,6 +43,7 @@ import java.util.Date;
 import java.util.List;
 
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -44,7 +51,8 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         SearchableOptionsView.SearchOptionSelectionCallback,
         DateInputView.DateInputCallbacks,
         TimeInputView.TimeInputCallback,
-        DatePickerFragment.DateSelectedCallback
+        DatePickerFragment.DateSelectedCallback,
+        NpsDialog.NpsDialogListener, OptionsInputView.OptionClickCallback
 {
     private static final String TAG = ChatActivity.class.getName();
     private static final String CHANNEL_NAME = "channelName";
@@ -71,6 +79,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
     private DateInputView mDateInput;
     private TimeInputView mTimeInput;
     private SearchableOptionsView mSearchableOptionInput;
+    private OptionsInputView mListInputOption;
 
     private ChatAdapter mAdapter;
     private List<Message> mMessages;
@@ -170,17 +179,28 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
                 mUserInputContainer.addView(mTimeInput);
             } else if (message.getResponseType() == Message.ResponseType.SEARCH_OPTION)
             {
+//                List<Option> options = ServiceFactory.MetaDataService().getOptions(this, message.getMessageHash());
+//                mSearchableOptionInput.setOptions(options);
+//                mUserInputContainer.removeAllViews();
+//                mUserInputContainer.addView(mSearchableOptionInput);
+//                mSearchableOptionInput.takeInputFocus();
+                hideKeyboard();
                 List<Option> options = ServiceFactory.MetaDataService().getOptions(this, message.getMessageHash());
-                mSearchableOptionInput.setOptions(options);
+                mListInputOption.setOptions(options);
                 mUserInputContainer.removeAllViews();
-                mUserInputContainer.addView(mSearchableOptionInput);
-                mSearchableOptionInput.takeInputFocus();
+                mUserInputContainer.addView(mListInputOption);
             } else if (message.getResponseType() == Message.ResponseType.INT)
             {
                 mUserInputContainer.removeAllViews();
                 mUserInputContainer.addView(mTextInput);
                 mTextInput.setNumberInput(true);
                 mTextInput.takeInputFocus();
+            } else if (message.getResponseType() == Message.ResponseType.RATING)
+            {
+                if (ServiceFactory.MetaDataService().isRatingSent(this, message.getMessageHash()))
+                {
+                    showRatingDialog();
+                }
             } else
             {
                 mUserInputContainer.removeAllViews();
@@ -197,11 +217,18 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         }
     }
 
+    private void showRatingDialog()
+    {
+        NpsDialog dialog = new NpsDialog();
+        dialog.setCancelable(false);
+        dialog.show(getSupportFragmentManager(), "NPS");
+    }
+
     private Message getLastMessage()
     {
         if (mMessages != null && !mMessages.isEmpty())
         {
-            return mMessages.get(0);
+            return mMessages.get(mMessages.size()-1);
         } else
         {
             return null;
@@ -227,6 +254,7 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         mDateInput = new DateInputView(this, this);
         mTimeInput = new TimeInputView(this, this);
         mSearchableOptionInput = new SearchableOptionsView(this, this);
+        mListInputOption = new OptionsInputView(this, this);
     }
 
     private void init(Bundle savedInstanceState)
@@ -389,5 +417,58 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         mListView = null;
         mChannelName = null;
         mObserver = null;
+    }
+
+    @Override
+    public void onClickOk(float rating, String comments)
+    {
+        Snackbar.make(mListView, getString(R.string.sending_feedback), Snackbar.LENGTH_SHORT).show();
+        ServiceFactory.MessageNetworkService().sendFeedback(this, comments, rating).subscribe(new Subscriber<Boolean>()
+        {
+            @Override
+            public void onCompleted()
+            {
+                ServiceFactory.MetaDataService().ratingSent(getLastMessage().getMessageHash());
+            }
+
+            @Override
+            public void onError(Throwable e)
+            {
+                Snackbar.make(mListView, getString(R.string.feedback_error), Snackbar.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean)
+            {
+                Snackbar.make(mListView, getString(R.string.feedback_success), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onClickCancel()
+    {
+        ServiceFactory.MetaDataService().ratingSent(getLastMessage().getMessageHash());
+    }
+
+    @Override
+    public void onOptionClick(Option option)
+    {
+        if (option != null)
+        {
+            Message message = ServiceFactory.MessageDatabaseService().generateOptionMessage(option);
+            sendMessage(message);
+        }
+    }
+
+    private void hideKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = getCurrentFocus();
+        if (view == null)
+        {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

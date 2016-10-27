@@ -31,6 +31,7 @@ public class CredentialsService
     private static final String EMAIL = "email";
     private static final String CUSTOMER_HASH = "customerHash";
     private static final String USER_PARAMS = "userParams";
+    private static final String TICKET_HASH = "ticketHash";
 
     private static final String EMPTY = "";
 
@@ -147,5 +148,18 @@ public class CredentialsService
             builder.deleteCharAt(builder.length() - 1);
         }
         return builder.toString();
+    }
+
+    public void saveTicketHash(Context context, String ticketHash)
+    {
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(TICKET_HASH, ticketHash);
+    }
+
+    public String getTicketHash(Context context)
+    {
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        return preferences.getString(TICKET_HASH, EMPTY);
     }
 }

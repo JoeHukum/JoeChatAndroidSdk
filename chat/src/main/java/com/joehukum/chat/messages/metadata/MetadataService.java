@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.joehukum.chat.JoeHukum;
 import com.joehukum.chat.messages.objects.DateMetaData;
 import com.joehukum.chat.messages.objects.Option;
+import com.joehukum.chat.ui.activities.ChatActivity;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -104,6 +105,45 @@ public class MetadataService
             {
                 Log.wtf(TAG, e);
             }
+        }
+    }
+
+    public void ratingSent(String messageHash)
+    {
+        if (!TextUtils.isEmpty(messageHash))
+        {
+            try
+            {
+                Reservoir.put(messageHash, true);
+            } catch (Exception e)
+            {
+                Log.wtf(TAG, e);
+            }
+        }
+    }
+
+    public boolean isRatingSent(Context context, String messageHash)
+    {
+        if (!TextUtils.isEmpty(messageHash))
+        {
+            try
+            {
+                JoeHukum.initReservoir(context.getApplicationContext());
+                if (Reservoir.contains(messageHash))
+                {
+                    return Reservoir.get(messageHash, Boolean.class);
+                } else
+                {
+                    return false;
+                }
+            } catch (Exception e)
+            {
+                Log.wtf(TAG, e);
+                return false;
+            }
+        } else
+        {
+            return false;
         }
     }
 }

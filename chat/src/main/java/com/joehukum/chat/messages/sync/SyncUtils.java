@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.joehukum.chat.ServiceFactory;
 import com.joehukum.chat.user.Credentials;
@@ -19,6 +20,7 @@ public class SyncUtils
     private static final long SYNC_FREQUENCY = 60 * 10;  // 10 minutes (in seconds)
     private static final String PREF_SETUP_COMPLETE = "setup_complete";
     private static final String TAG = SyncUtils.class.getName();
+    private static final String ACCOUNT_NAME = "chat";
 
 
     public static boolean isPrefSetupComplete(@Nullable Context context)
@@ -35,12 +37,10 @@ public class SyncUtils
         boolean newAccount = false;
         boolean setupComplete = PreferenceManager
                 .getDefaultSharedPreferences(context).getBoolean(PREF_SETUP_COMPLETE, false);
-
-        Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
         String contentAuthority = context.getPackageName();
 
         // Create account, if it's missing. (Either first run, or user has deleted account.)
-        Account account = GenericAccountService.GetAccount(context, credentials.getCustomerHash());
+        Account account = GenericAccountService.GetAccount(context, ACCOUNT_NAME);
         AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         if (accountManager.addAccountExplicitly(account, null, null))
         {
@@ -75,11 +75,9 @@ public class SyncUtils
         // Disable sync backoff and ignore sync preferences. In other words...perform sync NOW!
         b.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         b.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
         String contentAuthority = context.getPackageName();
-        String accountName = credentials.getCustomerHash();
         ContentResolver.requestSync(
-                GenericAccountService.GetAccount(context, accountName),      // Sync account
+                GenericAccountService.GetAccount(context, ACCOUNT_NAME),      // Sync account
                 contentAuthority, // Content authority
                 b);                                      // Extras
     }

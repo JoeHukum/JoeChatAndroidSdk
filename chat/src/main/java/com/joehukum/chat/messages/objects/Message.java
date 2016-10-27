@@ -152,7 +152,7 @@ public class Message
     public enum ResponseType
     {
         TEXT("TEXT"), OPTIONS("OPTIONS"), ADDRESS("ADDRESS"), INT("INT"), DATE("DATE"), TIME("TIME")
-        , SEARCH_OPTION("SEARCH_OPTION"),  PAYMENT("PAYMENT");
+        , SEARCH_OPTION("SEARCH_OPTION"),  PAYMENT("PAYMENT"), RATING("RATING");
 
         private String name;
 
