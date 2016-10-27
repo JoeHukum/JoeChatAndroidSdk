@@ -24,6 +24,14 @@ JoeHukum.chat(this, "your-auth-key", "99xxxxxxxx", "abc@xyz.com");
 `e-mail` and `phone number` are nullable / optional in the above method.
 
 
+If you need to send some extra info about the user before the chat.
+You can do so by passing a Map object with respective keys and user info.
+Here is an example code
+```java
+HashMap<String, String> params = new HashMap<String, String>();
+params.put("UserEmail", "a@b.com");
+params.put("UserExtId", "12345");
+```
 
 Following code needs to be added to the AndroidManifest.xml of your app.
 
@@ -32,6 +40,9 @@ Following code needs to be added to the AndroidManifest.xml of your app.
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.CAMERA"/>
 ```
 
 Inside `<application>`
