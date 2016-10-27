@@ -22,13 +22,13 @@ public class ImageParser
         try
         {
             JSONObject jsonObject = new JSONObject(response);
-            if (jsonObject.has("excptn"))
+            if (jsonObject.has("excp"))
             {
-                success = !jsonObject.getBoolean("excptn");
+                success = !jsonObject.getBoolean("excp");
             }
-            if (jsonObject.has("fileUrl"))
+            if (jsonObject.has("url"))
             {
-                url = jsonObject.getString("fileUrl");
+                url = jsonObject.getString("url");
             }
         } catch (JSONException je)
         {

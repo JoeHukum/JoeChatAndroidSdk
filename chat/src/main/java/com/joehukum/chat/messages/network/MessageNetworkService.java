@@ -64,10 +64,22 @@ public class MessageNetworkService
         Credentials credentials = ServiceFactory.CredentialsService().getUserCredentials(context);
         String customerHash = credentials.getCustomerHash();
         String content = getContent(message);
-        String response = HttpIO.makeRequest(context, Api.Message.Url(), Api.Message.Json(customerHash, content), HttpIO.Method.POST);
+        String response = HttpIO.makeRequest(context, Api.Message.Url(), Api.Message.Json(customerHash,
+                content, getContentTypeString(message)), HttpIO.Method.POST);
         String messageHash = MessageParser.parseMessageHash(response);
         ServiceFactory.MessageDatabaseService().updateHash(context, messageHash, message.getId());
         return true;
+    }
+
+    private String getContentTypeString(Message message)
+    {
+        if (message.getContentType() == Message.ContentType.IMAGE)
+        {
+            return "img";
+        } else
+        {
+            return "";
+        }
     }
 
     private String getContent(Message message)

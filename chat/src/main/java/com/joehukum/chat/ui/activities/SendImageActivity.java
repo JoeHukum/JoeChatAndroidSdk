@@ -33,6 +33,8 @@ import java.io.IOException;
 
 import rx.Observable;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /*
  * Created by pulkitkumar on 17/03/16.
@@ -103,7 +105,7 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
     private void openGallery()
     {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image");
+        intent.setType("image/*");
         startActivityForResult(intent, TYPE_GALLERY);
     }
 
@@ -211,40 +213,41 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
                 finish();
             }
             Observable<String> imgUpload = ServiceFactory.ImageService().sendImage(this, mPath);
-
             showProgress();
-            imgUpload.subscribe(new Observer<String>()
-            {
-                @Override
-                public void onCompleted()
-                {
-
-                }
-
-                @Override
-                public void onError(Throwable e)
-                {
-
-                }
-
-                @Override
-                public void onNext(String url)
-                {
-                    hideProgress();
-                    if (!TextUtils.isEmpty(url))
+            imgUpload.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                    .subscribe(new Observer<String>()
                     {
-                        Intent intent = new Intent();
-                        intent.putExtra(URL, url);
-                        intent.putExtra(PATH, mPath);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else
-                    {
-                        setResult(RESULT_CANCELED);
-                        finish();
-                    }
-                }
-            });
+                        @Override
+                        public void onCompleted()
+                        {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e)
+                        {
+                            Log.wtf(TAG, e);
+                            hideProgress();
+                        }
+
+                        @Override
+                        public void onNext(String url)
+                        {
+                            hideProgress();
+                            if (!TextUtils.isEmpty(url))
+                            {
+                                Intent intent = new Intent();
+                                intent.putExtra(URL, url);
+                                intent.putExtra(PATH, mPath);
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            } else
+                            {
+                                setResult(RESULT_CANCELED);
+                                finish();
+                            }
+                        }
+                    });
         }
     }
 

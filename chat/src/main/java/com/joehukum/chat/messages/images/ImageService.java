@@ -172,7 +172,7 @@ public class ImageService
                     return null;
                 }
             }
-        }).observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread());
+        });
     }
 
     public Bitmap loadFromUri(Uri fileUri, float maxWidth, float maxHeight)

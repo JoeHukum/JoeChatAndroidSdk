@@ -85,7 +85,7 @@ public class TextUserInputView extends LinearLayout implements View.OnClickListe
         });
 
         attachment.setOnClickListener(this);
-        attachment.setVisibility(View.GONE);
+        //attachment.setVisibility(View.GONE);
         send.setOnClickListener(this);
     }
 

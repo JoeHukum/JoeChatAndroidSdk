@@ -187,25 +187,32 @@ public class MessageDatabaseService
         }
     }
 
-    private Message getGenericMessage()
+    private Message getGenericMessage(Message.ContentType contentType)
     {
         Message message = new Message();
         message.setTime(new Date());
         message.setType(Message.Type.SENT);
-        message.setContentType(Message.ContentType.TEXT);
+        message.setContentType(contentType);
         return message;
     }
 
     public Message generateTextMessage(String input)
     {
-        Message message = getGenericMessage();
+        Message message = getGenericMessage(Message.ContentType.TEXT);
         message.setContent(input);
+        return message;
+    }
+
+    public Message generateImageMessage(String url)
+    {
+        Message message= getGenericMessage(Message.ContentType.IMAGE);
+        message.setContent(url);
         return message;
     }
 
     public Message generateOptionMessage(Option option)
     {
-        Message message = getGenericMessage();
+        Message message = getGenericMessage(Message.ContentType.TEXT);
         message.setContentType(Message.ContentType.OPTION);
         message.setContent(option.getDisplayText());
         message.setMetadata(option.getId());

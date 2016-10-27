@@ -343,16 +343,31 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
             {
                 if (which == CAMERA_POSITION)
                 {
-                    //Intent intent = SendImageActivity.getCameraIntent(ChatActivity.this);
-                    //startActivityForResult(intent, REQUEST_CODE_CAMERA);
+                    Intent intent = SendImageActivity.getCameraIntent(ChatActivity.this);
+                    startActivityForResult(intent, REQUEST_CODE_CAMERA);
                 } else if (which == GALLERY_POSITION)
                 {
-                    //Intent intent = SendImageActivity.getGalleryIntent(ChatActivity.this);
-                    //startActivityForResult(intent, REQUEST_CODE_GALLERY);
+                    Intent intent = SendImageActivity.getGalleryIntent(ChatActivity.this);
+                    startActivityForResult(intent, REQUEST_CODE_GALLERY);
                 }
             }
         });
         builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK)
+        {
+            if (requestCode == REQUEST_CODE_CAMERA || requestCode == REQUEST_CODE_GALLERY)
+            {
+                String url = data.getStringExtra(SendImageActivity.URL);
+                Message message = ServiceFactory.MessageDatabaseService().generateImageMessage(url);
+                sendMessage(message);
+            }
+        }
     }
 
     @Override

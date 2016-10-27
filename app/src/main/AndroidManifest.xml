@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -22,13 +24,15 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
         <activity
             android:name="com.joehukum.chat.ui.activities.ChatActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name="com.joehukum.chat.ui.activities.SendImageActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <service android:name="com.joehukum.chat.messages.sync.GenericAccountService">
