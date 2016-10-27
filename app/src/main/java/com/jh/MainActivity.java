@@ -72,7 +72,10 @@ public class MainActivity extends AppCompatActivity
         String em = email.getText().toString();
         String ph = phoneNumber.getText().toString();
         userStore.saveUser(this, new User(clHash, ph, em));
-        JoeHukum.setUserParams(this, new HashMap<String, String>());
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("UserEmail", "a@b.com");
+        params.put("UserExtId", "12345");
+        JoeHukum.setUserParams(this, params);
         JoeHukum.chat(this, clHash, ph, em, null);
     }
 }
