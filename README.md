@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-	compile 'com.joehukum:chat:0.47'
+	compile 'com.joehukum:chat:0.48'
 }
 ```
 
