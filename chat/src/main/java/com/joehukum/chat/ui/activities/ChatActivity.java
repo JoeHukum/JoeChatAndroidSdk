@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,7 @@ import com.joehukum.chat.messages.network.MessageNetworkService;
 import com.joehukum.chat.messages.objects.DateMetaData;
 import com.joehukum.chat.messages.objects.Message;
 import com.joehukum.chat.messages.objects.Option;
+import com.joehukum.chat.nps.NpsDialog;
 import com.joehukum.chat.ui.adapters.ChatAdapter;
 import com.joehukum.chat.ui.fragments.DatePickerFragment;
 import com.joehukum.chat.ui.fragments.TimePickerFragment;
@@ -37,6 +39,7 @@ import java.util.Date;
 import java.util.List;
 
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -44,7 +47,8 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         SearchableOptionsView.SearchOptionSelectionCallback,
         DateInputView.DateInputCallbacks,
         TimeInputView.TimeInputCallback,
-        DatePickerFragment.DateSelectedCallback
+        DatePickerFragment.DateSelectedCallback,
+        NpsDialog.NpsDialogListener
 {
     private static final String TAG = ChatActivity.class.getName();
     private static final String CHANNEL_NAME = "channelName";
@@ -181,6 +185,12 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
                 mUserInputContainer.addView(mTextInput);
                 mTextInput.setNumberInput(true);
                 mTextInput.takeInputFocus();
+            } else if (message.getResponseType() == Message.ResponseType.RATING)
+            {
+                if (ServiceFactory.MetaDataService().isRatingSent(this, message.getMessageHash()))
+                {
+                    showRatingDialog();
+                }
             } else
             {
                 mUserInputContainer.removeAllViews();
@@ -195,6 +205,13 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
             mTextInput.setNumberInput(false);
             mTextInput.takeInputFocus();
         }
+    }
+
+    private void showRatingDialog()
+    {
+        NpsDialog dialog = new NpsDialog();
+        dialog.setCancelable(false);
+        dialog.show(getSupportFragmentManager(), "NPS");
     }
 
     private Message getLastMessage()
@@ -389,5 +406,37 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         mListView = null;
         mChannelName = null;
         mObserver = null;
+    }
+
+    @Override
+    public void onClickOk(float rating, String comments)
+    {
+        Snackbar.make(mListView, getString(R.string.sending_feedback), Snackbar.LENGTH_SHORT).show();
+        ServiceFactory.MessageNetworkService().sendFeedback(this, comments, rating).subscribe(new Subscriber<Boolean>()
+        {
+            @Override
+            public void onCompleted()
+            {
+                ServiceFactory.MetaDataService().ratingSent(getLastMessage().getMessageHash());
+            }
+
+            @Override
+            public void onError(Throwable e)
+            {
+                Snackbar.make(mListView, getString(R.string.feedback_error), Snackbar.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean)
+            {
+                Snackbar.make(mListView, getString(R.string.feedback_success), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onClickCancel()
+    {
+        ServiceFactory.MetaDataService().ratingSent(getLastMessage().getMessageHash());
     }
 }
