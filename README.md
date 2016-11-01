@@ -31,6 +31,8 @@ Here is an example code
 HashMap<String, String> params = new HashMap<String, String>();
 params.put("UserEmail", "a@b.com");
 params.put("UserExtId", "12345");
+
+JoeHukum.setUserParams(context, params);
 ```
 
 Following code needs to be added to the AndroidManifest.xml of your app.
