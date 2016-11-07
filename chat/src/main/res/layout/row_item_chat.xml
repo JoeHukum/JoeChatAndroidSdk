@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
-            android:textColor="@color/material_blue_grey_800"
+            android:textColor="?receiveTextColor"
             android:text="10 18 pm"
             android:layout_below="@id/receivedContent"
             android:layout_alignParentRight="true"/>
@@ -131,6 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
+            android:textColor="?sendTextColor"
             android:textSize="10sp"
             android:text="10 : 20 pm"/>
 

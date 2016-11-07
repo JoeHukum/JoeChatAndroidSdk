@@ -184,7 +184,10 @@ public class MessageParser
         }
         if (messageJson.has(ACTION))
         {
-            message.setResponseType(getResponseTypeFromAction(messageJson.getJSONObject(ACTION)));
+            if (Message.ResponseType.RATING == getResponseTypeFromAction(messageJson.getJSONObject(ACTION)))
+            {
+                message.setResponseType(getResponseTypeFromAction(messageJson.getJSONObject(ACTION)));
+            }
         }
         if (messageJson.has(AUTHOR))
         {
