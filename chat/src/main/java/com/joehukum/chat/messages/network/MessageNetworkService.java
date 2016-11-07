@@ -63,7 +63,7 @@ public class MessageNetworkService
         String customerHash = credentials.getCustomerHash();
         String content = getContent(message);
         String response = HttpIO.makeRequest(context, Api.Message.Url(), Api.Message.Json(customerHash,
-                content, getContentTypeString(message)), HttpIO.Method.POST);
+                content, message.getReferenceMessageHash(), getContentTypeString(message)), HttpIO.Method.POST);
         String messageHash = MessageParser.parseMessageHash(response);
         ServiceFactory.MessageDatabaseService().updateHash(context, messageHash, message.getId());
         return true;

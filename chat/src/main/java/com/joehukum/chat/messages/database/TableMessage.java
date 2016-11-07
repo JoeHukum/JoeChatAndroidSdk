@@ -32,6 +32,7 @@ public class TableMessage
     private static final String COLUMN_AUTHOR = "author";
     private static final String COLUMN_IS_READ = "is_read";
     private static final String COLUMN_METADATA = "metadata";
+    private static final String COLUMN_REF_MESSAGE_HASH = "ref_message_hash";
 
     public static void onCreate(@NonNull SQLiteDatabase db)
     {
@@ -45,6 +46,7 @@ public class TableMessage
                 .append(COLUMN_TIME).append(" long, ")// not null
                 .append(COLUMN_AUTHOR).append(" text, ")
                 .append(COLUMN_METADATA).append(" text, ")
+                .append(COLUMN_REF_MESSAGE_HASH).append(" text, ")
                 .append(COLUMN_IS_READ).append(" boolean default false);");
         Log.i(TAG, builder.toString());
         db.execSQL(builder.toString());
@@ -75,6 +77,7 @@ public class TableMessage
                     message.setMetadata(cursor.getString(cursor.getColumnIndex(COLUMN_METADATA)));
                     message.setIsRead(cursor.getInt(cursor.getColumnIndex(COLUMN_IS_READ)) > 0);
                     message.setMetadata(cursor.getString(cursor.getColumnIndex(COLUMN_METADATA)));
+                    message.setReferenceMessageHash(cursor.getString(cursor.getColumnIndex(COLUMN_REF_MESSAGE_HASH)));
                     messages.add(message);
                 } while (cursor.moveToNext());
                 return messages;
@@ -125,6 +128,10 @@ public class TableMessage
         if (message.getMetadata() != null)
         {
             contentValues.put(COLUMN_METADATA, message.getMetadata().toString());
+        }
+        if (message.getReferenceMessageHash() != null)
+        {
+            contentValues.put(COLUMN_REF_MESSAGE_HASH, message.getReferenceMessageHash());
         }
         return contentValues;
     }

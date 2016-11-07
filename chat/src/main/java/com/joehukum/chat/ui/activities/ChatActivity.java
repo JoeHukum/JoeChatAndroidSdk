@@ -323,6 +323,11 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         if (!TextUtils.isEmpty(input))
         {
             Message message = ServiceFactory.MessageDatabaseService().generateTextMessage(input);
+            Message lastMessage = getLastMessage();
+            if (lastMessage != null)
+            {
+                message.setReferenceMessageHash(lastMessage.getMessageHash());
+            }
             sendMessage(message);
         }
     }
@@ -370,6 +375,11 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
             {
                 String url = data.getStringExtra(SendImageActivity.URL);
                 Message message = ServiceFactory.MessageDatabaseService().generateImageMessage(url);
+                Message lastMessage = getLastMessage();
+                if (lastMessage != null)
+                {
+                    message.setReferenceMessageHash(lastMessage.getMessageHash());
+                }
                 sendMessage(message);
             }
         }
@@ -394,6 +404,11 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         if (option != null)
         {
             Message message = ServiceFactory.MessageDatabaseService().generateOptionMessage(option);
+            Message lastMessage = getLastMessage();
+            if (lastMessage != null)
+            {
+                message.setReferenceMessageHash(lastMessage.getMessageHash());
+            }
             sendMessage(message);
         }
     }
@@ -480,6 +495,11 @@ public class ChatActivity extends AppCompatActivity implements TextUserInputView
         if (option != null)
         {
             Message message = ServiceFactory.MessageDatabaseService().generateOptionMessage(option);
+            Message lastMessage = getLastMessage();
+            if (lastMessage != null)
+            {
+                message.setReferenceMessageHash(lastMessage.getMessageHash());
+            }
             sendMessage(message);
         }
     }

@@ -16,15 +16,16 @@ public class Api
             return new StringBuilder(BASE_URL).append("api/conversation/v2/ticket/smart/").toString();
         }
 
-        public static String Json(String customerHash, String message, String contentType)
+        public static String Json(String customerHash, String message, String refTmHash, String contentType)
         {
             String template = new StringBuilder("{\n")
                     .append("\t\"customer_hash\": \"%s\",\n")
                     .append("\t\"channel\":\"android_app_channel\",\n")
                     .append("\t\"message\": \"%s\",")
+                    .append("\t\"refTcktMsgHsh\": \"%s\",")
                     .append("\t\"cntntTyp\": \"%s\"")
                     .append("}").toString();
-            return String.format(template, customerHash, message, contentType);
+            return String.format(template, customerHash, message, refTmHash, contentType);
         }
     }
 

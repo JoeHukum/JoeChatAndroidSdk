@@ -21,6 +21,7 @@ public class Message
     private boolean isPublicNote;
     private Object metadata;
     private String ticketHash;
+    private String referenceMessageHash;
 
     public Message()
     {
@@ -147,6 +148,16 @@ public class Message
     public void setTicketHash(String ticketHash)
     {
         this.ticketHash = ticketHash;
+    }
+
+    public String getReferenceMessageHash()
+    {
+        return referenceMessageHash;
+    }
+
+    public void setReferenceMessageHash(String referenceMessageHash)
+    {
+        this.referenceMessageHash = referenceMessageHash;
     }
 
     public String getDisplayText()
