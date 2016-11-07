@@ -174,6 +174,8 @@ And in AndroidManifest.xml
 <activity
     android:name="com.joehukum.chat.ui.activities.ChatActivity"
     android:theme="@style/JoeChatTheme.Custom"/>
+<activity android:name="com.joehukum.chat.ui.activities.SendImageActivity"
+            android:theme="@style/JoeChatTheme.Custom"/>
 ```
 
 The customizable items of the screen are mapped with theme attribute in the following image.
