@@ -17,6 +17,7 @@
         <item name="sendTextColor">@color/white</item>
         <item name="sendIcon">@drawable/ic_send</item>
         <item name="inputTextColor">@color/gray</item>
+        <item name="android:textColorLink">@color/white</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
